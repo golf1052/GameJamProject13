@@ -11,10 +11,10 @@ namespace GameSlamProject
     public class Player:Sprite
     {
         #region Constants
-        const int MAX_JUMP_HEIGHT = 50;
-        const int FLOOR_HEIGHT = 0;
+        const int MAX_JUMP_HEIGHT = 600;
+        const int FLOOR_HEIGHT = 768;
         const int MOVE_DISTANCE = 5;
-        const int JUMP_HEIGHT = 5;
+        const int JUMP_HEIGHT = 15;
         const int MELEE_RANGE = 90;
         Vector2 PLAYER_VELOCITY = new Vector2(5, 0);
         #endregion
@@ -105,6 +105,8 @@ namespace GameSlamProject
             isJumping = false;
             isFalling = false;
             isColliding = false;
+            //myBullet = new Bullet(Texture2D);
+            //myBullet.visible = false;
         }
 
         /// <summary>
@@ -113,21 +115,15 @@ namespace GameSlamProject
         /// <param name="ks"></param>
         public void Move(KeyboardState ks)
         {
-            KeyboardState newState = Keyboard.GetState();
-
-            if(newState.IsKeyDown(Keys.Left)) 
+            if(ks.IsKeyDown(Keys.Left)) 
             {
                 this.pos.X -= MOVE_DISTANCE;
                 facing = Facing.Left;
             }
-            else if (newState.IsKeyDown(Keys.Right))
+            else if (ks.IsKeyDown(Keys.Right))
             {
                 this.pos.X += MOVE_DISTANCE;
                 facing = Facing.Right;
-            }
-            else
-            {
-                //do nothing because left or right have not been pressed
             }
         }
 
@@ -138,9 +134,7 @@ namespace GameSlamProject
         /// <param name="ks"></param>
         public void Attack(KeyboardState ks, List<Enemy> enemyList)
         {
-            KeyboardState newState = Keyboard.GetState();
-
-            if(newState.IsKeyDown(Keys.Z)) 
+            if(ks.IsKeyDown(Keys.Z)) 
             {
                 //RAISE UR ERECTIONS
                 Rectangle meleeHurtBox = new Rectangle((int)this.pos.X + tex.Width, (int)this.pos.Y, MELEE_RANGE, this.rect.Height);
@@ -153,30 +147,36 @@ namespace GameSlamProject
 
                 }
             }
-            else if (newState.IsKeyDown(Keys.X))
+            else if (ks.IsKeyDown(Keys.X))
             {
                 if (this.canFire)
                 {
-                    //use ranged attack
+                    myBullet.visible = false;
+                    this.canFire = false;
                 }
+                else
+                {
+                    myBullet.visible = true;
+                    myBullet.pos.X = this.origin.X;
+                    myBullet.pos.Y = this.origin.Y;
+                    myBullet.moveBullet(this);
+                }
+
+
             }
-            else if (newState.IsKeyDown(Keys.C))
+            else if (ks.IsKeyDown(Keys.C))
             {
                 if (this.canUseStrike)
                 {
                     //use Airforce One Strike
                 }
             }
-            else if (newState.IsKeyDown(Keys.V))
+            else if (ks.IsKeyDown(Keys.V))
             {
                 if (this.canUseFear)
                 {
                     //use phobia attack
                 }
-            }
-            else
-            {
-                // do nothing???
             }
         }
 
@@ -200,31 +200,39 @@ namespace GameSlamProject
         /// <summary>
         /// Player jumps and can still move
         /// </summary>
-        public void Jump()
+        public void Jump(KeyboardState ks, KeyboardState ls)
         {
-            KeyboardState newState = Keyboard.GetState();
-            if (newState.IsKeyDown(Keys.Up))
+            if ((ks.IsKeyDown(Keys.Up))&&(ls.IsKeyUp(Keys.Up)))
             {
                 isJumping = true;
-                if ((isJumping) && (this.pos.Y < MAX_JUMP_HEIGHT) && (this.pos.Y > FLOOR_HEIGHT))
+                isFalling = false;
+            }
+
+            if (isJumping)
+            {
+                this.pos.Y -= JUMP_HEIGHT;
+            }
+            
+            if (this.pos.Y + tex.Height/2 <= MAX_JUMP_HEIGHT)
+            {
+                isJumping = false;
+                isFalling = true;
+            }
+
+            if (isFalling)
+            {
+                if (this.pos.Y + tex.Height / 2 < FLOOR_HEIGHT)
                 {
-                    this.pos.Y -= JUMP_HEIGHT;
+                    this.pos.Y += JUMP_HEIGHT;
                 }
-                else if (pos.Y == MAX_JUMP_HEIGHT)
+                else
                 {
                     isJumping = false;
-                    isFalling = true;
-
-                    if ((isFalling) && (this.pos.Y < FLOOR_HEIGHT))
-                    {
-                        this.pos.Y += JUMP_HEIGHT;
-                    }
-                    else
-                    {
-                        isFalling = false;
-                    }
+                    isFalling = false;
+                    this.pos.Y = FLOOR_HEIGHT - tex.Height / 2;
                 }
             }
+            
         }
 
         /// <summary>
