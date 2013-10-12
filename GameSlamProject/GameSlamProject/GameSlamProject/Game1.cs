@@ -27,6 +27,15 @@ namespace GameSlamProject
         Player dunkin;
 
         Sprite ani;
+        /// <summary>
+        /// the player's faithful eagle companion
+        /// </summary>
+        Eagle attilla;
+
+        /// <summary>
+        /// the bullet that the player has
+        /// </summary>
+        Bullet gunshaver;
 
         Enemy testee;
 
@@ -90,8 +99,14 @@ namespace GameSlamProject
 
             world.GenerateBackgroundList(backgrounds);
 
-            dunkin = new Player(Content.Load<Texture2D>("PD_Stand_NoWep"));
+            dunkin = new Player(Content.Load<Texture2D>("PD_Stand_NoWep"), attilla, gunshaver);
             dunkin.pos = new Vector2(dunkin.tex.Width / 2 + 125, world.GROUND_HEIGHT - dunkin.tex.Height / 2);
+
+            attilla = new Eagle(Content.Load<Texture2D>("Eagle"), 10, graphics);
+            attilla.visible = false;
+
+            gunshaver = new Bullet(Content.Load<Texture2D>("Bullet_Right"));
+            gunshaver.visible = false;
 
             testee = new Republican(Content.Load<Texture2D>("Rep1_Stand"));
             testee.pos = new Vector2(testee.tex.Width / 2 + 500, world.GROUND_HEIGHT - testee.tex.Height / 2);
@@ -353,7 +368,17 @@ namespace GameSlamProject
                 spriteBatch.Draw(dunkin.tex, dunkin.pos, null, dunkin.color, dunkin.rotation, dunkin.origin, dunkin.scale, SpriteEffects.None, 0);
             }
 
-            spriteBatch.Draw(testee.tex, testee.pos, null, testee.color, testee.rotation, testee.origin, testee.scale, SpriteEffects.None, 0);
+            if (attilla.visible)
+            {
+                attilla.Draw(spriteBatch);
+            }
+
+            if (gunshaver.visible)
+            {
+                gunshaver.Draw(spriteBatch);
+            }
+
+            testee.Draw(spriteBatch);
 
             ani.DrawAnimation(spriteBatch);
 
