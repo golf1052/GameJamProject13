@@ -20,7 +20,7 @@ namespace GameSlamProject
             this.tex = loadedTx;
 
             // We are going to set these as the standard values for health & damage.
-            this.health = 100;
+            this.health = 2;
             this.damage = 1;
 
             // All vars inherited from Sprite, their values are set here.

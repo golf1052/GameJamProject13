@@ -26,6 +26,8 @@ namespace GameSlamProject
 
         Player dunkin;
 
+        Enemy testee;
+
         #region Map Particles
         List<Particle> particles = new List<Particle>();
         List<Particle> p_flagParticles = new List<Particle>();
@@ -97,6 +99,9 @@ namespace GameSlamProject
             dunkin = new Player(Content.Load<Texture2D>("PD_Stand_NoWep"));
             dunkin.pos = new Vector2(dunkin.tex.Width / 2 + 125, graphics.GraphicsDevice.Viewport.Height - dunkin.tex.Height / 2);
 
+            testee = new Republican(Content.Load<Texture2D>("Rep1_Stand"));
+            testee.pos = new Vector2(testee.tex.Width / 2 + 500, graphics.GraphicsDevice.Viewport.Height - testee.tex.Height / 2);
+
             particleTex = Content.Load<Texture2D>("flixel");
 
             background = new Sprite(Content.Load<Texture2D>("Level1_Chunk1"));
@@ -139,7 +144,13 @@ namespace GameSlamProject
 			
             dunkin.Move(keyboardState);
 
+            dunkin.Jump(keyboardState, previousKeyboardState);
+
             dunkin.Update(gameTime, graphics);
+
+            testee.move(dunkin);
+
+            testee.Update(gameTime, graphics);
 
             if (background.pos.X > 0)
             {
@@ -151,9 +162,9 @@ namespace GameSlamProject
                 background.pos.X = -background.tex.Width + graphics.GraphicsDevice.Viewport.Width;
             }
 
-            if (dunkin.pos.X > 900 - dunkin.tex.Width / 2)
+            if (dunkin.pos.X > 400 - dunkin.tex.Width / 2)
             {
-                dunkin.pos.X = 900  - dunkin.tex.Width / 2;
+                dunkin.pos.X = 400  - dunkin.tex.Width / 2;
 
                 //if (backgrounds[backgrounds.Count - 1].pos.X + backgrounds[backgrounds.Count - 1].tex.Width > graphics.GraphicsDevice.Viewport.Width)
                 //{
@@ -234,6 +245,8 @@ namespace GameSlamProject
             {
                 particle.DrawWithRect(spriteBatch);
             }
+
+            spriteBatch.Draw(testee.tex, testee.pos, null, testee.color, testee.rotation, testee.origin, testee.scale, SpriteEffects.None, 0);
 
             spriteBatch.End();
 
