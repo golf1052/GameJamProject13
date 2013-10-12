@@ -26,6 +26,8 @@ namespace GameSlamProject
 
         Player dunkin;
 
+        Sprite ani;
+
         Enemy testee;
 
         #region Map Particles
@@ -99,6 +101,14 @@ namespace GameSlamProject
             background = new Sprite(Content.Load<Texture2D>("Level1_Chunk1"));
             background.origin = Vector2.Zero;
             world.worldObjects.Add(background);
+
+            Texture2D aniX = Content.Load<Texture2D>("testspritesheet");
+            List<Texture2D> aniList = new List<Texture2D>();
+            aniList.Add(Content.Load<Texture2D>("testspritesheet"));
+            ani = new Sprite(aniList, 10, 10, 5, 100, true, particleTex);
+            ani.active = true;
+            ani.alive = true;
+            ani.visible = true;
         }
 
         /// <summary>
@@ -191,6 +201,9 @@ namespace GameSlamProject
             testee.move(dunkin);
 
             testee.Update(gameTime, graphics);
+
+            ani.DefaultControlSprite(keyboardState, gamePadState, 5.0f);
+            ani.Update(gameTime, graphics);
 
             if (background.pos.X > 0)
             {
@@ -341,6 +354,8 @@ namespace GameSlamProject
             }
 
             spriteBatch.Draw(testee.tex, testee.pos, null, testee.color, testee.rotation, testee.origin, testee.scale, SpriteEffects.None, 0);
+
+            ani.DrawAnimation(spriteBatch);
 
             spriteBatch.End();
 

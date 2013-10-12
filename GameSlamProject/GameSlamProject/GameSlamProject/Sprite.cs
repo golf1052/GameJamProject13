@@ -117,10 +117,68 @@ namespace GameSlamProject
         public enum Facing
         {
             Left,
-            Right
+            Right,
+            None
         }
 
         public Facing facing;
+
+        #region Animation Stuff
+        /// <summary>
+        /// Flag for if this sprite has an animation
+        /// </summary>
+        bool isAnimatable;
+
+        /// <summary>
+        /// The sprite strip the sprite is refering from.
+        /// </summary>
+        public List<Texture2D> spriteStrips;
+
+        /// <summary>
+        /// How long has gone by from the last frame.
+        /// </summary>
+        public int elapsedTime;
+
+        /// <summary>
+        /// How long each frame should last in milliseconds.
+        /// </summary>
+        public int frameTime;
+
+        /// <summary>
+        /// The number of frames in the animation.
+        /// </summary>
+        public int frameCount;
+
+        /// <summary>
+        /// The current frame we are displaying.
+        /// </summary>
+        public int currentFrame;
+
+        /// <summary>
+        /// The rectangle on the sprite sheet that is actually being drawn.
+        /// </summary>
+        public Rectangle sourceRect = new Rectangle();
+
+        /// <summary>
+        /// The width of the frame on the sprite sheet.
+        /// </summary>
+        public int frameWidth;
+
+        /// <summary>
+        /// The height of the frame on the sprite sheet.
+        /// </summary>
+        public int frameHeight;
+
+        /// <summary>
+        /// Flag for if the animation is currently active.
+        /// </summary>
+        public bool active;
+
+        /// <summary>
+        /// Flag for if the animation should loop.
+        /// </summary>
+        public bool looping;
+        #endregion
 
         /// <summary>
         /// Main contructor. Sets values to all the declarations above
@@ -146,6 +204,40 @@ namespace GameSlamProject
             origin = new Vector2(tex.Width / 2, tex.Height / 2);
             windowCollision = false;
             facing = Facing.Right;
+            isAnimatable = false;
+        }
+
+        public Sprite(List<Texture2D> loadedSheets, int width, int height, int count, int time, bool loop, Texture2D textex)
+        {
+            frameWidth = width;
+            frameHeight = height;
+            frameCount = count;
+            frameTime = time;
+            looping = loop;
+            spriteStrips = loadedSheets;
+            elapsedTime = 0;
+            currentFrame = 0;
+            active = false;
+            isAnimatable = true;
+
+            tex = textex;
+            alive = true;
+            visible = true;
+            colorData = new Color[tex.Width * tex.Height];
+            tex.GetData(colorData);
+            pos = Vector2.Zero;
+            vel = Vector2.Zero;
+            drawRect = new Rectangle((int)pos.X, (int)pos.Y, 0, 0);
+            color = Color.White;
+            alpha = 1.0f;
+            rotation = 0.0f;
+            scale = 1.0f;
+            collision = false;
+            rect = new Rectangle((int)pos.X, (int)pos.Y, tex.Width, tex.Height);
+            random = new Random();
+            origin = Vector2.Zero;
+            windowCollision = false;
+            facing = Facing.Right;
         }
 
         /// <summary>
@@ -154,6 +246,70 @@ namespace GameSlamProject
         /// <param name="loadedFont">The SpriteFont that is being loaded. Must load a sprite font when using this constructor</param>
         public Sprite(SpriteFont loadedFont)
         {
+        }
+
+        /// <summary>
+        /// Animate the current sprite.
+        /// </summary>
+        /// <param name="gameTime">gameTime from class</param>
+        public void Animate(GameTime gameTime)
+        {
+            if (active == false)
+            {
+                return;
+            }
+
+            elapsedTime += (int)gameTime.ElapsedGameTime.TotalMilliseconds;
+
+            if (elapsedTime > frameTime)
+            {
+                currentFrame++;
+
+                if (currentFrame == frameCount)
+                {
+                    currentFrame = 0;
+                    if (looping == false)
+                    {
+                        active = false;
+                    }
+                }
+
+                elapsedTime = 0;
+            }
+
+            sourceRect = new Rectangle(currentFrame * frameWidth, 0, frameWidth, frameHeight);
+        }
+
+        /// <summary>
+        /// Update method for animated sprites. Needs to be changed so that it can override the Sprite.cs Update function.
+        /// </summary>
+        /// <param name="gameTime">gameTime from class</param>
+        public void UpdateAnimation(GameTime gameTime)
+        {
+            if (active == false)
+            {
+                return;
+            }
+
+            elapsedTime += (int)gameTime.ElapsedGameTime.TotalMilliseconds;
+
+            if (elapsedTime > frameTime)
+            {
+                currentFrame++;
+
+                if (currentFrame == frameCount)
+                {
+                    currentFrame = 0;
+                    if (looping == false)
+                    {
+                        active = false;
+                    }
+                }
+
+                elapsedTime = 0;
+            }
+
+            sourceRect = new Rectangle(currentFrame * frameWidth, 0, frameWidth, frameHeight);
         }
 
         /// <summary>
@@ -168,6 +324,10 @@ namespace GameSlamProject
             rect = new Rectangle((int)pos.X, (int)pos.Y, tex.Width, tex.Height);
             spriteTransform = Matrix.CreateTranslation(new Vector3(-origin, 0.0f)) * Matrix.CreateScale(scale) * Matrix.CreateRotationZ(rotation) * Matrix.CreateTranslation(new Vector3(pos, 0.0f));
             rect = CalculateBoundingRectangle(new Rectangle(0, 0, tex.Width, tex.Height), spriteTransform);
+            if (isAnimatable == true)
+            {
+                UpdateAnimation(gameTime);
+            }
 
             #region Window Collision
             if (windowCollision == true)
@@ -239,6 +399,14 @@ namespace GameSlamProject
         public void DrawWithRect(SpriteBatch spriteBatch)
         {
             spriteBatch.Draw(tex, drawRect, null, color, rotation, origin, SpriteEffects.None, 0);
+        }
+
+        public void DrawAnimation(SpriteBatch spriteBatch)
+        {
+            if (active == true)
+            {
+                spriteBatch.Draw(spriteStrips[0], pos, sourceRect, color, rotation, origin, scale, SpriteEffects.None, 0);
+            }
         }
 
         /// <summary>
