@@ -20,30 +20,33 @@ namespace GameSlamProject
 
         public Color fadeToColor;
         public float colorShiftRate;
+        public bool gravity;
 
         /// <summary>
         /// Main constructor. Loads the particle texture.
         /// </summary>
         /// <param name="loadedTex">Base texture parameter from Sprite.cs. Load a texture here.</param>
-        public Particle(Texture2D loadedTex, Vector2 position, Color particleColor, int aliveTimeMin, int aliveTimeMax, Rectangle size, int rot, int spread, float velMultiplyMin, float velMultiplyMax, Color fadeTo)
+        public Particle(Texture2D loadedTex, Vector2 position, Color particleColor, int aliveTimeMin, int aliveTimeMax, Rectangle size, int rot, int spread, float velMultiplyMin, float velMultiplyMax, Color fadeTo, bool hasGravity)
             : base(loadedTex)
         {
             tex = loadedTex;
             pos = Vector2.Zero;
             alive = false;
-            SpawnParticle(position, particleColor, aliveTimeMin, aliveTimeMax, size, rot, spread, velMultiplyMin, velMultiplyMax, fadeTo);
+            gravity = hasGravity;
+            SpawnParticle(position, particleColor, aliveTimeMin, aliveTimeMax, size, rot, spread, velMultiplyMin, velMultiplyMax, fadeTo, hasGravity);
         }
 
-        public Particle(Texture2D loadedTex, Vector2 position, Color particleColor, int aliveTimeMin, int aliveTimeMax, Rectangle size, int rot, int spread, float velMultiplyMin, float velMultiplyMax, Color fadeTo, List<Color> colorList)
+        public Particle(Texture2D loadedTex, Vector2 position, List<Color> colorList, int aliveTimeMin, int aliveTimeMax, Rectangle size, int rot, int spread, float velMultiplyMin, float velMultiplyMax, Color fadeTo, bool hasGravity)
             : base(loadedTex)
         {
             tex = loadedTex;
             pos = Vector2.Zero;
             alive = false;
-            SpawnParticle(position, particleColor, aliveTimeMin, aliveTimeMax, size, rot, spread, velMultiplyMin, velMultiplyMax, fadeTo, colorList);
+            gravity = hasGravity;
+            SpawnParticle(position, colorList, aliveTimeMin, aliveTimeMax, size, rot, spread, velMultiplyMin, velMultiplyMax, fadeTo, hasGravity);
         }
 
-        public void SpawnParticle(Vector2 position, Color particleColor, int aliveTimeMin, int aliveTimeMax, Rectangle size, int rot, int spread, float velMultiplyMin, float velMultiplyMax, Color fadeTo)
+        public void SpawnParticle(Vector2 position, Color particleColor, int aliveTimeMin, int aliveTimeMax, Rectangle size, int rot, int spread, float velMultiplyMin, float velMultiplyMax, Color fadeTo, bool hasGravity)
         {
             if (alive == false)
             {
@@ -60,7 +63,7 @@ namespace GameSlamProject
             }
         }
 
-        public void SpawnParticle(Vector2 position, Color particleColor, int aliveTimeMin, int aliveTimeMax, Rectangle size, int rot, int spread, float velMultiplyMin, float velMultiplyMax, Color fadeTo, List<Color> colorList)
+        public void SpawnParticle(Vector2 position, List<Color> colorList, int aliveTimeMin, int aliveTimeMax, Rectangle size, int rot, int spread, float velMultiplyMin, float velMultiplyMax, Color fadeTo, bool hasGravity)
         {
             if (alive == false)
             {
@@ -140,12 +143,22 @@ namespace GameSlamProject
             if (alive == true)
             {
                 vel *= velDecayRate;
+
+                if (gravity == true)
+                {
+                    vel.Y += world.GRAVITY;
+                }
+
                 pos += vel;
                 aliveTime -= gameTime.ElapsedGameTime;
 
                 if (pos.Y > world.GROUND_HEIGHT)
                 {
                     pos.Y = world.GROUND_HEIGHT;
+                    if (gravity == true)
+                    {
+                        vel.Y *= -0.5f;
+                    }
                 }
 
                 if (aliveTime <= TimeSpan.FromSeconds(0))

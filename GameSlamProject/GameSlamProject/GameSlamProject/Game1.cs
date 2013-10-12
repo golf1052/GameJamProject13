@@ -125,49 +125,49 @@ namespace GameSlamProject
             #region Map Specific Particles
             if (world.gameWindow.Contains((int)world.p_flagParticleSpawn.X, (int)world.p_flagParticleSpawn.Y))
             {
-                p_flagParticles.Add(new Particle(particleTex, world.p_flagParticleSpawn, Color.Orange, 500, 1000, new Rectangle(0, 0, 5, 5), 270, 90, 1.0f, 1.0f, Color.Gray));
+                p_flagParticles.Add(new Particle(particleTex, world.p_flagParticleSpawn, Color.Orange, 500, 1000, new Rectangle(0, 0, 5, 5), 270, 90, 1.0f, 1.0f, Color.Gray, false));
                 world.worldObjects.Add(p_flagParticles[p_flagParticles.Count - 1]);
             }
 
             if (world.gameWindow.Contains((int)world.p_bloodParticleSpawn.X, (int)world.p_bloodParticleSpawn.Y))
             {
-                p_bloodParticles.Add(new Particle(particleTex, world.p_bloodParticleSpawn, Color.Red, 300, 500, new Rectangle(0, 0, 3, 3), 90, 7, 1.0f, 2.0f, Color.DarkRed));
+                p_bloodParticles.Add(new Particle(particleTex, world.p_bloodParticleSpawn, Color.Red, 300, 500, new Rectangle(0, 0, 3, 3), 90, 7, 1.0f, 2.0f, Color.DarkRed, false));
                 world.worldObjects.Add(p_bloodParticles[p_bloodParticles.Count - 1]);
             }
 
             if (world.gameWindow.Contains((int)world.p_fireGroundSpawn1.X, (int)world.p_fireGroundSpawn1.Y))
             {
-                p_fireGroundParticles.Add(new Particle(particleTex, world.p_fireGroundSpawn1, Color.Orange, 1000, 2000, new Rectangle(0, 0, 5, 5), 270, 22, 1.0f, 1.5f, Color.Gray));
+                p_fireGroundParticles.Add(new Particle(particleTex, world.p_fireGroundSpawn1, Color.Orange, 1000, 2000, new Rectangle(0, 0, 5, 5), 270, 22, 1.0f, 1.5f, Color.Gray, false));
                 world.worldObjects.Add(p_fireGroundParticles[p_fireGroundParticles.Count - 1]);
             }
 
             if (world.gameWindow.Contains((int)world.p_fireGroundSpawn2.X, (int)world.p_fireGroundSpawn2.Y))
             {
-                p_fireGroundParticles.Add(new Particle(particleTex, world.p_fireGroundSpawn2, Color.Orange, 1000, 2000, new Rectangle(0, 0, 5, 5), 270, 22, 1.0f, 1.5f, Color.Gray));
+                p_fireGroundParticles.Add(new Particle(particleTex, world.p_fireGroundSpawn2, Color.Orange, 1000, 2000, new Rectangle(0, 0, 5, 5), 270, 22, 1.0f, 1.5f, Color.Gray, false));
                 world.worldObjects.Add(p_fireGroundParticles[p_fireGroundParticles.Count - 1]);
             }
 
             if (world.gameWindow.Intersects(world.p_treeFireSpawn1))
             {
-                p_treeFireParticles.Add(new Particle(particleTex, new Vector2(world.random.Next(world.p_treeFireSpawn1.Left, world.p_treeFireSpawn1.Right), world.random.Next(world.p_treeFireSpawn1.Top, world.p_treeFireSpawn1.Bottom)), Color.Orange, 500, 1000, new Rectangle(0, 0, 5, 5), 270, 10, 1.0f, 1.5f, Color.Gray, world.fireColors));
+                p_treeFireParticles.Add(new Particle(particleTex, new Vector2(world.random.Next(world.p_treeFireSpawn1.Left, world.p_treeFireSpawn1.Right), world.random.Next(world.p_treeFireSpawn1.Top, world.p_treeFireSpawn1.Bottom)), world.fireColors, 500, 1000, new Rectangle(0, 0, 5, 5), 270, 10, 1.0f, 1.5f, Color.Gray, false));
                 world.worldObjects.Add(p_treeFireParticles[p_treeFireParticles.Count - 1]);
             }
 
             if (world.gameWindow.Intersects(world.p_treeFireSpawn2))
             {
-                p_treeFireParticles.Add(new Particle(particleTex, new Vector2(world.random.Next(world.p_treeFireSpawn2.Left, world.p_treeFireSpawn2.Right), world.random.Next(world.p_treeFireSpawn2.Top, world.p_treeFireSpawn2.Bottom)), Color.Orange, 500, 1000, new Rectangle(0, 0, 5, 5), 270, 10, 1.0f, 1.5f, Color.Gray, world.fireColors));
+                p_treeFireParticles.Add(new Particle(particleTex, new Vector2(world.random.Next(world.p_treeFireSpawn2.Left, world.p_treeFireSpawn2.Right), world.random.Next(world.p_treeFireSpawn2.Top, world.p_treeFireSpawn2.Bottom)), world.fireColors, 500, 1000, new Rectangle(0, 0, 5, 5), 270, 10, 1.0f, 1.5f, Color.Gray, false));
                 world.worldObjects.Add(p_treeFireParticles[p_treeFireParticles.Count - 1]);
             }
 
             if (world.gameWindow.Intersects(world.p_treeFireSpawn3))
             {
-                p_treeFireParticles.Add(new Particle(particleTex, new Vector2(world.random.Next(world.p_treeFireSpawn3.Left, world.p_treeFireSpawn3.Right), world.random.Next(world.p_treeFireSpawn3.Top, world.p_treeFireSpawn3.Bottom)), Color.Orange, 500, 1000, new Rectangle(0, 0, 5, 5), 270, 10, 1.0f, 1.5f, Color.Gray, world.fireColors));
+                p_treeFireParticles.Add(new Particle(particleTex, new Vector2(world.random.Next(world.p_treeFireSpawn3.Left, world.p_treeFireSpawn3.Right), world.random.Next(world.p_treeFireSpawn3.Top, world.p_treeFireSpawn3.Bottom)), world.fireColors, 500, 1000, new Rectangle(0, 0, 5, 5), 270, 10, 1.0f, 1.5f, Color.Gray, false));
                 world.worldObjects.Add(p_treeFireParticles[p_treeFireParticles.Count - 1]);
             }
 
             if (world.gameWindow.Intersects(world.p_bushFireSpawn))
             {
-                p_bushFireParticles.Add(new Particle(particleTex, new Vector2(world.random.Next(world.p_bushFireSpawn.Left, world.p_bushFireSpawn.Right), world.random.Next(world.p_bushFireSpawn.Top, world.p_bushFireSpawn.Bottom)), Color.Orange, 500, 1000, new Rectangle(0, 0, 5, 5), 270, 20, 1.0f, 1.5f, Color.Gray, world.fireColors));
+                p_bushFireParticles.Add(new Particle(particleTex, new Vector2(world.random.Next(world.p_bushFireSpawn.Left, world.p_bushFireSpawn.Right), world.random.Next(world.p_bushFireSpawn.Top, world.p_bushFireSpawn.Bottom)), world.fireColors, 500, 1000, new Rectangle(0, 0, 5, 5), 270, 20, 1.0f, 1.5f, Color.Gray, false));
                 world.worldObjects.Add(p_bushFireParticles[p_bushFireParticles.Count - 1]);
             }
             #endregion
@@ -179,7 +179,7 @@ namespace GameSlamProject
 
             if (mouseState.LeftButton == ButtonState.Pressed)
             {
-                particles.Add(new Particle(particleTex, new Vector2(mouseState.X, mouseState.Y), Color.White, 1000, 2000, new Rectangle(0, 0, 5, 5), 270, 22, 4.0f, 7.0f, Color.White));
+                particles.Add(new Particle(particleTex, new Vector2(mouseState.X, mouseState.Y), world.sparkColors, 1000, 2000, new Rectangle(0, 0, 5, 5), 270, 22, 5.0f, 10.0f, Color.White, true));
             }
 			
             dunkin.Move(keyboardState);
