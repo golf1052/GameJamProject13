@@ -24,6 +24,8 @@ namespace GameSlamProject
         /// Height off the bottom of the screen we are
         /// </summary>
         public int GROUND_HEIGHT;
+        public int OFFSET_FROM_BOTTOM = 10;
+        public float GRAVITY = 0.5f;
 
         /// <summary>
         /// size of the start region of the map
@@ -76,6 +78,7 @@ namespace GameSlamProject
         public GraphicsDeviceManager graphics;
 
         public List<Color> fireColors = new List<Color>();
+        public List<Color> sparkColors = new List<Color>();
 
         /// <summary>
         /// Main constructor. Needs to be passed the GraphicsDeviceManager so that it can get the game window.
@@ -85,11 +88,15 @@ namespace GameSlamProject
         {
             graphics = gfx;
             gameWindow = new Rectangle(0, 0, graphics.GraphicsDevice.Viewport.Width, graphics.GraphicsDevice.Viewport.Height);
-            GROUND_HEIGHT = graphics.GraphicsDevice.Viewport.Height - 10;
+            GROUND_HEIGHT = graphics.GraphicsDevice.Viewport.Height - OFFSET_FROM_BOTTOM;
             fireColors.Add(Color.Red);
             fireColors.Add(Color.Yellow);
             fireColors.Add(Color.Orange);
             fireColors.Add(Color.OrangeRed);
+
+            sparkColors.Add(Color.Yellow);
+            sparkColors.Add(Color.LightGoldenrodYellow);
+            sparkColors.Add(Color.LightYellow);
         }
 
         public void GenerateBackgroundList(List<Background> backgrounds)

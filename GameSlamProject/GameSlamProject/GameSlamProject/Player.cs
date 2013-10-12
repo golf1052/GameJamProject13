@@ -221,44 +221,39 @@ namespace GameSlamProject
         /// </summary>
         public void Jump(KeyboardState ks, KeyboardState ls, World world)
         {
+            if (!isJumping && !isFalling)
+            {
                 if ((ks.IsKeyDown(Keys.Up)) && (ls.IsKeyUp(Keys.Up)))
                 {
-                    /*
-                    if (this.pos.Y < FLOOR_HEIGHT - tex.Height / 2)
-                    {
-                        isJumping = false;
-                        isFalling = false;
-                    }
-                    else
-                     */
                     isJumping = true;
                     isFalling = false;
                 }
+            }
 
-                if (isJumping)
+            if (isJumping)
+            {
+                this.pos.Y -= JUMP_HEIGHT;
+            }
+
+            if (this.pos.Y + tex.Height / 2 <= MAX_JUMP_HEIGHT)
+            {
+                isJumping = false;
+                isFalling = true;
+            }
+
+            if (isFalling)
+            {
+                if (this.pos.Y + tex.Height / 2 < world.GROUND_HEIGHT)
                 {
-                    this.pos.Y -= JUMP_HEIGHT;
+                    this.pos.Y += JUMP_HEIGHT;
                 }
-
-                if (this.pos.Y + tex.Height / 2 <= MAX_JUMP_HEIGHT)
+                else
                 {
                     isJumping = false;
-                    isFalling = true;
+                    isFalling = false;
+                    this.pos.Y = world.GROUND_HEIGHT - tex.Height / 2;
                 }
-
-                if (isFalling)
-                {
-                    if (this.pos.Y + tex.Height / 2 < world.GROUND_HEIGHT)
-                    {
-                        this.pos.Y += JUMP_HEIGHT;
-                    }
-                    else
-                    {
-                        isJumping = false;
-                        isFalling = false;
-                        this.pos.Y = world.GROUND_HEIGHT - tex.Height / 2;
-                    }
-                }   
+            }
         }
 
         /// <summary>
