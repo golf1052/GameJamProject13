@@ -88,6 +88,23 @@ namespace GameSlamProject
         /// the bullet that exists as part of the player
         /// </summary>
         public Bullet myBullet;
+
+        /// <summary>
+        /// the eagle that exists as part of the player
+        /// </summary>
+        public Eagle myEagle;
+
+        /// <summary>
+        /// the enumerator that determines what map sector the player is in
+        /// republican, democrat, origin, start
+        /// </summary>
+        public enum mapSector
+        {
+            Start,
+            Democrat,
+            Republican,
+            Boss
+        }
        
         public Player(Texture2D loadedTex)
             : base(loadedTex)
@@ -105,8 +122,13 @@ namespace GameSlamProject
             isJumping = false;
             isFalling = false;
             isColliding = false;
-            //myBullet = new Bullet(Texture2D);
-            //myBullet.visible = false;
+            //mapSector.Start;
+            /*
+            myBullet = new Bullet();
+            myBullet.visible = false;
+            myEagle = new Eagle();
+            myEagle.visible = false;
+            */ 
         }
 
         /// <summary>
@@ -168,14 +190,23 @@ namespace GameSlamProject
             {
                 if (this.canUseStrike)
                 {
-                    //use Airforce One Strike
+                    myEagle.visible = false;
+                    this.canFire = false;
+                }
+                else
+                {
+                    myEagle.visible = true;
+                    myEagle.pos.X = this.pos.X;
+                    myEagle.pos.Y = 0;
                 }
             }
             else if (ks.IsKeyDown(Keys.V))
             {
                 if (this.canUseFear)
                 {
-                    //use phobia attack
+                    //get map sector
+                    //assign correct fear
+                    //move-phobia list of enemies
                 }
             }
         }
@@ -202,37 +233,44 @@ namespace GameSlamProject
         /// </summary>
         public void Jump(KeyboardState ks, KeyboardState ls)
         {
-            if ((ks.IsKeyDown(Keys.Up))&&(ls.IsKeyUp(Keys.Up)))
-            {
-                isJumping = true;
-                isFalling = false;
-            }
-
-            if (isJumping)
-            {
-                this.pos.Y -= JUMP_HEIGHT;
-            }
-            
-            if (this.pos.Y + tex.Height/2 <= MAX_JUMP_HEIGHT)
-            {
-                isJumping = false;
-                isFalling = true;
-            }
-
-            if (isFalling)
-            {
-                if (this.pos.Y + tex.Height / 2 < FLOOR_HEIGHT)
+                if ((ks.IsKeyDown(Keys.Up)) && (ls.IsKeyUp(Keys.Up)))
                 {
-                    this.pos.Y += JUMP_HEIGHT;
+                    /*
+                    if (this.pos.Y < FLOOR_HEIGHT - tex.Height / 2)
+                    {
+                        isJumping = false;
+                        isFalling = false;
+                    }
+                    else
+                     */
+                    isJumping = true;
+                    isFalling = false;
                 }
-                else
+
+                if (isJumping)
+                {
+                    this.pos.Y -= JUMP_HEIGHT;
+                }
+
+                if (this.pos.Y + tex.Height / 2 <= MAX_JUMP_HEIGHT)
                 {
                     isJumping = false;
-                    isFalling = false;
-                    this.pos.Y = FLOOR_HEIGHT - tex.Height / 2;
+                    isFalling = true;
                 }
-            }
-            
+
+                if (isFalling)
+                {
+                    if (this.pos.Y + tex.Height / 2 < FLOOR_HEIGHT)
+                    {
+                        this.pos.Y += JUMP_HEIGHT;
+                    }
+                    else
+                    {
+                        isJumping = false;
+                        isFalling = false;
+                        this.pos.Y = FLOOR_HEIGHT - tex.Height / 2;
+                    }
+                }   
         }
 
         /// <summary>

@@ -42,13 +42,13 @@ namespace GameSlamProject
         /// <summary>
         /// Moves the Enemy instance towards the player (at all times).
         /// </summary>
-        public void move(Sprite player)
+        public void move(Player p)
         {
-            if (player.pos.X < this.pos.X)
+            if (p.pos.X + 5 < this.pos.X)
             {
                 this.pos.X = this.pos.X - MOVE_DISTANCE;
             }
-            else if (player.pos.X > this.pos.X)
+            else if (p.pos.X > this.pos.X)
             {
                 this.pos.X = this.pos.X + MOVE_DISTANCE;
             }
