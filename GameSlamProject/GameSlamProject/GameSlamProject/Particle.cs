@@ -18,20 +18,32 @@ namespace GameSlamProject
         /// </summary>
         public TimeSpan aliveTime = new TimeSpan();
 
+        public Color fadeToColor;
+        public float colorShiftRate;
+
         /// <summary>
         /// Main constructor. Loads the particle texture.
         /// </summary>
         /// <param name="loadedTex">Base texture parameter from Sprite.cs. Load a texture here.</param>
-        public Particle(Texture2D loadedTex, Vector2 position, Color particleColor, int aliveTimeMin, int aliveTimeMax, Rectangle size, int rot, int spread, float velMultiplyMin, float velMultiplyMax)
+        public Particle(Texture2D loadedTex, Vector2 position, Color particleColor, int aliveTimeMin, int aliveTimeMax, Rectangle size, int rot, int spread, float velMultiplyMin, float velMultiplyMax, Color fadeTo)
             : base(loadedTex)
         {
             tex = loadedTex;
             pos = Vector2.Zero;
             alive = false;
-            SpawnParticle(position, particleColor, aliveTimeMin, aliveTimeMax, size, rot, spread, velMultiplyMin, velMultiplyMax);
+            SpawnParticle(position, particleColor, aliveTimeMin, aliveTimeMax, size, rot, spread, velMultiplyMin, velMultiplyMax, fadeTo);
         }
 
-        public void SpawnParticle(Vector2 position, Color particleColor, int aliveTimeMin, int aliveTimeMax, Rectangle size, int rot, int spread, float velMultiplyMin, float velMultiplyMax)
+        public Particle(Texture2D loadedTex, Vector2 position, Color particleColor, int aliveTimeMin, int aliveTimeMax, Rectangle size, int rot, int spread, float velMultiplyMin, float velMultiplyMax, Color fadeTo, List<Color> colorList)
+            : base(loadedTex)
+        {
+            tex = loadedTex;
+            pos = Vector2.Zero;
+            alive = false;
+            SpawnParticle(position, particleColor, aliveTimeMin, aliveTimeMax, size, rot, spread, velMultiplyMin, velMultiplyMax, fadeTo, colorList);
+        }
+
+        public void SpawnParticle(Vector2 position, Color particleColor, int aliveTimeMin, int aliveTimeMax, Rectangle size, int rot, int spread, float velMultiplyMin, float velMultiplyMax, Color fadeTo)
         {
             if (alive == false)
             {
@@ -40,9 +52,28 @@ namespace GameSlamProject
                 vel = new Vector2((float)Math.Cos((MathHelper.ToRadians(rot) + MathHelper.ToRadians(random.Next(-spread, spread)))), (float)Math.Sin((MathHelper.ToRadians(rot) + MathHelper.ToRadians(random.Next(-spread, spread))))) * random.Next((int)velMultiplyMin, (int)velMultiplyMax);
                 //vel = new Vector2(random.Next(-5, 6), random.Next(-5, 6));
                 color = particleColor;
+                fadeToColor = fadeTo;
                 pos = position;
                 aliveTime = TimeSpan.FromMilliseconds(random.Next(aliveTimeMin, aliveTimeMax));
                 drawRect = size;
+                colorShiftRate = 1.0f;
+            }
+        }
+
+        public void SpawnParticle(Vector2 position, Color particleColor, int aliveTimeMin, int aliveTimeMax, Rectangle size, int rot, int spread, float velMultiplyMin, float velMultiplyMax, Color fadeTo, List<Color> colorList)
+        {
+            if (alive == false)
+            {
+                alive = true;
+                alpha = 1.0f;
+                vel = new Vector2((float)Math.Cos((MathHelper.ToRadians(rot) + MathHelper.ToRadians(random.Next(-spread, spread)))), (float)Math.Sin((MathHelper.ToRadians(rot) + MathHelper.ToRadians(random.Next(-spread, spread))))) * random.Next((int)velMultiplyMin, (int)velMultiplyMax);
+                //vel = new Vector2(random.Next(-5, 6), random.Next(-5, 6));
+                color = colorList[random.Next(0, colorList.Count - 1)];
+                fadeToColor = fadeTo;
+                pos = position;
+                aliveTime = TimeSpan.FromMilliseconds(random.Next(aliveTimeMin, aliveTimeMax));
+                drawRect = size;
+                colorShiftRate = 1.0f;
             }
         }
 
@@ -104,24 +135,41 @@ namespace GameSlamProject
         /// Updates the particle.
         /// </summary>
         /// <param name="gameTime">gameTime from class</param>
-        public void UpdateParticle(GameTime gameTime, GraphicsDeviceManager graphics, float velDecayRate, float fadeRate)
+        public void UpdateParticle(GameTime gameTime, GraphicsDeviceManager graphics, float velDecayRate, float fadeRate, float shiftRate, World world)
         {
-            vel *= velDecayRate;
-            pos += vel;
-            aliveTime -= gameTime.ElapsedGameTime;
-
-            if (aliveTime <= TimeSpan.FromSeconds(0))
+            if (alive == true)
             {
-                alpha -= fadeRate;
-                color *= alpha;
-            }
+                vel *= velDecayRate;
+                pos += vel;
+                aliveTime -= gameTime.ElapsedGameTime;
 
-            if (alpha <= 0.0f)
-            {
-                alive = false;
-            }
+                if (pos.Y > world.GROUND_HEIGHT)
+                {
+                    pos.Y = world.GROUND_HEIGHT;
+                }
 
-            Update(gameTime, graphics);
+                if (aliveTime <= TimeSpan.FromSeconds(0))
+                {
+                    if (colorShiftRate > 0)
+                    {
+                        colorShiftRate -= shiftRate;
+                        color = Color.Lerp(color, fadeToColor, colorShiftRate);
+                    }
+                }
+
+                if (colorShiftRate <= 0)
+                {
+                    alpha -= fadeRate;
+                    color *= alpha;
+                }
+
+                if (alpha <= 0.0f)
+                {
+                    alive = false;
+                }
+
+                Update(gameTime, graphics);
+            }
         }
 
         /// <summary>

@@ -19,6 +19,22 @@ namespace GameSlamProject
     /// </summary>
     public class World
     {
+        #region Constants
+        /// <summary>
+        /// Height off the bottom of the screen we are
+        /// </summary>
+        public int GROUND_HEIGHT;
+        #endregion
+
+        public Vector2 p_flagParticleSpawn = new Vector2(506, 338);
+        public Vector2 p_bloodParticleSpawn = new Vector2(118, 664);
+        public Vector2 p_fireGroundSpawn1 = new Vector2(627, 596);
+        public Vector2 p_fireGroundSpawn2 = new Vector2(1151, 613);
+        public Rectangle p_treeFireSpawn1 = new Rectangle(1674, 467, 96, 101);
+        public Rectangle p_treeFireSpawn2 = new Rectangle(2160, 441, 103, 97);
+        public Rectangle p_treeFireSpawn3 = new Rectangle(2413, 408, 104, 94);
+        public Rectangle p_bushFireSpawn = new Rectangle(414, 694, 661, 34);
+
         /// <summary>
         /// Random to use.
         /// </summary>
@@ -39,6 +55,8 @@ namespace GameSlamProject
         /// </summary>
         public GraphicsDeviceManager graphics;
 
+        public List<Color> fireColors = new List<Color>();
+
         /// <summary>
         /// Main constructor. Needs to be passed the GraphicsDeviceManager so that it can get the game window.
         /// </summary>
@@ -47,6 +65,11 @@ namespace GameSlamProject
         {
             graphics = gfx;
             gameWindow = new Rectangle(0, 0, graphics.GraphicsDevice.Viewport.Width, graphics.GraphicsDevice.Viewport.Height);
+            GROUND_HEIGHT = graphics.GraphicsDevice.Viewport.Height - 10;
+            fireColors.Add(Color.Red);
+            fireColors.Add(Color.Yellow);
+            fireColors.Add(Color.Orange);
+            fireColors.Add(Color.OrangeRed);
         }
 
         public void GenerateBackgroundList(List<Background> backgrounds)
@@ -101,6 +124,19 @@ namespace GameSlamProject
             {
                 sprite.pos += movementVector;
             }
+
+            p_flagParticleSpawn += movementVector;
+            p_bloodParticleSpawn += movementVector;
+            p_fireGroundSpawn1 += movementVector;
+            p_fireGroundSpawn2 += movementVector;
+            p_treeFireSpawn1.X += (int)movementVector.X;
+            p_treeFireSpawn1.Y += (int)movementVector.Y;
+            p_treeFireSpawn2.X += (int)movementVector.X;
+            p_treeFireSpawn2.Y += (int)movementVector.Y;
+            p_treeFireSpawn3.X += (int)movementVector.X;
+            p_treeFireSpawn3.Y += (int)movementVector.Y;
+            p_bushFireSpawn.X += (int)movementVector.X;
+            p_bushFireSpawn.Y += (int)movementVector.Y;
         }
 
         //public float ReturnCorrectRotation(float f, float s)

@@ -231,7 +231,7 @@ namespace GameSlamProject
         /// <summary>
         /// Player jumps and can still move
         /// </summary>
-        public void Jump(KeyboardState ks, KeyboardState ls)
+        public void Jump(KeyboardState ks, KeyboardState ls, World world)
         {
                 if ((ks.IsKeyDown(Keys.Up)) && (ls.IsKeyUp(Keys.Up)))
                 {
@@ -260,7 +260,7 @@ namespace GameSlamProject
 
                 if (isFalling)
                 {
-                    if (this.pos.Y + tex.Height / 2 < FLOOR_HEIGHT)
+                    if (this.pos.Y + tex.Height / 2 < world.GROUND_HEIGHT)
                     {
                         this.pos.Y += JUMP_HEIGHT;
                     }
@@ -268,7 +268,7 @@ namespace GameSlamProject
                     {
                         isJumping = false;
                         isFalling = false;
-                        this.pos.Y = FLOOR_HEIGHT - tex.Height / 2;
+                        this.pos.Y = world.GROUND_HEIGHT - tex.Height / 2;
                     }
                 }   
         }
