@@ -46,8 +46,16 @@ namespace GameSlamProject
             if (bulletBox.Intersects(e.rect)) 
             {
                 e.health -= 1;
+                // Bullet gets moved back to the Player elsewhere
+            }
+        }
 
-
+        // Determines if the bullet hit any of these enemies.
+        public void hitEnemies(List<Enemy> LoE)
+        {
+            foreach (Enemy e in LoE)
+            {
+                this.hitByBullet(e);
             }
         }
     }

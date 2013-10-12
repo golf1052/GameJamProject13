@@ -14,11 +14,6 @@ namespace GameSlamProject
     public class Particle : Sprite
     {
         /// <summary>
-        /// Random to use in class. I don't know why it is here.
-        /// </summary>
-        // public Random random = new Random();
-
-        /// <summary>
         /// How long the particle will stay alive before despawning.
         /// </summary>
         public TimeSpan aliveTime = new TimeSpan();
@@ -27,12 +22,27 @@ namespace GameSlamProject
         /// Main constructor. Loads the particle texture.
         /// </summary>
         /// <param name="loadedTex">Base texture parameter from Sprite.cs. Load a texture here.</param>
-        public Particle(Texture2D loadedTex)
+        public Particle(Texture2D loadedTex, Vector2 position, Color particleColor, int aliveTimeMin, int aliveTimeMax, Rectangle size)
             : base(loadedTex)
         {
             tex = loadedTex;
             pos = Vector2.Zero;
             alive = false;
+            SpawnParticle(position, particleColor, aliveTimeMin, aliveTimeMax, size);
+        }
+
+        public void SpawnParticle(Vector2 position, Color particleColor, int aliveTimeMin, int aliveTimeMax, Rectangle size)
+        {
+            if (alive == false)
+            {
+                alive = true;
+                alpha = 1.0f;
+                vel = new Vector2(random.Next(-5, 6), random.Next(-5, 6));
+                color = particleColor;
+                pos = position;
+                aliveTime = TimeSpan.FromMilliseconds(random.Next(aliveTimeMin, aliveTimeMax));
+                drawRect = size;
+            }
         }
 
         /// <summary>
@@ -61,33 +71,33 @@ namespace GameSlamProject
         //    }
         //}
 
-        public void SpawnParticle(Vector2 position, Color particleColor, float velMultiplyMin, float velMultiplyMax, int aliveTimeMin, int aliveTimeMax, int seed)
-        {
-            if (alive == false)
-            {
-                random = new Random(seed);
-                alive = true;
-                vel = AngleToVector(MathHelper.ToRadians(random.Next(0, 359))) * RandomBetween(velMultiplyMin, velMultiplyMax);
-                alpha = 1.0f;
-                color = particleColor;
-                pos = position;
-                aliveTime = TimeSpan.FromMilliseconds(random.Next(aliveTimeMin, aliveTimeMax));
-            }
-        }
+        //public void SpawnParticle(Vector2 position, Color particleColor, float velMultiplyMin, float velMultiplyMax, int aliveTimeMin, int aliveTimeMax, int seed)
+        //{
+        //    if (alive == false)
+        //    {
+        //        random = new Random(seed);
+        //        alive = true;
+        //        vel = AngleToVector(MathHelper.ToRadians(random.Next(0, 359))) * RandomBetween(velMultiplyMin, velMultiplyMax);
+        //        alpha = 1.0f;
+        //        color = particleColor;
+        //        pos = position;
+        //        aliveTime = TimeSpan.FromMilliseconds(random.Next(aliveTimeMin, aliveTimeMax));
+        //    }
+        //}
 
-        public void SpawnParticle(Vector2 position, Color particleColor, float velMultiplyMin, float velMultiplyMax, int aliveTimeMin, int aliveTimeMax, int seed, int spread, float rot)
-        {
-            if (alive == false)
-            {
-                random = new Random(seed);
-                alive = true;
-                vel = AngleToVector(MathHelper.ToRadians(rot + MathHelper.ToRadians(random.Next(-spread, spread)))) * RandomBetween(velMultiplyMin, velMultiplyMax);
-                alpha = 1.0f;
-                color = particleColor;
-                pos = position;
-                aliveTime = TimeSpan.FromMilliseconds(random.Next(aliveTimeMin, aliveTimeMax));
-            }
-        }
+        //public void SpawnParticle(Vector2 position, Color particleColor, float velMultiplyMin, float velMultiplyMax, int aliveTimeMin, int aliveTimeMax, int seed, int spread, float rot)
+        //{
+        //    if (alive == false)
+        //    {
+        //        random = new Random(seed);
+        //        alive = true;
+        //        vel = AngleToVector(MathHelper.ToRadians(rot + MathHelper.ToRadians(random.Next(-spread, spread)))) * RandomBetween(velMultiplyMin, velMultiplyMax);
+        //        alpha = 1.0f;
+        //        color = particleColor;
+        //        pos = position;
+        //        aliveTime = TimeSpan.FromMilliseconds(random.Next(aliveTimeMin, aliveTimeMax));
+        //    }
+        //}
 
         /// <summary>
         /// Updates the particle.
@@ -95,12 +105,12 @@ namespace GameSlamProject
         /// <param name="gameTime">gameTime from class</param>
         public void UpdateParticle(GameTime gameTime, GraphicsDeviceManager graphics)
         {
-            vel *= 0.95f;
+            vel *= 0.99f;
             pos += vel;
             aliveTime -= gameTime.ElapsedGameTime;
 
-            spriteTransform = Matrix.CreateTranslation(new Vector3(-origin, 0.0f)) * Matrix.CreateScale(scale) * Matrix.CreateRotationZ(rotation) * Matrix.CreateTranslation(new Vector3(pos, 0.0f));
-            rect = CalculateBoundingRectangle(new Rectangle(0, 0, tex.Width, tex.Height), spriteTransform);
+            //spriteTransform = Matrix.CreateTranslation(new Vector3(-origin, 0.0f)) * Matrix.CreateScale(scale) * Matrix.CreateRotationZ(rotation) * Matrix.CreateTranslation(new Vector3(pos, 0.0f));
+            //rect = CalculateBoundingRectangle(new Rectangle(0, 0, tex.Width, tex.Height), spriteTransform);
 
             if (aliveTime <= TimeSpan.FromSeconds(0))
             {
@@ -113,23 +123,7 @@ namespace GameSlamProject
                 alive = false;
             }
 
-            //if (pos.X < 0 || pos.Y < 0 || pos.X > graphics.GraphicsDevice.Viewport.Width || pos.Y > graphics.GraphicsDevice.Viewport.Height)
-            //{
-            //    alive = false;
-            //}
-            //else
-            //{
-            //    if (aliveTime <= TimeSpan.FromSeconds(0))
-            //    {
-            //        alpha -= 0.1f;
-            //        color *= alpha;
-            //    }
-
-            //    if (alpha <= 0.0f)
-            //    {
-            //        alive = false;
-            //    }
-            //}
+            Update(gameTime, graphics);
         }
 
         public void UpdateParticle2(GameTime gameTime, GraphicsDeviceManager graphics)
