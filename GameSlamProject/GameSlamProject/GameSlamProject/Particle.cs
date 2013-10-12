@@ -18,14 +18,36 @@ namespace GameSlamProject
         /// </summary>
         public TimeSpan aliveTime = new TimeSpan();
 
+        /// <summary>
+        /// Color to fade to from initial color
+        /// </summary>
         public Color fadeToColor;
+
+        /// <summary>
+        /// How fast to shift the color
+        /// </summary>
         public float colorShiftRate;
+
+        /// <summary>
+        /// Flag for if the particle has gravity
+        /// </summary>
         public bool gravity;
 
         /// <summary>
-        /// Main constructor. Loads the particle texture.
+        /// Particle constructor for 1 color
         /// </summary>
-        /// <param name="loadedTex">Base texture parameter from Sprite.cs. Load a texture here.</param>
+        /// <param name="loadedTex">The particle texture</param>
+        /// <param name="position">The position to spawn the particle at</param>
+        /// <param name="particleColor">The color the particle is</param>
+        /// <param name="aliveTimeMin">Minimum life time for particle (in milliseconds 1000 ms = 1 sec)</param>
+        /// <param name="aliveTimeMax">Maximum life time for particle (in milliseconds 1000 ms = 1 sec</param>
+        /// <param name="size">The size the particle should be (new Rectangle(0, 0, width, height))</param>
+        /// <param name="rot">The direction the particle should fire in (in degrees) (0 points right) (90 points down) </param>
+        /// <param name="spread">The random spread the particle can spawn in (in degrees) (value of 5 would be 10 degrees total spread)</param>
+        /// <param name="velMultiplyMin">The minimum speed the particle can spawn at</param>
+        /// <param name="velMultiplyMax">The maximum speed the particle can spawn at</param>
+        /// <param name="fadeTo">The color the particle should fade to</param>
+        /// <param name="hasGravity">If the particle has gravity</param>
         public Particle(Texture2D loadedTex, Vector2 position, Color particleColor, int aliveTimeMin, int aliveTimeMax, Rectangle size, int rot, int spread, float velMultiplyMin, float velMultiplyMax, Color fadeTo, bool hasGravity)
             : base(loadedTex)
         {
@@ -36,6 +58,21 @@ namespace GameSlamProject
             SpawnParticle(position, particleColor, aliveTimeMin, aliveTimeMax, size, rot, spread, velMultiplyMin, velMultiplyMax, fadeTo, hasGravity);
         }
 
+        /// <summary>
+        /// Particle constructor for a list of colors
+        /// </summary>
+        /// <param name="loadedTex">The particle texture</param>
+        /// <param name="position">The position to spawn the particle at</param>
+        /// <param name="colorList">The list of colors the particle can be</param>
+        /// <param name="aliveTimeMin">Minimum life time for particle (in milliseconds 1000 ms = 1 sec)</param>
+        /// <param name="aliveTimeMax">Maximum life time for particle (in milliseconds 1000 ms = 1 sec</param>
+        /// <param name="size">The size the particle should be (new Rectangle(0, 0, width, height))</param>
+        /// <param name="rot">The direction the particle should fire in (in degrees) (0 points right) (90 points down) </param>
+        /// <param name="spread">The random spread the particle can spawn in (in degrees) (value of 5 would be 10 degrees total spread)</param>
+        /// <param name="velMultiplyMin">The minimum speed the particle can spawn at</param>
+        /// <param name="velMultiplyMax">The maximum speed the particle can spawn at</param>
+        /// <param name="fadeTo">The color the particle should fade to</param>
+        /// <param name="hasGravity">If the particle has gravity</param>
         public Particle(Texture2D loadedTex, Vector2 position, List<Color> colorList, int aliveTimeMin, int aliveTimeMax, Rectangle size, int rot, int spread, float velMultiplyMin, float velMultiplyMax, Color fadeTo, bool hasGravity)
             : base(loadedTex)
         {
@@ -46,6 +83,20 @@ namespace GameSlamProject
             SpawnParticle(position, colorList, aliveTimeMin, aliveTimeMax, size, rot, spread, velMultiplyMin, velMultiplyMax, fadeTo, hasGravity);
         }
 
+        /// <summary>
+        /// Spawn method for 1 color particle
+        /// </summary>
+        /// <param name="position">The position to spawn the particle at</param>
+        /// <param name="particleColor">The color the particle is</param>
+        /// <param name="aliveTimeMin">Minimum life time for particle (in milliseconds 1000 ms = 1 sec)</param>
+        /// <param name="aliveTimeMax">Maximum life time for particle (in milliseconds 1000 ms = 1 sec</param>
+        /// <param name="size">The size the particle should be (new Rectangle(0, 0, width, height))</param>
+        /// <param name="rot">The direction the particle should fire in (in degrees) (0 points right) (90 points down) </param>
+        /// <param name="spread">The random spread the particle can spawn in (in degrees) (value of 5 would be 10 degrees total spread)</param>
+        /// <param name="velMultiplyMin">The minimum speed the particle can spawn at</param>
+        /// <param name="velMultiplyMax">The maximum speed the particle can spawn at</param>
+        /// <param name="fadeTo">The color the particle should fade to</param>
+        /// <param name="hasGravity">If the particle has gravity</param>
         public void SpawnParticle(Vector2 position, Color particleColor, int aliveTimeMin, int aliveTimeMax, Rectangle size, int rot, int spread, float velMultiplyMin, float velMultiplyMax, Color fadeTo, bool hasGravity)
         {
             if (alive == false)
@@ -63,6 +114,20 @@ namespace GameSlamProject
             }
         }
 
+        /// <summary>
+        /// Spawn method for a multicolor particle
+        /// </summary>
+        /// <param name="position">The position to spawn the particle at</param>
+        /// <param name="colorList">The list of colors the particle can be</param>
+        /// <param name="aliveTimeMin">Minimum life time for particle (in milliseconds 1000 ms = 1 sec)</param>
+        /// <param name="aliveTimeMax">Maximum life time for particle (in milliseconds 1000 ms = 1 sec</param>
+        /// <param name="size">The size the particle should be (new Rectangle(0, 0, width, height))</param>
+        /// <param name="rot">The direction the particle should fire in (in degrees) (0 points right) (90 points down) </param>
+        /// <param name="spread">The random spread the particle can spawn in (in degrees) (value of 5 would be 10 degrees total spread)</param>
+        /// <param name="velMultiplyMin">The minimum speed the particle can spawn at</param>
+        /// <param name="velMultiplyMax">The maximum speed the particle can spawn at</param>
+        /// <param name="fadeTo">The color the particle should fade to</param>
+        /// <param name="hasGravity">If the particle has gravity</param>
         public void SpawnParticle(Vector2 position, List<Color> colorList, int aliveTimeMin, int aliveTimeMax, Rectangle size, int rot, int spread, float velMultiplyMin, float velMultiplyMax, Color fadeTo, bool hasGravity)
         {
             if (alive == false)
@@ -70,7 +135,6 @@ namespace GameSlamProject
                 alive = true;
                 alpha = 1.0f;
                 vel = new Vector2((float)Math.Cos((MathHelper.ToRadians(rot) + MathHelper.ToRadians(random.Next(-spread, spread)))), (float)Math.Sin((MathHelper.ToRadians(rot) + MathHelper.ToRadians(random.Next(-spread, spread))))) * random.Next((int)velMultiplyMin, (int)velMultiplyMax);
-                //vel = new Vector2(random.Next(-5, 6), random.Next(-5, 6));
                 color = colorList[random.Next(0, colorList.Count - 1)];
                 fadeToColor = fadeTo;
                 pos = position;
@@ -81,63 +145,14 @@ namespace GameSlamProject
         }
 
         /// <summary>
-        /// Spawns a particle. I have no idea how this is supposed to work as there are many different versions of SpawnParticle somewhere...will figure out.
+        /// Update method for particle
         /// </summary>
-        /// <param name="position">The initial spawn position of the particle</param>
-        /// <param name="particleColor">What color the particle should be</param>
-        /// <param name="velMultiplyMin">The slowest the particle can move. This number is multipled by a unit vector.</param>
-        /// <param name="velMultiplyMax">The fastest the particle can move. This number is multipled by a unit vector.</param>
-        /// <param name="aliveTimeMin">The shortest amount of time a particle can be alive. In milliseconds.</param>
-        /// <param name="aliveTimeMax">The longest amount of time a particle can be alive. In milliseconds.</param>
-        /// <param name="seed">Seed for spawning random particles...this was a weird bug</param>
-        /// <param name="spread">The spread of the particles. Used for firing particles in a given direction.</param>
-        /// <param name="rot">The current rotation of the sprite the particles are emitting from</param>
-        //public void SpawnParticle(Vector2 position, Color particleColor, float velMultiplyMin, float velMultiplyMax, int aliveTimeMin, int aliveTimeMax, int seed, int spread, float rot)
-        //{
-        //    if (alive == false)
-        //    {
-        //        random = new Random(seed);
-        //        alive = true;
-        //        vel = new Vector2((float)Math.Cos((rot + MathHelper.ToRadians(random.Next(-spread, spread)))), (float)Math.Sin((rot + MathHelper.ToRadians(random.Next(-spread, spread))))) * random.Next((int)velMultiplyMin, (int)velMultiplyMax);
-        //        alpha = 1.0f;
-        //        color = particleColor;
-        //        pos = position;
-        //        aliveTime = TimeSpan.FromMilliseconds(random.Next(aliveTimeMin, aliveTimeMax));
-        //    }
-        //}
-
-        //public void SpawnParticle(Vector2 position, Color particleColor, float velMultiplyMin, float velMultiplyMax, int aliveTimeMin, int aliveTimeMax, int seed)
-        //{
-        //    if (alive == false)
-        //    {
-        //        random = new Random(seed);
-        //        alive = true;
-        //        vel = AngleToVector(MathHelper.ToRadians(random.Next(0, 359))) * RandomBetween(velMultiplyMin, velMultiplyMax);
-        //        alpha = 1.0f;
-        //        color = particleColor;
-        //        pos = position;
-        //        aliveTime = TimeSpan.FromMilliseconds(random.Next(aliveTimeMin, aliveTimeMax));
-        //    }
-        //}
-
-        //public void SpawnParticle(Vector2 position, Color particleColor, float velMultiplyMin, float velMultiplyMax, int aliveTimeMin, int aliveTimeMax, int seed, int spread, float rot)
-        //{
-        //    if (alive == false)
-        //    {
-        //        random = new Random(seed);
-        //        alive = true;
-        //        vel = AngleToVector(MathHelper.ToRadians(rot + MathHelper.ToRadians(random.Next(-spread, spread)))) * RandomBetween(velMultiplyMin, velMultiplyMax);
-        //        alpha = 1.0f;
-        //        color = particleColor;
-        //        pos = position;
-        //        aliveTime = TimeSpan.FromMilliseconds(random.Next(aliveTimeMin, aliveTimeMax));
-        //    }
-        //}
-
-        /// <summary>
-        /// Updates the particle.
-        /// </summary>
-        /// <param name="gameTime">gameTime from class</param>
+        /// <param name="gameTime">gameTime from Game class</param>
+        /// <param name="graphics">graphics from Game class</param>
+        /// <param name="velDecayRate">Rate at which the particle should show down (0.0f instant slowdown, 1.0f no slowdown)</param>
+        /// <param name="fadeRate">Rate at which the particle should fade to invisible (1.0f instant fade, 0.0f no fade MUST HAVE A FADE)</param>
+        /// <param name="shiftRate">Rate at which the particle should switch from its starting color to its ending color (1.0f instant fade, 0.0f no switch MUST HAVE A SWITCH)</param>
+        /// <param name="world">world from Game class</param>
         public void UpdateParticle(GameTime gameTime, GraphicsDeviceManager graphics, float velDecayRate, float fadeRate, float shiftRate, World world)
         {
             if (alive == true)
