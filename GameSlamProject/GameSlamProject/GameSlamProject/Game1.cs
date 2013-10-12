@@ -33,6 +33,8 @@ namespace GameSlamProject
         /// </summary>
         World world;
 
+        Texture2D backgroundTest;
+
         List<Background> backgrounds = new List<Background>();
 
         public Game1()
@@ -79,6 +81,8 @@ namespace GameSlamProject
             dunkin.pos = new Vector2(dunkin.tex.Width / 2 + 125, graphics.GraphicsDevice.Viewport.Height - dunkin.tex.Height / 2);
 
             particleTex = Content.Load<Texture2D>("flixel");
+
+            backgroundTest = Content.Load<Texture2D>("Level1_Chunk1");
         }
 
         /// <summary>
