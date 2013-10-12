@@ -22,22 +22,23 @@ namespace GameSlamProject
         /// Main constructor. Loads the particle texture.
         /// </summary>
         /// <param name="loadedTex">Base texture parameter from Sprite.cs. Load a texture here.</param>
-        public Particle(Texture2D loadedTex, Vector2 position, Color particleColor, int aliveTimeMin, int aliveTimeMax, Rectangle size)
+        public Particle(Texture2D loadedTex, Vector2 position, Color particleColor, int aliveTimeMin, int aliveTimeMax, Rectangle size, int rot, int spread, float velMultiplyMin, float velMultiplyMax)
             : base(loadedTex)
         {
             tex = loadedTex;
             pos = Vector2.Zero;
             alive = false;
-            SpawnParticle(position, particleColor, aliveTimeMin, aliveTimeMax, size);
+            SpawnParticle(position, particleColor, aliveTimeMin, aliveTimeMax, size, rot, spread, velMultiplyMin, velMultiplyMax);
         }
 
-        public void SpawnParticle(Vector2 position, Color particleColor, int aliveTimeMin, int aliveTimeMax, Rectangle size)
+        public void SpawnParticle(Vector2 position, Color particleColor, int aliveTimeMin, int aliveTimeMax, Rectangle size, int rot, int spread, float velMultiplyMin, float velMultiplyMax)
         {
             if (alive == false)
             {
                 alive = true;
                 alpha = 1.0f;
-                vel = new Vector2(random.Next(-5, 6), random.Next(-5, 6));
+                vel = new Vector2((float)Math.Cos((MathHelper.ToRadians(rot) + MathHelper.ToRadians(random.Next(-spread, spread)))), (float)Math.Sin((MathHelper.ToRadians(rot) + MathHelper.ToRadians(random.Next(-spread, spread))))) * random.Next((int)velMultiplyMin, (int)velMultiplyMax);
+                //vel = new Vector2(random.Next(-5, 6), random.Next(-5, 6));
                 color = particleColor;
                 pos = position;
                 aliveTime = TimeSpan.FromMilliseconds(random.Next(aliveTimeMin, aliveTimeMax));
@@ -103,18 +104,15 @@ namespace GameSlamProject
         /// Updates the particle.
         /// </summary>
         /// <param name="gameTime">gameTime from class</param>
-        public void UpdateParticle(GameTime gameTime, GraphicsDeviceManager graphics)
+        public void UpdateParticle(GameTime gameTime, GraphicsDeviceManager graphics, float velDecayRate, float fadeRate)
         {
-            vel *= 0.99f;
+            vel *= velDecayRate;
             pos += vel;
             aliveTime -= gameTime.ElapsedGameTime;
 
-            //spriteTransform = Matrix.CreateTranslation(new Vector3(-origin, 0.0f)) * Matrix.CreateScale(scale) * Matrix.CreateRotationZ(rotation) * Matrix.CreateTranslation(new Vector3(pos, 0.0f));
-            //rect = CalculateBoundingRectangle(new Rectangle(0, 0, tex.Width, tex.Height), spriteTransform);
-
             if (aliveTime <= TimeSpan.FromSeconds(0))
             {
-                alpha -= 0.1f;
+                alpha -= fadeRate;
                 color *= alpha;
             }
 
@@ -124,21 +122,6 @@ namespace GameSlamProject
             }
 
             Update(gameTime, graphics);
-        }
-
-        public void UpdateParticle2(GameTime gameTime, GraphicsDeviceManager graphics)
-        {
-            pos += vel;
-            drawRect.X = (int)pos.X;
-            drawRect.Y = (int)pos.Y;
-            rect = new Rectangle((int)pos.X, (int)pos.Y, tex.Width, tex.Height);
-            spriteTransform = Matrix.CreateTranslation(new Vector3(-origin, 0.0f)) * Matrix.CreateScale(scale) * Matrix.CreateRotationZ(rotation) * Matrix.CreateTranslation(new Vector3(pos, 0.0f));
-            rect = CalculateBoundingRectangle(new Rectangle(0, 0, tex.Width, tex.Height), spriteTransform);
-
-            if (pos.X < 0 || pos.Y < 0 || pos.X > graphics.GraphicsDevice.Viewport.Width || pos.Y > graphics.GraphicsDevice.Viewport.Height)
-            {
-                alive = false;
-            }
         }
 
         /// <summary>

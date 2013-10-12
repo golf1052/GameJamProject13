@@ -25,15 +25,32 @@ namespace GameSlamProject
         MouseState previousMouseState = Mouse.GetState();
 
         Player dunkin;
+
+        #region Map Particles
         List<Particle> particles = new List<Particle>();
+        List<Particle> p_flagParticles = new List<Particle>();
+        List<Particle> p_bloodParticles = new List<Particle>();
+        List<Particle> p_fireGroundParticles = new List<Particle>();
+        List<Particle> p_treeFireParticles = new List<Particle>();
+        List<Particle> p_bushFireParticles = new List<Particle>();
+
         Texture2D particleTex;
+        Vector2 p_flagParticleSpawn = new Vector2(506, 338);
+        Vector2 p_bloodParticleSpawn = new Vector2(118, 664);
+        Vector2 p_fireGroundSpawn1 = new Vector2(627, 596);
+        Vector2 p_fireGroundSpawn2 = new Vector2(1151, 613);
+        Rectangle p_treeFireSpawn1 = new Rectangle(1674, 467, 96, 101);
+        Rectangle p_treeFireSpawn2 = new Rectangle(2160, 441, 103, 97);
+        Rectangle p_treeFireSpawn3 = new Rectangle(2413, 408, 104, 94);
+        Rectangle p_bushFireSpawn = new Rectangle(414, 694, 661, 34);
+        #endregion
 
         /// <summary>
         /// THE WORLD...BISH
         /// </summary>
         World world;
 
-        Texture2D backgroundTest;
+        Sprite background;
 
         List<Background> backgrounds = new List<Background>();
 
@@ -82,7 +99,8 @@ namespace GameSlamProject
 
             particleTex = Content.Load<Texture2D>("flixel");
 
-            backgroundTest = Content.Load<Texture2D>("Level1_Chunk1");
+            background = new Sprite(Content.Load<Texture2D>("Level1_Chunk1"));
+            background.origin = Vector2.Zero;
         }
 
         /// <summary>
@@ -105,7 +123,10 @@ namespace GameSlamProject
             KeyboardState keyboardState = Keyboard.GetState();
             GamePadState gamePadState = GamePad.GetState(PlayerIndex.One);
             MouseState mouseState = Mouse.GetState();
-			
+
+            #region Map Specific Particles
+            #endregion
+
             if (keyboardState.IsKeyDown(Keys.Escape))
             {
                 this.Exit();
@@ -113,20 +134,35 @@ namespace GameSlamProject
 
             if (mouseState.LeftButton == ButtonState.Pressed)
             {
-                particles.Add(new Particle(particleTex, new Vector2(mouseState.X, mouseState.Y), Color.BurlyWood, 1000, 2000, new Rectangle(0, 0, 5, 5)));
+                particles.Add(new Particle(particleTex, new Vector2(mouseState.X, mouseState.Y), Color.White, 1000, 2000, new Rectangle(0, 0, 5, 5), 270, 22, 4.0f, 7.0f));
             }
 			
             dunkin.Move(keyboardState);
 
             dunkin.Update(gameTime, graphics);
 
+            if (background.pos.X > 0)
+            {
+                background.pos.X = 0;
+            }
+
+            if (background.pos.X + background.tex.Width < graphics.GraphicsDevice.Viewport.Width)
+            {
+                background.pos.X = -background.tex.Width + graphics.GraphicsDevice.Viewport.Width;
+            }
+
             if (dunkin.pos.X > 900 - dunkin.tex.Width / 2)
             {
                 dunkin.pos.X = 900  - dunkin.tex.Width / 2;
 
-                if (backgrounds[backgrounds.Count - 1].pos.X + backgrounds[backgrounds.Count - 1].tex.Width > graphics.GraphicsDevice.Viewport.Width)
+                //if (backgrounds[backgrounds.Count - 1].pos.X + backgrounds[backgrounds.Count - 1].tex.Width > graphics.GraphicsDevice.Viewport.Width)
+                //{
+                //    backgrounds[0].pos.X -= 1.0f;
+                //}
+
+                if (background.pos.X + background.tex.Width > graphics.GraphicsDevice.Viewport.Width)
                 {
-                    backgrounds[0].pos.X -= 1.0f;
+                    background.pos.X -= 5.0f;
                 }
             }
 
@@ -134,20 +170,25 @@ namespace GameSlamProject
             {
                 dunkin.pos.X = 124 + dunkin.tex.Width / 2;
 
-                if (backgrounds[0].pos.X < 0)
+                //if (backgrounds[0].pos.X < 0)
+                //{
+                //    backgrounds[0].pos.X += 1.0f;
+                //}
+
+                if (background.pos.X < 0)
                 {
-                    backgrounds[0].pos.X += 1.0f;
+                    background.pos.X += 5.0f;
                 }
             }
 
-            foreach (Background background in backgrounds)
-            {
-                background.Update(gameTime, graphics);
-            }
+            //foreach (Background background in backgrounds)
+            //{
+            //    background.Update(gameTime, graphics);
+            //}
 
             foreach (Particle particle in particles)
             {
-                particle.UpdateParticle(gameTime, graphics);
+                particle.UpdateParticle(gameTime, graphics, 0.95f, 0.1f);
             }
 
             // Set previous states to current states
@@ -178,10 +219,7 @@ namespace GameSlamProject
 
             // ALL DRAW CODE GOES IN HERE
 
-            foreach (Background background in backgrounds)
-            {
-                background.Draw(spriteBatch);
-            }
+            background.Draw(spriteBatch);
 
             if (dunkin.facing == Player.Facing.Left)
             {
