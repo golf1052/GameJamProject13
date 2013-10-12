@@ -20,11 +20,11 @@ namespace GameSlamProject
         public GraphicsDeviceManager graphics;
 
         #region CONSTANTS
-        public const Vector2 descendingRightSpeed = new Vector2(7, 25);
-        public const Vector2 ascendingRightSpeed = new Vector2(7, -25);
+        public Vector2 descendingRightSpeed = new Vector2(7, 25);
+        public Vector2 ascendingRightSpeed = new Vector2(7, -25);
 
-        public const Vector2 descendingLeftSpeed = new Vector2(-7, 25);
-        public const Vector2 ascendingLeftSpeed = new Vector2(-7, -25);
+        public Vector2 descendingLeftSpeed = new Vector2(-7, 25);
+        public Vector2 ascendingLeftSpeed = new Vector2(-7, -25);
 
         public const int EAGLE_WIDTH = 40;
         public const int EAGLE_HEIGHT = 25;
