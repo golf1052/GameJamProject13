@@ -17,7 +17,7 @@ namespace GameSlamProject
     /// <summary>
     /// Holds the basic information for the world that sprites and objects would exist in. Create one in the main game class to use its usefull functions.
     /// </summary>
-    public class World2D
+    public class World
     {
         /// <summary>
         /// Random to use.
@@ -50,7 +50,7 @@ namespace GameSlamProject
         /// Main constructor. Needs to be passed the GraphicsDeviceManager so that it can get the game window.
         /// </summary>
         /// <param name="graphics">GraphicsDeviceManager from class</param>
-        public World2D(GraphicsDeviceManager gfx)
+        public World(GraphicsDeviceManager gfx)
         {
             graphics = gfx;
             gameWindow = new Rectangle(0, 0, graphics.GraphicsDevice.Viewport.Width, graphics.GraphicsDevice.Viewport.Height);

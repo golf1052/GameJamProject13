@@ -75,6 +75,7 @@
     <Compile Include="Animation.cs" />
     <Compile Include="Democrat.cs" />
     <Compile Include="Enemy.cs" />
+    <Compile Include="Background.cs" />
     <Compile Include="Particle.cs" />
     <Compile Include="Player.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

@@ -18,11 +18,20 @@ namespace GameSlamProject
     {
         GraphicsDeviceManager graphics;
         SpriteBatch spriteBatch;
+        
+        // Previous input states
+        KeyboardState previousKeyboardState = Keyboard.GetState();
+        GamePadState previousGamePadState = GamePad.GetState(PlayerIndex.One);
+        MouseState previousMouseState = Mouse.GetState();
 
         public Game1()
         {
             graphics = new GraphicsDeviceManager(this);
             Content.RootDirectory = "Content";
+
+            // Window size
+            graphics.PreferredBackBufferWidth = 1024;
+            graphics.PreferredBackBufferHeight = 768;
         }
 
         /// <summary>
@@ -46,8 +55,6 @@ namespace GameSlamProject
         {
             // Create a new SpriteBatch, which can be used to draw textures.
             spriteBatch = new SpriteBatch(GraphicsDevice);
-
-            // TODO: use this.Content to load your game content here
         }
 
         /// <summary>
@@ -66,11 +73,15 @@ namespace GameSlamProject
         /// <param name="gameTime">Provides a snapshot of timing values.</param>
         protected override void Update(GameTime gameTime)
         {
-            // Allows the game to exit
-            if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed)
-                this.Exit();
+            // Get new states of inputs
+            KeyboardState keyboardState = Keyboard.GetState();
+            GamePadState gamePadState = GamePad.GetState(PlayerIndex.One);
+            MouseState mouseState = Mouse.GetState();
 
-            // TODO: Add your update logic here
+            // Set previous states to current states
+            previousKeyboardState = keyboardState;
+            previousGamePadState = gamePadState;
+            previousMouseState = mouseState;
 
             base.Update(gameTime);
         }

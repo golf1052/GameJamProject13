@@ -26,7 +26,7 @@ namespace GameSlamProject
         /// <summary>
         /// Holds the 2D texture information.
         /// </summary>
-        public Texture2D tex;
+        public Texture2D tex; 
 
         /// <summary>
         /// Flag for alive state.
@@ -104,49 +104,10 @@ namespace GameSlamProject
         /// </summary>
         public bool collision;
 
-        public enum CollisionEdge
-        {
-            None,
-            XSides,
-            YSides
-        }
-
-        public CollisionEdge collisionEdge = CollisionEdge.None;
-
         /// <summary>
         /// Lets you generate random numbers.
         /// </summary>
         public Random random;
-
-        /// <summary>
-        /// Flag to apply gravity to the sprite. True if gravity affects the sprite.
-        /// </summary>
-        public bool gravity;
-
-        public Sprite possibleNewSprite;
-
-        /// <summary>
-        /// States for movement.
-        /// </summary>
-        public enum MovementState
-        {
-            /// <summary>
-            /// The normal movement state of the sprite.
-            /// </summary>
-            Normal,
-
-            /// <summary>
-            /// State set if the sprite is jumping. Usually used with the gravity flag.
-            /// </summary>
-            Jumping,
-
-            Dashing
-        }
-
-        /// <summary>
-        /// Holds the movement states of the sprite.
-        /// </summary>
-        public MovementState movementState;
 
         /// <summary>
         /// If you want the sprite to auto collide with the edge of the screen
@@ -174,9 +135,6 @@ namespace GameSlamProject
             rect = new Rectangle((int)pos.X, (int)pos.Y, tex.Width, tex.Height);
             random = new Random();
             origin = new Vector2(tex.Width / 2, tex.Height / 2);
-            gravity = false;
-            movementState = MovementState.Normal;
-            possibleNewSprite = this;
             windowCollision = false;
         }
 
@@ -200,8 +158,6 @@ namespace GameSlamProject
             rect = new Rectangle((int)pos.X, (int)pos.Y, tex.Width, tex.Height);
             spriteTransform = Matrix.CreateTranslation(new Vector3(-origin, 0.0f)) * Matrix.CreateScale(scale) * Matrix.CreateRotationZ(rotation) * Matrix.CreateTranslation(new Vector3(pos, 0.0f));
             rect = CalculateBoundingRectangle(new Rectangle(0, 0, tex.Width, tex.Height), spriteTransform);
-
-            possibleNewSprite = this;
 
             #region Window Collision
             if (windowCollision == true)
