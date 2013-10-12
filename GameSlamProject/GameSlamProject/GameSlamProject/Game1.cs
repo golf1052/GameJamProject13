@@ -25,6 +25,8 @@ namespace GameSlamProject
         MouseState previousMouseState = Mouse.GetState();
 
         Player dunkin;
+        List<Particle> particles = new List<Particle>();
+        Texture2D particleTex;
 
         /// <summary>
         /// THE WORLD...BISH
@@ -75,6 +77,8 @@ namespace GameSlamProject
 
             dunkin = new Player(Content.Load<Texture2D>("PD_Stand_NoWep"));
             dunkin.pos = new Vector2(dunkin.tex.Width / 2 + 125, graphics.GraphicsDevice.Viewport.Height - dunkin.tex.Height / 2);
+
+            particleTex = Content.Load<Texture2D>("flixel");
         }
 
         /// <summary>
@@ -97,7 +101,17 @@ namespace GameSlamProject
             KeyboardState keyboardState = Keyboard.GetState();
             GamePadState gamePadState = GamePad.GetState(PlayerIndex.One);
             MouseState mouseState = Mouse.GetState();
+			
+            if (keyboardState.IsKeyDown(Keys.Escape))
+            {
+                this.Exit();
+            }
 
+            if (mouseState.LeftButton == ButtonState.Pressed)
+            {
+                particles.Add(new Particle(particleTex, new Vector2(mouseState.X, mouseState.Y), Color.BurlyWood, 1000, 2000, new Rectangle(0, 0, 5, 5)));
+            }
+			
             dunkin.Move(keyboardState);
 
             dunkin.Update(gameTime, graphics);
@@ -125,6 +139,11 @@ namespace GameSlamProject
             foreach (Background background in backgrounds)
             {
                 background.Update(gameTime, graphics);
+            }
+
+            foreach (Particle particle in particles)
+            {
+                particle.UpdateParticle(gameTime, graphics);
             }
 
             // Set previous states to current states
@@ -167,6 +186,11 @@ namespace GameSlamProject
             else
             {
                 spriteBatch.Draw(dunkin.tex, dunkin.pos, null, dunkin.color, dunkin.rotation, dunkin.origin, dunkin.scale, SpriteEffects.None, 0);
+            }
+
+            foreach (Particle particle in particles)
+            {
+                particle.DrawWithRect(spriteBatch);
             }
 
             spriteBatch.End();
