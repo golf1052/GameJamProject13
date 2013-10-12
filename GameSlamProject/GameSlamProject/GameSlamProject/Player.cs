@@ -115,8 +115,6 @@ namespace GameSlamProject
             isJumping = false;
             isFalling = false;
             isColliding = false;
-            myBullet.visible = false;
-            myEagle.visible = false;
 
         }
 
@@ -187,6 +185,8 @@ namespace GameSlamProject
                     myEagle.visible = true;
                     myEagle.pos.X = this.pos.X;
                     myEagle.pos.Y = 0;
+                    myEagle.moveEagleLeft();
+                    myEagle.damageEnemies(enemyList);
                 }
             }
             else if (ks.IsKeyDown(Keys.V))
