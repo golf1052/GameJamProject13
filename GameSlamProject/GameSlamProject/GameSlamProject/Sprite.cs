@@ -20,7 +20,7 @@ namespace GameSlamProject
     public class Sprite
     {
         #region CONSTANTS
-        const int FLOOR = 20;
+        public const int FLOOR = 20;
         #endregion
 
         /// <summary>
@@ -122,6 +122,7 @@ namespace GameSlamProject
         {
             tex = loadedTex;
             alive = true;
+            visible = true;
             colorData = new Color[tex.Width * tex.Height];
             tex.GetData(colorData);
             pos = Vector2.Zero;

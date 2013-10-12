@@ -16,6 +16,7 @@ namespace GameSlamProject
         const int MOVE_DISTANCE = 5;
         const int JUMP_HEIGHT = 5;
         const int MELEE_RANGE = 90;
+        const Vector2 PLAYER_VELOCITY = new Vector2(5, 0);
         #endregion
 
         /// <summary>
@@ -77,6 +78,16 @@ namespace GameSlamProject
         /// is the player falling
         /// </summary>
         public bool isFalling;
+
+        /// <summary>
+        /// is the player colliding with an object
+        /// </summary>
+        public bool isColliding;
+
+        /// <summary>
+        /// the bullet that exists as part of the player
+        /// </summary>
+        public Bullet myBullet;
        
         public Player(Texture2D loadedTex)
             : base(loadedTex)
@@ -93,6 +104,7 @@ namespace GameSlamProject
             canUseFear = true;
             isJumping = false;
             isFalling = false;
+            isColliding = false;
         }
 
         /// <summary>
@@ -128,10 +140,14 @@ namespace GameSlamProject
 
             if(newState.IsKeyDown(Keys.Z)) 
             {
-                //use melee attack
+                //RAISE UR ERECTIONS
                 Rectangle meleeHurtBox = new Rectangle((int)this.pos.X + tex.Width, (int)this.pos.Y, MELEE_RANGE, this.rect.Height);
                 foreach (Enemy e in enemyList)
                 {
+                    if (meleeHurtBox.Intersects(e.rect))
+                    {
+                        e.health -= 1;
+                    }
 
                 }
             }
@@ -168,11 +184,13 @@ namespace GameSlamProject
         /// <param name="p"></param>
         public void GetPup(Pup p)
         {
+            //RAISE UR PUPPIES
             Vector2 pickupRange = new Vector2(this.pos.X + 10, this.pos.Y);
-            if ((p.pos.X = pickupRange.X) && (!this.hasPup))
+            if ((p.pos.X == pickupRange.X) && (!this.hasPup))
             {
                 this.hasPup = true;
-                p.usePup(this);
+                p.UsePup(this);
+                
             }
 
         }
@@ -218,6 +236,12 @@ namespace GameSlamProject
                 rateOfFire = 1;
                 hasPup = false;
             }
+
+            if (!isColliding)
+            {
+                this.vel = PLAYER_VELOCITY;
+            }
+
         }
 
         /// <summary>

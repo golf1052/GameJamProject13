@@ -60,9 +60,12 @@ namespace GameSlamProject
         /// <param name="player"></param>
         public void collide(Sprite player)
         {
-            if (player.pos.X == this.pos.X && player.pos.Y == this.pos.Y)
+            if (player.rect.Intersects(this.rect))
             {
-                // SHIT FUCK ASS TITTIES!!
+                // Effects a colision has on a player.
+                player.health -= 1;
+                player.vel.X -= 1;
+
             }
         }
     }

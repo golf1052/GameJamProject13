@@ -16,7 +16,7 @@ namespace GameSlamProject
     /// abstracted usePup method, which alters the Player state
     /// depending on the power up.
     /// </summary>
-    public class Pup : Sprite
+    public abstract class Pup : Sprite
     {
         #region CONSTANTS
         // The determined duration of the Obamacare powerup.
@@ -36,7 +36,7 @@ namespace GameSlamProject
             : base(loadedTex)
         {
         }
-        abstract void UsePup(Player p);
+        public abstract void UsePup(Player p);
     }
 }
 
