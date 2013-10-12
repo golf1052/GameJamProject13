@@ -12,23 +12,19 @@ using Microsoft.Xna.Framework.Media;
 
 namespace GameSlamProject
 {
-    class Republican : Enemy
+    class Boss : Enemy
     {
-        public Republican(Texture2D loadedTx) : base(loadedTx)
+        public Boss(Texture2D loadedTx) : base(loadedTx)
         {
             // Assigning the inputted texture to this.tex.
             this.tex = loadedTx;
 
-            // We are going to set these as the standard values for health & damage.
-            this.health = 100;
-            this.damage = 1;
+            // We are going to set the health & damage for all Bosses as:
+            this.health = 500;
+            this.damage = 20;
 
             // All vars inherited from Sprite, their values are set here.
-            this.pos.X = 0;     // ASSIGN ME
-            this.pos.Y = FLOOR - (this.rect.Height / 2);
-            this.vel.X = 0;     // ASSIGN ME
-            this.vel.Y = 0;     // ASSIGN ME
-            this.windowCollision = true;
+
         }
     }
 }
