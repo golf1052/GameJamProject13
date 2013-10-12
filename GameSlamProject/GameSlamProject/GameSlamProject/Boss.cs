@@ -24,7 +24,11 @@ namespace GameSlamProject
             this.damage = 20;
 
             // All vars inherited from Sprite, their values are set here.
-
+            this.pos.X = 0;     // ASSIGN ME
+            this.pos.Y = FLOOR;
+            this.vel.X = 0;     // ASSIGN ME
+            this.vel.Y = 0;     // ASSIGN ME
+            this.windowCollision = true;
         }
     }
 }
