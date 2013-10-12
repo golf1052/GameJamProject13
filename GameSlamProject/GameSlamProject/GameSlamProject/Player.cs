@@ -15,6 +15,7 @@ namespace GameSlamProject
         const int FLOOR_HEIGHT = 0;
         const int MOVE_DISTANCE = 5;
         const int JUMP_HEIGHT = 5;
+        const int MELEE_RANGE = 90;
         #endregion
 
         /// <summary>
@@ -121,15 +122,18 @@ namespace GameSlamProject
         /// player uses one of four attacks based on ks parameter
         /// </summary>
         /// <param name="ks"></param>
-        public void Attack(KeyboardState ks)
+        public void Attack(KeyboardState ks, List<Enemy> enemyList)
         {
             KeyboardState newState = Keyboard.GetState();
 
             if(newState.IsKeyDown(Keys.Z)) 
             {
                 //use melee attack
-                //change player image
+                Rectangle meleeHurtBox = new Rectangle((int)this.pos.X + tex.Width, (int)this.pos.Y, MELEE_RANGE, this.rect.Height);
+                foreach (Enemy e in enemyList)
+                {
 
+                }
             }
             else if (newState.IsKeyDown(Keys.X))
             {
