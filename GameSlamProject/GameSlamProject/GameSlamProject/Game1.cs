@@ -24,6 +24,13 @@ namespace GameSlamProject
         GamePadState previousGamePadState = GamePad.GetState(PlayerIndex.One);
         MouseState previousMouseState = Mouse.GetState();
 
+        /// <summary>
+        /// THE WORLD...BISH
+        /// </summary>
+        World world;
+
+        List<Background> backgrounds = new List<Background>();
+
         public Game1()
         {
             graphics = new GraphicsDeviceManager(this);
@@ -42,7 +49,7 @@ namespace GameSlamProject
         /// </summary>
         protected override void Initialize()
         {
-            // TODO: Add your initialization logic here
+            world = new World(graphics);
 
             base.Initialize();
         }
@@ -55,6 +62,14 @@ namespace GameSlamProject
         {
             // Create a new SpriteBatch, which can be used to draw textures.
             spriteBatch = new SpriteBatch(GraphicsDevice);
+
+            backgrounds.Add(new Background(Content.Load<Texture2D>("testbackground1")));
+            backgrounds.Add(new Background(Content.Load<Texture2D>("testbackground2")));
+            backgrounds.Add(new Background(Content.Load<Texture2D>("testbackground3")));
+            backgrounds.Add(new Background(Content.Load<Texture2D>("testbackground4")));
+            backgrounds.Add(new Background(Content.Load<Texture2D>("testbackground5")));
+
+            world.GenerateBackgroundList(backgrounds);
         }
 
         /// <summary>
@@ -94,7 +109,24 @@ namespace GameSlamProject
         {
             GraphicsDevice.Clear(Color.CornflowerBlue);
 
-            // TODO: Add your drawing code here
+            /*
+             * Things draw from top to bottom so in the list:
+             * - background
+             * - player
+             * - powerup
+             * Background will draw first, player will draw over the background
+             * and the powerup will draw over the background and the player
+             */
+            spriteBatch.Begin();
+
+            // ALL DRAW CODE GOES IN HERE
+
+            foreach (Background background in backgrounds)
+            {
+                background.Draw(spriteBatch);
+            }
+
+            spriteBatch.End();
 
             base.Draw(gameTime);
         }

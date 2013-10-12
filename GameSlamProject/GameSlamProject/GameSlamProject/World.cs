@@ -35,15 +35,8 @@ namespace GameSlamProject
         public Rectangle gameWindow;
 
         /// <summary>
-        /// The list of rays in the world. This is in World2D so Enemies can fire bullets.
+        /// Holds the graphics info
         /// </summary>
-        public List<int> rayList = new List<int>();
-
-        /// <summary>
-        /// The list of sprites that have been hit by rays in the world.
-        /// </summary>
-        public List<Sprite> hitSprite = new List<Sprite>();
-
         public GraphicsDeviceManager graphics;
 
         /// <summary>
@@ -54,6 +47,31 @@ namespace GameSlamProject
         {
             graphics = gfx;
             gameWindow = new Rectangle(0, 0, graphics.GraphicsDevice.Viewport.Width, graphics.GraphicsDevice.Viewport.Height);
+        }
+
+        public void GenerateBackgroundList(List<Background> backgrounds)
+        {
+            for (int i = 0; i < backgrounds.Count; i++)
+            {
+                if (i == 0)
+                {
+                    backgrounds[i].previous = null;
+                    backgrounds[i].next = backgrounds[i + 1];
+                    backgrounds[i].pos = Vector2.Zero;
+                }
+                else if (i > 0 && i < backgrounds.Count - 1)
+                {
+                    backgrounds[i].previous = backgrounds[i - 1];
+                    backgrounds[i].next = backgrounds[i + 1];
+                    backgrounds[i].pos = new Vector2(backgrounds[i].previous.pos.X + backgrounds[i].previous.tex.Width, 0);
+                }
+                else
+                {
+                    backgrounds[i].previous = backgrounds[i - 1];
+                    backgrounds[i].next = null;
+                    backgrounds[i].pos = new Vector2(backgrounds[i].previous.pos.X + backgrounds[i].previous.tex.Width, 0);
+                }
+            }
         }
 
         /// <summary>
@@ -75,24 +93,6 @@ namespace GameSlamProject
         /// <param name="gameTime">gameTime from class</param>
         public void Update(GameTime gameTime, GraphicsDeviceManager graphics)
         {
-            foreach (Sprite sprite in worldObjects)
-            {
-                if (sprite.gravity == true)
-                {
-                    if (sprite.pos.Y >= gameWindow.Bottom - (sprite.tex.Height) && sprite.movementState == Sprite.MovementState.Jumping)
-                    {
-                        sprite.movementState = Sprite.MovementState.Normal;
-                        sprite.vel.Y = 0.0f;
-                        sprite.pos.Y = gameWindow.Bottom - (sprite.tex.Height) - 1;
-                    }
-                    else if (sprite.pos.Y < gameWindow.Bottom - (sprite.tex.Height) && sprite.movementState == Sprite.MovementState.Jumping)
-                    {
-                        sprite.vel.Y += 1.0f;
-                    }
-                }
-
-                sprite.Update(gameTime, graphics);
-            }
         }
 
         public void MoveWorld(Vector2 movementVector)

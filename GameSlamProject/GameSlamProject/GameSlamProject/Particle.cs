@@ -16,7 +16,7 @@ namespace GameSlamProject
         /// <summary>
         /// Random to use in class. I don't know why it is here.
         /// </summary>
-        public Random random = new Random();
+        // public Random random = new Random();
 
         /// <summary>
         /// How long the particle will stay alive before despawning.

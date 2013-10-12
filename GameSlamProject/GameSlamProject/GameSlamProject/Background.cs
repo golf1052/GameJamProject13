@@ -16,16 +16,7 @@ namespace GameSlamProject
         public Background(Texture2D loadedTex)
             : base(loadedTex)
         {
-        }
-
-        public void SetPreviousBackground(Background bg)
-        {
-            previous = bg;
-        }
-
-        public void SetNextBackground(Background bg)
-        {
-            next = bg;
+            origin = Vector2.Zero;
         }
 
         public void Update(GameTime gameTime, GraphicsDeviceManager graphics)
