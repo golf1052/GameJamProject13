@@ -76,6 +76,9 @@
     <Compile Include="Democrat.cs" />
     <Compile Include="Enemy.cs" />
     <Compile Include="Background.cs" />
+    <Compile Include="Background.cs" />
+    <Compile Include="Enemy.cs" />
+    <Compile Include="ModelObject.cs" />
     <Compile Include="Particle.cs" />
     <Compile Include="Player.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -85,6 +88,12 @@
     <Compile Include="Sprite.cs" />
     <Compile Include="TextItem.cs" />
     <Compile Include="World2D.cs" />
+    <Compile Include="RayLine.cs" />
+    <Compile Include="Sprite.cs" />
+    <Compile Include="TextItem.cs" />
+    <Compile Include="Weapon.cs" />
+    <Compile Include="World2D.cs" />
+    <Compile Include="World3D.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Game.ico" />
