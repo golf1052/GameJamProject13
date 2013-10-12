@@ -75,6 +75,8 @@
     <Compile Include="Animation.cs" />
     <Compile Include="BearArms.cs" />
 	<Compile Include="Background.cs" />
+    <Compile Include="Background.cs" />
+    <Compile Include="Boss.cs" />
     <Compile Include="Enemy.cs" />
     <Compile Include="Obamacare.cs" />
     <Compile Include="Particle.cs" />
