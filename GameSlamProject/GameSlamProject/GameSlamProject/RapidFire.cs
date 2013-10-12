@@ -27,7 +27,7 @@ namespace GameSlamProject
         }
         // Using the RapidFire powerup increases the players shooting 
         // rate of fire. It also locks skills 3 and 4.
-        public void UsePup(Player p)
+        public override void UsePup(Player p)
         {
             p.pupDuration = p.pupDuration + duration;
             p.rateOfFire = rofChange;

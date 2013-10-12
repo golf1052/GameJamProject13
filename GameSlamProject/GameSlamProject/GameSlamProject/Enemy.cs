@@ -15,7 +15,7 @@ namespace GameSlamProject
     public class Enemy : Sprite
     {
         #region CONSTANTS
-        const int DISTANCE_MOVED = 5; // How far we want the unit to move on a tick.
+        const int MOVE_DISTANCE = 5; // How far we want the unit to move on a tick.
         #endregion
 
         // FIELDS -----------------------------------------------------------------------------------------------------
@@ -46,27 +46,28 @@ namespace GameSlamProject
         {
             if (player.pos.X < this.pos.X)
             {
-                this.pos.X = this.pos.X - DISTANCE_MOVED;
+                this.pos.X = this.pos.X - MOVE_DISTANCE;
             }
             else if (player.pos.X > this.pos.X)
             {
-                this.pos.X = this.pos.X + DISTANCE_MOVED;
+                this.pos.X = this.pos.X + MOVE_DISTANCE;
             }
         }
 
         /// <summary>
-        /// 
+        /// We check to see if this enemy has collided w/ given player, and if so, we hurt player
         /// </summary>
         /// <param name="player"></param>
-        public void collide(Sprite player)
+        public void collide(Player player)
         {
             if (player.rect.Intersects(this.rect))
             {
                 // Effects a colision has on a player.
                 player.health -= 1;
+                player.isColliding = true;
                 player.vel.X -= 1;
-
             }
+            player.isColliding = false;
         }
     }
 }

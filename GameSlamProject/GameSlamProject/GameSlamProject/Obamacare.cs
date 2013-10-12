@@ -27,10 +27,10 @@ namespace GameSlamProject
         }
         // Using the obamacare powerup makes the player invulnerable for the 
         // OBCARE_PUP_DURATION.
-        void UsePup(Player p)
+        public override void UsePup(Player p)
         {
             p.pupDuration = p.pupDuration + duration;
-            p.invulnerable = obcare;
+            p.isInvulnerable = obcare;
             p.hasPup = true;
             p.canUseStrike = false;
             p.canUseFear = false;

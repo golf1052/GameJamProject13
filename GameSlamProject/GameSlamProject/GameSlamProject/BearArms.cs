@@ -27,7 +27,7 @@ namespace GameSlamProject
         }
         // Using the Beararms powerup increases the rate of fire of the
         // player. It also locks the skills 2 3 and 4.
-        public void UsePup(Player p)
+        public override void UsePup(Player p)
         {
             p.pupDuration = p.pupDuration + duration;
             p.rateOfFire = meleeChange;

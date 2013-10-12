@@ -24,6 +24,8 @@ namespace GameSlamProject
         GamePadState previousGamePadState = GamePad.GetState(PlayerIndex.One);
         MouseState previousMouseState = Mouse.GetState();
 
+        Player dunkin;
+
         /// <summary>
         /// THE WORLD...BISH
         /// </summary>
@@ -70,6 +72,9 @@ namespace GameSlamProject
             backgrounds.Add(new Background(Content.Load<Texture2D>("testbackground5")));
 
             world.GenerateBackgroundList(backgrounds);
+
+            dunkin = new Player(Content.Load<Texture2D>("PD_Stand_NoWep"));
+            dunkin.pos = new Vector2(dunkin.tex.Width / 2 + 125, graphics.GraphicsDevice.Viewport.Height - dunkin.tex.Height / 2);
         }
 
         /// <summary>
@@ -92,6 +97,35 @@ namespace GameSlamProject
             KeyboardState keyboardState = Keyboard.GetState();
             GamePadState gamePadState = GamePad.GetState(PlayerIndex.One);
             MouseState mouseState = Mouse.GetState();
+
+            dunkin.Move(keyboardState);
+
+            dunkin.Update(gameTime, graphics);
+
+            if (dunkin.pos.X > 900 - dunkin.tex.Width / 2)
+            {
+                dunkin.pos.X = 900  - dunkin.tex.Width / 2;
+
+                if (backgrounds[backgrounds.Count - 1].pos.X + backgrounds[backgrounds.Count - 1].tex.Width > graphics.GraphicsDevice.Viewport.Width)
+                {
+                    backgrounds[0].pos.X -= 1.0f;
+                }
+            }
+
+            if (dunkin.pos.X < 124 + dunkin.tex.Width / 2)
+            {
+                dunkin.pos.X = 124 + dunkin.tex.Width / 2;
+
+                if (backgrounds[0].pos.X < 0)
+                {
+                    backgrounds[0].pos.X += 1.0f;
+                }
+            }
+
+            foreach (Background background in backgrounds)
+            {
+                background.Update(gameTime, graphics);
+            }
 
             // Set previous states to current states
             previousKeyboardState = keyboardState;
@@ -124,6 +158,15 @@ namespace GameSlamProject
             foreach (Background background in backgrounds)
             {
                 background.Draw(spriteBatch);
+            }
+
+            if (dunkin.facing == Player.Facing.Left)
+            {
+                spriteBatch.Draw(dunkin.tex, dunkin.pos, null, dunkin.color, dunkin.rotation, dunkin.origin, dunkin.scale, SpriteEffects.FlipHorizontally, 0);
+            }
+            else
+            {
+                spriteBatch.Draw(dunkin.tex, dunkin.pos, null, dunkin.color, dunkin.rotation, dunkin.origin, dunkin.scale, SpriteEffects.None, 0);
             }
 
             spriteBatch.End();

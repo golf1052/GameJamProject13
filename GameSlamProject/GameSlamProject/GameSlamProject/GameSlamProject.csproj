@@ -75,9 +75,9 @@
     <Compile Include="Animation.cs" />
     <Compile Include="BearArms.cs" />
     <Compile Include="Background.cs" />
+    <Compile Include="Bullet.cs" />
     <Compile Include="Boss.cs" />
     <Compile Include="Democrat.cs" />
-    <Compile Include="Enemy.cs" />
     <Compile Include="Obamacare.cs" />
     <Compile Include="Enemy.cs" />
     <Compile Include="Particle.cs" />
@@ -91,7 +91,6 @@
     <Compile Include="Sprite.cs" />
     <Compile Include="TextItem.cs" />
 	<Compile Include="World.cs" />
-    <Compile Include="World.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Game.ico" />
