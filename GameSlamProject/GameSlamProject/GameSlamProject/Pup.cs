@@ -29,6 +29,8 @@ namespace GameSlamProject
         public const int RAPIDFIRE_PUP_DURATION = 600;
         // The determined rofchange of the RapidFire powerup.
         public const int RAPIDFIRE_PUP_ROFCHANGE = 2;
+        // The determined duration of the fear powerup.
+        public const int PHOBIA_PUP_DURATION = 600;
         
         #endregion 
         public int duration;

@@ -26,6 +26,26 @@ namespace GameSlamProject
         public int GROUND_HEIGHT;
         public int OFFSET_FROM_BOTTOM = 10;
         public float GRAVITY = 0.5f;
+
+        /// <summary>
+        /// size of the start region of the map
+        /// </summary>
+        public int START_SIZE;
+
+        /// <summary>
+        /// size of the republican region of the map
+        /// </summary>
+        public int REPUBLICAN_SIZE;
+
+        /// <summary>
+        /// Size of the democrat region of the map
+        /// </summary>
+        public int DEMOCRAT_SIZE;
+        
+        /// <summary>
+        /// Size of the boss region of the map
+        /// </summary>
+        public int BOSS_SIZE;
         #endregion
 
         public Vector2 p_flagParticleSpawn = new Vector2(506, 338);

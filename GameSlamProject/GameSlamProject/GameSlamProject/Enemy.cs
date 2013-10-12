@@ -29,7 +29,6 @@ namespace GameSlamProject
         /// int representing how much damage the player can do.
         /// </summary>
         public int damage;
-
         /// <summary>
         /// Constructor for an Enemy.
         /// </summary>
@@ -44,6 +43,20 @@ namespace GameSlamProject
         /// </summary>
         public void move(Player p)
         {
+            // if they enemies are afraid, they move away from the player.
+            if (p.fearOn)
+            {
+                if (p.pos.X < this.pos.X)
+                {
+                    this.pos.X = this.pos.X + MOVE_DISTANCE;
+                }
+                else if (p.pos.X > this.pos.X)
+                {
+                    this.pos.X = this.pos.X - MOVE_DISTANCE;
+                }
+            }
+                // otherwise, they move towards the player.
+            else 
             if (p.pos.X + 5 < this.pos.X)
             {
                 this.pos.X = this.pos.X - MOVE_DISTANCE;
@@ -53,7 +66,6 @@ namespace GameSlamProject
                 this.pos.X = this.pos.X + MOVE_DISTANCE;
             }
         }
-
         /// <summary>
         /// We check to see if this enemy has collided w/ given player, and if so, we hurt player
         /// </summary>
