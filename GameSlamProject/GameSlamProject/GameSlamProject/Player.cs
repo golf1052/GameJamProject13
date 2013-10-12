@@ -99,7 +99,7 @@ namespace GameSlamProject
         /// </summary>
         public bool fearOn;
        
-        public Player(Texture2D loadedTex)
+        public Player(Texture2D loadedTex, Eagle myEagle, Bullet myBullet)
             : base(loadedTex)
         {
             health = 100;
@@ -115,12 +115,9 @@ namespace GameSlamProject
             isJumping = false;
             isFalling = false;
             isColliding = false;
-            /*
-            myBullet = new Bullet();
             myBullet.visible = false;
-            myEagle = new Eagle();
             myEagle.visible = false;
-            */ 
+
         }
 
         /// <summary>
@@ -196,9 +193,8 @@ namespace GameSlamProject
             {
                 if (this.canUseFear)
                 {
-                    //get map sector
-                    //assign correct fear
-                    //move-phobia list of enemies
+                    fearOn = true;
+                    hasPup = true;
                 }
             }
         }

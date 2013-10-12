@@ -26,6 +26,16 @@ namespace GameSlamProject
 
         Player dunkin;
 
+        /// <summary>
+        /// the player's faithful eagle companion
+        /// </summary>
+        Eagle attilla;
+
+        /// <summary>
+        /// the bullet that the player has
+        /// </summary>
+        Bullet gunshaver;
+
         Enemy testee;
 
         #region Map Particles
@@ -88,7 +98,7 @@ namespace GameSlamProject
 
             world.GenerateBackgroundList(backgrounds);
 
-            dunkin = new Player(Content.Load<Texture2D>("PD_Stand_NoWep"));
+            dunkin = new Player(Content.Load<Texture2D>("PD_Stand_NoWep"), attilla, gunshaver);
             dunkin.pos = new Vector2(dunkin.tex.Width / 2 + 125, world.GROUND_HEIGHT - dunkin.tex.Height / 2);
 
             testee = new Republican(Content.Load<Texture2D>("Rep1_Stand"));
