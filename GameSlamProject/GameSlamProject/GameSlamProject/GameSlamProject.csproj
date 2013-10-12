@@ -82,7 +82,6 @@
     <Compile Include="Game1.cs" />
     <Compile Include="Sprite.cs" />
     <Compile Include="TextItem.cs" />
-    <Compile Include="Sprite.cs" />
     <Compile Include="World.cs" />
   </ItemGroup>
   <ItemGroup>
