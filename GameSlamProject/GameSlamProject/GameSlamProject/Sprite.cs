@@ -19,6 +19,10 @@ namespace GameSlamProject
     /// </summary>
     public class Sprite
     {
+        #region CONSTANTS
+        const int FLOOR = 20;
+        #endregion
+
         /// <summary>
         /// Holds the 2D texture information.
         /// </summary>
@@ -28,6 +32,11 @@ namespace GameSlamProject
         /// Flag for alive state.
         /// </summary>
         public bool alive;
+
+        /// <summary>
+        /// Flag for whether or not this should be drawn.
+        /// </summary>
+        public bool visible;
 
         /// <summary>
         /// Holds the X and Y coordinates of the sprite.
