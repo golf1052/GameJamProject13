@@ -114,6 +114,14 @@ namespace GameSlamProject
         /// </summary>
         public bool windowCollision;
 
+        public enum Facing
+        {
+            Left,
+            Right
+        }
+
+        public Facing facing;
+
         /// <summary>
         /// Main contructor. Sets values to all the declarations above
         /// </summary>
@@ -137,6 +145,7 @@ namespace GameSlamProject
             random = new Random();
             origin = new Vector2(tex.Width / 2, tex.Height / 2);
             windowCollision = false;
+            facing = Facing.Right;
         }
 
         /// <summary>

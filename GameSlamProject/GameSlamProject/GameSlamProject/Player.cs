@@ -8,7 +8,7 @@ using Microsoft.Xna.Framework;
 
 namespace GameSlamProject
 {
-    class Player:Sprite
+    public class Player:Sprite
     {
         #region Constants
         const int MAX_JUMP_HEIGHT = 50;
@@ -16,7 +16,7 @@ namespace GameSlamProject
         const int MOVE_DISTANCE = 5;
         const int JUMP_HEIGHT = 5;
         const int MELEE_RANGE = 90;
-        const Vector2 PLAYER_VELOCITY = new Vector2(5, 0);
+        Vector2 PLAYER_VELOCITY = new Vector2(5, 0);
         #endregion
 
         /// <summary>
@@ -118,10 +118,12 @@ namespace GameSlamProject
             if(newState.IsKeyDown(Keys.Left)) 
             {
                 this.pos.X -= MOVE_DISTANCE;
+                facing = Facing.Left;
             }
             else if (newState.IsKeyDown(Keys.Right))
             {
-                this.pos.X += MOVE_DISTANCE;        
+                this.pos.X += MOVE_DISTANCE;
+                facing = Facing.Right;
             }
             else
             {

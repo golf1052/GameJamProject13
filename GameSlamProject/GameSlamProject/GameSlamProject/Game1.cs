@@ -98,6 +98,11 @@ namespace GameSlamProject
             GamePadState gamePadState = GamePad.GetState(PlayerIndex.One);
             MouseState mouseState = Mouse.GetState();
 
+            if (keyboardState.IsKeyDown(Keys.Escape))
+            {
+                this.Exit();
+            }
+
             dunkin.Move(keyboardState);
 
             dunkin.Update(gameTime, graphics);
