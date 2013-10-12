@@ -18,11 +18,27 @@ namespace GameSlamProject
     {
         GraphicsDeviceManager graphics;
         SpriteBatch spriteBatch;
+        
+        // Previous input states
+        KeyboardState previousKeyboardState = Keyboard.GetState();
+        GamePadState previousGamePadState = GamePad.GetState(PlayerIndex.One);
+        MouseState previousMouseState = Mouse.GetState();
+
+        /// <summary>
+        /// THE WORLD...BISH
+        /// </summary>
+        World world;
+
+        List<Background> backgrounds = new List<Background>();
 
         public Game1()
         {
             graphics = new GraphicsDeviceManager(this);
             Content.RootDirectory = "Content";
+
+            // Window size
+            graphics.PreferredBackBufferWidth = 1024;
+            graphics.PreferredBackBufferHeight = 768;
         }
 
         /// <summary>
@@ -33,7 +49,7 @@ namespace GameSlamProject
         /// </summary>
         protected override void Initialize()
         {
-            // TODO: Add your initialization logic here
+            world = new World(graphics);
 
             base.Initialize();
         }
@@ -47,7 +63,13 @@ namespace GameSlamProject
             // Create a new SpriteBatch, which can be used to draw textures.
             spriteBatch = new SpriteBatch(GraphicsDevice);
 
-            // TODO: use this.Content to load your game content here
+            backgrounds.Add(new Background(Content.Load<Texture2D>("testbackground1")));
+            backgrounds.Add(new Background(Content.Load<Texture2D>("testbackground2")));
+            backgrounds.Add(new Background(Content.Load<Texture2D>("testbackground3")));
+            backgrounds.Add(new Background(Content.Load<Texture2D>("testbackground4")));
+            backgrounds.Add(new Background(Content.Load<Texture2D>("testbackground5")));
+
+            world.GenerateBackgroundList(backgrounds);
         }
 
         /// <summary>
@@ -66,11 +88,15 @@ namespace GameSlamProject
         /// <param name="gameTime">Provides a snapshot of timing values.</param>
         protected override void Update(GameTime gameTime)
         {
-            // Allows the game to exit
-            if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed)
-                this.Exit();
+            // Get new states of inputs
+            KeyboardState keyboardState = Keyboard.GetState();
+            GamePadState gamePadState = GamePad.GetState(PlayerIndex.One);
+            MouseState mouseState = Mouse.GetState();
 
-            // TODO: Add your update logic here
+            // Set previous states to current states
+            previousKeyboardState = keyboardState;
+            previousGamePadState = gamePadState;
+            previousMouseState = mouseState;
 
             base.Update(gameTime);
         }
@@ -83,7 +109,24 @@ namespace GameSlamProject
         {
             GraphicsDevice.Clear(Color.CornflowerBlue);
 
-            // TODO: Add your drawing code here
+            /*
+             * Things draw from top to bottom so in the list:
+             * - background
+             * - player
+             * - powerup
+             * Background will draw first, player will draw over the background
+             * and the powerup will draw over the background and the player
+             */
+            spriteBatch.Begin();
+
+            // ALL DRAW CODE GOES IN HERE
+
+            foreach (Background background in backgrounds)
+            {
+                background.Draw(spriteBatch);
+            }
+
+            spriteBatch.End();
 
             base.Draw(gameTime);
         }

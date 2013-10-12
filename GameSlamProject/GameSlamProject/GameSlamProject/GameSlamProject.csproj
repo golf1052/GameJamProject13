@@ -87,6 +87,9 @@
     <Compile Include="Sprite.cs" />
     <Compile Include="TextItem.cs" />
 	<Compile Include="World.cs" />
+    <Compile Include="Sprite.cs" />
+    <Compile Include="TextItem.cs" />
+    <Compile Include="World.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Game.ico" />
