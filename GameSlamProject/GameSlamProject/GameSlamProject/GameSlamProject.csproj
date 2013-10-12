@@ -77,6 +77,8 @@
     <Compile Include="Background.cs" />
     <Compile Include="Bullet.cs" />
     <Compile Include="Boss.cs" />
+    <Compile Include="MapSector.cs" />
+    <Compile Include="Phobia.cs" />
     <Compile Include="Democrat.cs" />
     <Compile Include="Eagle.cs" />
     <Compile Include="Obamacare.cs" />

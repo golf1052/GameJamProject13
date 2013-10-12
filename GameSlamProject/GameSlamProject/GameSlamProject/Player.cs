@@ -95,16 +95,9 @@ namespace GameSlamProject
         public Eagle myEagle;
 
         /// <summary>
-        /// the enumerator that determines what map sector the player is in
-        /// republican, democrat, origin, start
+        /// Is the player currently using fear
         /// </summary>
-        public enum mapSector
-        {
-            Start,
-            Democrat,
-            Republican,
-            Boss
-        }
+        public bool fearOn;
        
         public Player(Texture2D loadedTex)
             : base(loadedTex)
@@ -122,7 +115,6 @@ namespace GameSlamProject
             isJumping = false;
             isFalling = false;
             isColliding = false;
-            //mapSector.Start;
             /*
             myBullet = new Bullet();
             myBullet.visible = false;
@@ -281,6 +273,7 @@ namespace GameSlamProject
             if (pupDuration == 0)
             {
                 isInvulnerable = false;
+                fearOn = false;
                 rateOfFire = 1;
                 hasPup = false;
             }
