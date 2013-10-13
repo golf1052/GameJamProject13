@@ -257,13 +257,6 @@ namespace GameSlamProject
             spriteSheets[i].sourceRect = new Rectangle(spriteSheets[i].currentFrame * spriteSheets[i].frameWidth, 0, spriteSheets[i].frameWidth, spriteSheets[i].frameHeight);
         }
 
-        public void DrawAnimation(SpriteBatch spriteBatch, int i)
-        {
-            //if (active == true)
-            //{
-            //    spriteBatch.Draw(spriteSheets[i].tex, pos, spriteSheets[i].sourceRect, color, rotation, origin, scale, SpriteEffects.None, 0);
-            //}
-        }
 
         /// <summary>
         /// move the player based on the ks parameter

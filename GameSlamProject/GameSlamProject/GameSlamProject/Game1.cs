@@ -119,9 +119,11 @@ namespace GameSlamProject
             world.worldObjects.Add(background);
 
             List<SpriteSheet> aniSpriteSheets = new List<SpriteSheet>();
-            aniSpriteSheets.Add(new SpriteSheet(Content.Load<Texture2D>("testSpriteSheet"), 10, 10, 5, 100, true));
+            aniSpriteSheets.Add(new SpriteSheet(Content.Load<Texture2D>("PD_Test1_NoWep_cleansheet"), 241, 238, 3, 1, true));
             ani = new Sprite(aniSpriteSheets);
-            ani.spriteSheets[0].scale = 5.0f;
+            ani.pos = new Vector2(100.0f, 100.0f);
+            ani.scale = 10.0f;
+            ani.spriteSheets[0].scale = 10.0f;
         }
 
         /// <summary>

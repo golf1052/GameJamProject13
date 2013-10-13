@@ -293,6 +293,7 @@ namespace GameSlamProject
         public void UpdateAnimation(GameTime gameTime, GraphicsDeviceManager graphics, int index)
         {
             spriteSheets[index].UpdateAnimation(gameTime);
+            spriteSheets[index].pos = pos;
             spriteSheets[index].Update(gameTime, graphics);
         }
 
