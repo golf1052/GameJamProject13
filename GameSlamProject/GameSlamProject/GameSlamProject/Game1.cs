@@ -29,6 +29,8 @@ namespace GameSlamProject
 
         List<SpriteSheet> repEnemySpriteSheets = new List<SpriteSheet>();
 
+        Enemy testee2;
+
         Sprite healthBar;
         SpriteFont HUDfont;
         TextItem healthText;
@@ -48,7 +50,7 @@ namespace GameSlamProject
          * RESTEE TESTEE
          */
 
-        Boss corporateFatCat;
+        Enemy corporateFatCat;
 
         #region Map Particles
         List<Particle> particles = new List<Particle>();
@@ -116,8 +118,15 @@ namespace GameSlamProject
             dunkin.pos = new Vector2(dunkin.spriteSheets[0].tex.Width + 125, world.GROUND_HEIGHT - dunkin.spriteSheets[0].tex.Height / 2);
             #endregion
 
-            repEnemySpriteSheets.Add(new SpriteSheet(Content.Load<Texture2D>("Rep1_Stand"), 60, 146, 1, 0, true));
-            repEnemySpriteSheets.Add(new SpriteSheet(Content.Load<Texture2D>("Rep_Run_cleansheet"), 70, 148, 8, 200, true));
+            repEnemySpriteSheets.Add(new SpriteSheet(Content.Load<Texture2D>("Fat_Cat"), 60, 146, 1, 0, true));
+            //repEnemySpriteSheets.Add(new SpriteSheet(Content.Load<Texture2D>("Rep_Run_cleansheet"), 70, 148, 8, 75, true));
+            repEnemySpriteSheets.Add(new SpriteSheet(Content.Load<Texture2D>("FatCat_Run"), 450, 450, 6, 200, true));
+            //testee2 = new Enemy(repEnemySpriteSheets, 300, 3.0f, 7.0f, world);
+            //testee2.pos = new Vector2(testee2.tex.Width + 500, world.GROUND_HEIGHT - testee2.tex.Height);
+            //testee2.pos = new Vector2(testee2.tex.Width + 500, world.GROUND_HEIGHT - testee2.tex.Height);
+            //testee2.vel = new Vector2(5.0f, 0.0f);
+            //testee2.isAnimatable = true;
+            //world.enemyList.Add(testee2);
 
             attilla = new Eagle(Content.Load<Texture2D>("therealeagle"), 10, graphics);
             attilla.visible = false;
@@ -132,12 +141,14 @@ namespace GameSlamProject
             //testee.vel = new Vector2(5.0f, 0.0f);
             //world.enemyList.Add(testee);
 
-            corporateFatCat = new Boss(Content.Load<Texture2D>("Fat_Cat"));
-            corporateFatCat.alive = false;
-            corporateFatCat.visible = false;
+            corporateFatCat = new Enemy(repEnemySpriteSheets, 300, 2.0f, 2.0f, world);
+            corporateFatCat.alive = true;
+            corporateFatCat.visible = true;
+            corporateFatCat.isAnimatable = true;
             corporateFatCat.pos = new Vector2(corporateFatCat.tex.Width / 2 + 5000, world.GROUND_HEIGHT - corporateFatCat.tex.Height / 2);
-            corporateFatCat.vel = new Vector2(2.0f, 0.0f);
-            //world.enemyList.Add(corporateFatCat);
+            //corporateFatCat.pos.X = 500;
+            corporateFatCat.vel = new Vector2(-2.0f, 0.0f);
+            world.enemyList.Add(corporateFatCat);
             
             particleTex = Content.Load<Texture2D>("flixel");
             republicanTex = Content.Load<Texture2D>("Rep1_Stand");
@@ -251,11 +262,17 @@ namespace GameSlamProject
             world.enemyList.Add(new Enemy(republicanTex, 300, 3.0f, 7.0f, world));
             foreach (Enemy e in world.enemyList)
             {
-                e.isAnimatable = false;
-                //foreach (SpriteSheet sheet in e.spriteSheets)
-                //{
-                //    sheet.pos = e.pos;
-                //}
+                if (e != corporateFatCat)
+                {
+                    e.isAnimatable = false;
+                }
+                else
+                {
+                    foreach (SpriteSheet sheet in e.spriteSheets)
+                    {
+                        sheet.pos = e.pos;
+                    }
+                }
             }
             //world.enemyList[world.enemyList.Count - 1].pos = new Vector2(world.enemyList[world.enemyList.Count - 1].tex.Width / 2 + 500, world.GROUND_HEIGHT - world.enemyList[world.enemyList.Count - 1].tex.Height / 2);
 
@@ -292,7 +309,7 @@ namespace GameSlamProject
             }
             #endregion
 
-            corporateFatCat.Update(gameTime, dunkin, world, 0);
+            //corporateFatCat.Update(gameTime, dunkin, world, 0);
 
             #region Background Code
             if (dunkin.pos.X > graphics.GraphicsDevice.Viewport.Width / 2 + 200 - dunkin.tex.Width / 2)
@@ -306,12 +323,12 @@ namespace GameSlamProject
                 }
             }
 
-            if (world.gameWindow.Intersects(world.boss))
-            {
-                corporateFatCat.alive = true;
-                corporateFatCat.visible = true;
-                //world.enemyList.Add(corporateFatCat);
-            }
+            //if (world.gameWindow.Intersects(world.boss))
+            //{
+            //    corporateFatCat.alive = true;
+            //    corporateFatCat.visible = true;
+            //    //world.enemyList.Add(corporateFatCat);
+            //}
 
             if (dunkin.pos.X < graphics.GraphicsDevice.Viewport.Width / 2 - 200 + dunkin.tex.Width / 2)
             {
@@ -342,7 +359,14 @@ namespace GameSlamProject
                 //{
                 //    e.Update(gameTime, dunkin, world, 0);
                 //}
-                e.Update(gameTime, dunkin, world, 0);
+                if (e != corporateFatCat)
+                {
+                    e.Update(gameTime, dunkin, world, 0);
+                }
+                else
+                {
+                    e.Update(gameTime, dunkin, world, 1);
+                }
             }
 
             #region Update Particle Code
@@ -467,16 +491,21 @@ namespace GameSlamProject
             {
                 if (e.alive == true)
                 {
-                    //if (e.animationState == Enemy.Animations.Running)
-                    //{
-                    //    e.Draw(spriteBatch, 1);
-                    //}
-                    //else
-                    //{
-                    //    e.Draw(spriteBatch, 0);
-                    //}
-
-                    e.Draw(spriteBatch);
+                    if (e != corporateFatCat)
+                    {
+                        e.Draw(spriteBatch);
+                    }
+                    else
+                    {
+                        if (e.animationState == Enemy.Animations.Running)
+                        {
+                            e.Draw(spriteBatch, 1);
+                        }
+                        else
+                        {
+                            e.Draw(spriteBatch, 0);
+                        }
+                    }
                 }
             }
 

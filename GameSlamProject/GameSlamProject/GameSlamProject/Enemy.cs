@@ -203,39 +203,45 @@ namespace GameSlamProject
                 alive = true;
                 health = 2;
 
-                if (random.NextDouble() < 0.5)
+                if (isAnimatable == false)
                 {
-                    pos = new Vector2(random.Next(-spawnRange, 0), world.GROUND_HEIGHT - tex.Height / 2);
-                }
-                else
-                {
-                    pos = new Vector2(random.Next(world.graphics.GraphicsDevice.Viewport.Width + 1, world.graphics.GraphicsDevice.Viewport.Width + spawnRange), world.GROUND_HEIGHT - tex.Height / 2);
-                }
-                if (pos.X < 0)
-                {
-                    vel = new Vector2(world.RandomBetween(minVelocity, maxVelocity), 0.0f);
-                }
-                else
-                {
-                    vel = new Vector2(-world.RandomBetween(minVelocity, maxVelocity), 0.0f);
+                    if (random.NextDouble() < 0.5)
+                    {
+                        pos = new Vector2(random.Next(-spawnRange, 0), world.GROUND_HEIGHT - tex.Height / 2);
+                    }
+                    else
+                    {
+                        pos = new Vector2(random.Next(world.graphics.GraphicsDevice.Viewport.Width + 1, world.graphics.GraphicsDevice.Viewport.Width + spawnRange), world.GROUND_HEIGHT - tex.Height / 2);
+                    }
+                    if (pos.X < 0)
+                    {
+                        vel = new Vector2(world.RandomBetween(minVelocity, maxVelocity), 0.0f);
+                    }
+                    else
+                    {
+                        vel = new Vector2(-world.RandomBetween(minVelocity, maxVelocity), 0.0f);
+                    }
                 }
 
-                //if (random.NextDouble() < 0.5)
-                //{
-                //    pos = new Vector2(random.Next(-spawnRange, 0), world.GROUND_HEIGHT - spriteSheets[0].tex.Height / 2);
-                //}
-                //else
-                //{
-                //    pos = new Vector2(random.Next(world.graphics.GraphicsDevice.Viewport.Width + 1, world.graphics.GraphicsDevice.Viewport.Width + spawnRange), world.GROUND_HEIGHT - spriteSheets[0].tex.Height / 2);
-                //}
-                //if (pos.X < 0)
-                //{
-                //    vel = new Vector2(world.RandomBetween(minVelocity, maxVelocity), 0.0f);
-                //}
-                //else
-                //{
-                //    vel = new Vector2(-world.RandomBetween(minVelocity, maxVelocity), 0.0f);
-                //}
+                if (isAnimatable == true)
+                {
+                    if (random.NextDouble() < 0.5)
+                    {
+                        pos = new Vector2(random.Next(-spawnRange, 0), world.GROUND_HEIGHT - spriteSheets[0].tex.Height / 2);
+                    }
+                    else
+                    {
+                        pos = new Vector2(random.Next(world.graphics.GraphicsDevice.Viewport.Width + 1, world.graphics.GraphicsDevice.Viewport.Width + spawnRange), world.GROUND_HEIGHT - spriteSheets[0].tex.Height / 2);
+                    }
+                    if (pos.X < 0)
+                    {
+                        vel = new Vector2(world.RandomBetween(minVelocity, maxVelocity), 0.0f);
+                    }
+                    else
+                    {
+                        vel = new Vector2(-world.RandomBetween(minVelocity, maxVelocity), 0.0f);
+                    }
+                }
             }
         }
 
