@@ -103,7 +103,7 @@ namespace GameSlamProject
             {
                 alive = true;
                 alpha = 1.0f;
-                vel = new Vector2((float)Math.Cos((MathHelper.ToRadians(rot) + MathHelper.ToRadians(random.Next(-spread, spread)))), (float)Math.Sin((MathHelper.ToRadians(rot) + MathHelper.ToRadians(random.Next(-spread, spread))))) * random.Next((int)velMultiplyMin, (int)velMultiplyMax);
+                vel = new Vector2((float)Math.Cos((MathHelper.ToRadians(rot) + MathHelper.ToRadians(random.Next(-spread, spread)))), (float)Math.Sin((MathHelper.ToRadians(rot) + MathHelper.ToRadians(random.Next(-spread, spread))))) * RandomBetween(velMultiplyMin, velMultiplyMax);
                 //vel = new Vector2(random.Next(-5, 6), random.Next(-5, 6));
                 color = particleColor;
                 fadeToColor = fadeTo;
@@ -134,7 +134,7 @@ namespace GameSlamProject
             {
                 alive = true;
                 alpha = 1.0f;
-                vel = new Vector2((float)Math.Cos((MathHelper.ToRadians(rot) + MathHelper.ToRadians(random.Next(-spread, spread)))), (float)Math.Sin((MathHelper.ToRadians(rot) + MathHelper.ToRadians(random.Next(-spread, spread))))) * random.Next((int)velMultiplyMin, (int)velMultiplyMax);
+                vel = new Vector2((float)Math.Cos((MathHelper.ToRadians(rot) + MathHelper.ToRadians(random.Next(-spread, spread)))), (float)Math.Sin((MathHelper.ToRadians(rot) + MathHelper.ToRadians(random.Next(-spread, spread))))) * RandomBetween(velMultiplyMin, velMultiplyMax);
                 color = colorList[random.Next(0, colorList.Count - 1)];
                 fadeToColor = fadeTo;
                 pos = position;

@@ -53,6 +53,7 @@ namespace GameSlamProject
                 p.myBullet.pos.Y = 0;
                 p.canFire = true;
                 p.myBullet.visible = false;
+                p.myBullet.alive = false;
                 // Bullet gets moved back to the Player elsewhere
             }
         }
@@ -62,7 +63,10 @@ namespace GameSlamProject
         {
             foreach (Enemy e in LoE)
             {
-                this.hitByBullet(e, p);
+                if (e.alive == true)
+                {
+                    this.hitByBullet(e, p);
+                }
             }
         }
 

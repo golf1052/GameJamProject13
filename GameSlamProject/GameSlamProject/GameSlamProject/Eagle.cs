@@ -52,6 +52,7 @@ namespace GameSlamProject
                 this.pos.Y = -170;
                 this.pos.X = 384;
                 hitBottom = false;
+                visible = false;
             }
             else if (p.facing == Facing.Right)
             {
@@ -104,8 +105,7 @@ namespace GameSlamProject
         // takes damage.
         public void damageEnemy(Enemy e)
         {
-            Rectangle eagleBox = new Rectangle((int)this.pos.X, (int)this.pos.Y, EAGLE_WIDTH, EAGLE_HEIGHT);
-            if (eagleBox.Intersects(e.rect))
+            if (rect.Intersects(e.rect))
             {
                 e.health -= this.damage;
             }

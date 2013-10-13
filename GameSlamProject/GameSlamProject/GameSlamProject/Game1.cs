@@ -100,18 +100,17 @@ namespace GameSlamProject
             dunkin = new Player(Content.Load<Texture2D>("PD_Stand_NoWep"), attilla, gunshaver);
             dunkin.pos = new Vector2(dunkin.tex.Width / 2 + 125, world.GROUND_HEIGHT - dunkin.tex.Height / 2);
 
-            attilla = new Eagle(Content.Load<Texture2D>("Eagle"), 10, graphics);
+            attilla = new Eagle(Content.Load<Texture2D>("therealeagle"), 10, graphics);
             attilla.visible = false;
             dunkin.myEagle = attilla;
 
-            gunshaver = new Bullet(Content.Load<Texture2D>("Bullet_Right"));
+            gunshaver = new Bullet(Content.Load<Texture2D>("bullet"));
             gunshaver.visible = false;
             dunkin.myBullet = gunshaver;
 
             testee = new Republican(Content.Load<Texture2D>("Rep1_Stand"));
             testee.pos = new Vector2(testee.tex.Width / 2 + 500, world.GROUND_HEIGHT - testee.tex.Height / 2);
             testee.vel = new Vector2(5.0f, 0.0f);
-            testee.windowCollision = false;
             world.enemyList.Add(testee);
 
             particleTex = Content.Load<Texture2D>("flixel");
@@ -199,6 +198,7 @@ namespace GameSlamProject
             #region Bullet Stuff
             dunkin.myBullet.offScreen(dunkin, world);
             dunkin.myBullet.moveBullet(dunkin);
+            dunkin.myBullet.hitEnemies(world.enemyList, dunkin);
             #endregion
 
             world.enemyList.Add(new Enemy(republicanTex, 300, 3.0f, 7.0f, world));
@@ -229,9 +229,9 @@ namespace GameSlamProject
                 background.pos.X = -background.tex.Width + graphics.GraphicsDevice.Viewport.Width;
             }
 
-            if (dunkin.pos.X > 400 - dunkin.tex.Width / 2)
+            if (dunkin.pos.X > graphics.GraphicsDevice.Viewport.Width / 2 + 200 - dunkin.tex.Width / 2)
             {
-                dunkin.pos.X = 400  - dunkin.tex.Width / 2;
+                dunkin.pos.X = graphics.GraphicsDevice.Viewport.Width / 2 + 200 - dunkin.tex.Width / 2;
 
                 //if (backgrounds[backgrounds.Count - 1].pos.X + backgrounds[backgrounds.Count - 1].tex.Width > graphics.GraphicsDevice.Viewport.Width)
                 //{
@@ -244,9 +244,9 @@ namespace GameSlamProject
                 }
             }
 
-            if (dunkin.pos.X < 124 + dunkin.tex.Width / 2)
+            if (dunkin.pos.X < graphics.GraphicsDevice.Viewport.Width / 2 - 200 + dunkin.tex.Width / 2)
             {
-                dunkin.pos.X = 124 + dunkin.tex.Width / 2;
+                dunkin.pos.X = graphics.GraphicsDevice.Viewport.Width / 2 - 200 + dunkin.tex.Width / 2;
 
                 //if (backgrounds[0].pos.X < 0)
                 //{
@@ -348,7 +348,14 @@ namespace GameSlamProject
 
             if (gunshaver.visible)
             {
-                gunshaver.Draw(spriteBatch);
+                if (dunkin.facing == Player.Facing.Left)
+                {
+                    spriteBatch.Draw(gunshaver.tex, gunshaver.pos, null, gunshaver.color, gunshaver.rotation, gunshaver.origin, gunshaver.scale, SpriteEffects.FlipHorizontally, 0);
+                }
+                else
+                {
+                    spriteBatch.Draw(gunshaver.tex, gunshaver.pos, null, gunshaver.color, gunshaver.rotation, gunshaver.origin, gunshaver.scale, SpriteEffects.None, 0);
+                }
             }
 
             #region Player Draw Code
@@ -371,7 +378,14 @@ namespace GameSlamProject
 
             if (attilla.visible)
             {
-                attilla.Draw(spriteBatch);
+                if (dunkin.facing == Player.Facing.Left)
+                {
+                    spriteBatch.Draw(attilla.tex, attilla.pos, null, attilla.color, attilla.rotation, attilla.origin, attilla.scale, SpriteEffects.FlipHorizontally, 0);
+                }
+                else
+                {
+                    spriteBatch.Draw(attilla.tex, attilla.pos, null, attilla.color, attilla.rotation, attilla.origin, attilla.scale, SpriteEffects.None, 0);
+                }
             }
 
             testee.Draw(spriteBatch);

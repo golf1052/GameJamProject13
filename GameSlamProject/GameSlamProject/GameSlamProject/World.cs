@@ -47,7 +47,7 @@ namespace GameSlamProject
         /// </summary>
         public int BOSS_SIZE;
 
-        public int MAX_ENEMIES = 100;
+        public int MAX_ENEMIES = 10;
         #endregion
 
         public Vector2 p_bloodParticleSpawn = new Vector2(118, 664);

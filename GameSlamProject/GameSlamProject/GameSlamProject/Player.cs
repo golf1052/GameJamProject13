@@ -174,59 +174,6 @@ namespace GameSlamProject
             {
                 UpdateAnimation(gameTime, (int)animationState);
             }
-
-            #region Window Collision
-            if (windowCollision == true)
-            {
-                if (origin == Vector2.Zero)
-                {
-                    if (pos.X < 0)
-                    {
-                        pos.X = 0;
-                    }
-
-                    if (pos.X > graphics.GraphicsDevice.Viewport.Width - tex.Width)
-                    {
-                        pos.X = graphics.GraphicsDevice.Viewport.Width - tex.Width;
-                    }
-
-                    if (pos.Y < 0)
-                    {
-                        pos.Y = 0;
-                    }
-					
-					eagleIsDoingShit = false;
-
-                    if (pos.Y > graphics.GraphicsDevice.Viewport.Height - tex.Height)
-                    {
-                        pos.Y = graphics.GraphicsDevice.Viewport.Height - tex.Height;
-                    }
-                }
-
-                if (origin == new Vector2(tex.Width / 2, tex.Height / 2))
-                {
-                    if (pos.X < 0 + tex.Width / 2)
-                    {
-                        pos.X = tex.Width / 2;
-                    }
-
-                    if (pos.X > graphics.GraphicsDevice.Viewport.Width - tex.Width / 2)
-                    {
-                        pos.X = graphics.GraphicsDevice.Viewport.Width - tex.Width / 2;
-                    }
-
-                    if (pos.Y < 0 + tex.Height / 2)
-                    {
-                        pos.Y = tex.Height / 2;
-                    }
-
-                    if (pos.Y > graphics.GraphicsDevice.Viewport.Height - tex.Height / 2)
-                    {
-                        pos.Y = graphics.GraphicsDevice.Viewport.Height - tex.Height / 2;
-                    }
-                }
-            }
-            #endregion
         }
 
         public void UpdateAnimation(GameTime gameTime, int i)
@@ -282,20 +229,28 @@ namespace GameSlamProject
         /// <param name="ks"></param>
         public void Attack(KeyboardState ks, KeyboardState ls, List<Enemy> enemyList)
         {
-            if(ks.IsKeyDown(Keys.Z)) 
+            if(ks.IsKeyDown(Keys.Z) && ls.IsKeyUp(Keys.Z)) 
             {
+                Rectangle meleeHurtBox = new Rectangle();
+
                 //RAISE UR ERECTIONS
-                Rectangle meleeHurtBox = new Rectangle((int)this.pos.X + tex.Width, (int)this.pos.Y, MELEE_RANGE, this.rect.Height);
+                if (facing == Facing.Right)
+                {
+                    meleeHurtBox = new Rectangle((int)this.pos.X + tex.Width, (int)this.pos.Y, MELEE_RANGE, this.rect.Height);
+                }
+                else
+                {
+                    meleeHurtBox = new Rectangle((int)this.pos.X - tex.Width, (int)this.pos.Y, MELEE_RANGE, this.rect.Height);
+                }
                 foreach (Enemy e in enemyList)
                 {
                     if (meleeHurtBox.Intersects(e.rect))
                     {
                         e.health -= 1;
                     }
-
                 }
             }
-            else if (ks.IsKeyDown(Keys.X))
+            else if (ks.IsKeyDown(Keys.X) && ls.IsKeyUp(Keys.X))
             {
                 if (this.canFire)
                 {

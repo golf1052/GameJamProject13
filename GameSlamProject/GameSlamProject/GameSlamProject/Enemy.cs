@@ -39,7 +39,6 @@ namespace GameSlamProject
         public Enemy(Texture2D loadedTex)
             : base(loadedTex)
         {
-            alive = false;
         }
 
         /// <summary>
@@ -135,8 +134,21 @@ namespace GameSlamProject
         /// </summary>
         public void SpawnEnemy(int spawnRange, float minVelocity, float maxVelocity, World world)
         {
-            if (world.enemyList.Count < world.MAX_ENEMIES)
+            int enemiesAlive = 0;
+
+            foreach (Enemy e in world.enemyList)
             {
+                if (e.alive == true)
+                {
+                    enemiesAlive++;
+                }
+            }
+
+            if (enemiesAlive < world.MAX_ENEMIES)
+            {
+                alive = true;
+                health = 2;
+
                 if (random.NextDouble() < 0.5)
                 {
                     pos = new Vector2(random.Next(-spawnRange, 0), world.GROUND_HEIGHT - tex.Height / 2);
@@ -153,7 +165,6 @@ namespace GameSlamProject
                 {
                     vel = new Vector2(-world.RandomBetween(minVelocity, maxVelocity), 0.0f);
                 }
-                alive = true;
             }
         }
 
@@ -163,6 +174,14 @@ namespace GameSlamProject
             //{
             //    w.enemyList.Remove(this);
             //}
+        }
+
+        public void Draw(SpriteBatch spriteBatch)
+        {
+            if (alive == true)
+            {
+                spriteBatch.Draw(tex, pos, null, color, rotation, origin, scale, SpriteEffects.None, 0);
+            }
         }
     }
 }
