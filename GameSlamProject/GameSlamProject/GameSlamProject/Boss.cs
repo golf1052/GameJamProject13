@@ -28,7 +28,7 @@ namespace GameSlamProject
             /// <summary>
             /// We are going to set the health & damage for all Bosses as:
             /// </summary>
-            this.health = 500;
+            this.health = 1000;
             this.damage = 20;
 
             /// <summary>
@@ -48,11 +48,11 @@ namespace GameSlamProject
         {
             if (player.pos.X < this.pos.X)
             {
-                this.pos.X = this.pos.X - 30;
+                this.pos.X = this.pos.X - 2;
             }
             else if (player.pos.X > this.pos.X)
             {
-                this.pos.X = this.pos.X + 30;
+                this.pos.X = this.pos.X + 2;
             }
         }
 

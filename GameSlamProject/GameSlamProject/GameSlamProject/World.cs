@@ -30,22 +30,22 @@ namespace GameSlamProject
         /// <summary>
         /// size of the start region of the map
         /// </summary>
-        public int START_SIZE;
+        public int START_SIZE = 3000;
 
         /// <summary>
         /// size of the republican region of the map
         /// </summary>
-        public int REPUBLICAN_SIZE;
+        public int REPUBLICAN_SIZE = 3000;
 
         /// <summary>
         /// Size of the democrat region of the map
         /// </summary>
-        public int DEMOCRAT_SIZE;
+        public int DEMOCRAT_SIZE = 3000;
         
         /// <summary>
         /// Size of the boss region of the map
         /// </summary>
-        public int BOSS_SIZE;
+        public int BOSS_SIZE = 3000;
 
         public int MAX_ENEMIES = 10;
         #endregion
@@ -55,6 +55,11 @@ namespace GameSlamProject
         public Rectangle p_treeFireSpawn2 = new Rectangle(2160, 441, 103, 97);
         public Rectangle p_treeFireSpawn3 = new Rectangle(2413, 408, 104, 94);
         public Rectangle p_bushFireSpawn = new Rectangle(414, 694, 661, 34);
+
+        public Rectangle start = new Rectangle(0, 0, 3000, 768);
+        public Rectangle republican = new Rectangle(6000, 0, 3000, 768);
+        public Rectangle democrat = new Rectangle(9000, 0, 3000, 768);
+        public Rectangle boss = new Rectangle(2000, 0, 3000, 768);
 
         /// <summary>
         /// Random to use.
@@ -83,6 +88,11 @@ namespace GameSlamProject
         /// List of enemies that are to be drawn.
         /// </summary>
         public List<Enemy> enemyList = new List<Enemy>();
+
+        /// <summary>
+        /// List containing boss character
+        /// </summary>
+        public List<Enemy> bossList = new List<Enemy>();
 
         /// <summary>
         /// Main constructor. Needs to be passed the GraphicsDeviceManager so that it can get the game window.
