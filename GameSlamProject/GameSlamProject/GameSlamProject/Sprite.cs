@@ -273,19 +273,19 @@ namespace GameSlamProject
             if (isAnimatable == true)
             {
                 spriteSheets[sheet].UpdateAnimation(gameTime);
-            }
 
-            foreach (SpriteSheet currentSheet in spriteSheets)
-            {
-                currentSheet.pos = pos;
-                currentSheet.vel = vel;
-                currentSheet.visible = visible;
-                currentSheet.alive = alive;
-                currentSheet.facing = facing;
-                currentSheet.isAnimatable = isAnimatable;
-                currentSheet.origin = origin;
-                currentSheet.rotation = rotation;
-                currentSheet.scale = scale;
+                foreach (SpriteSheet currentSheet in spriteSheets)
+                {
+                    currentSheet.pos = pos;
+                    currentSheet.vel = vel;
+                    currentSheet.visible = visible;
+                    currentSheet.alive = alive;
+                    currentSheet.facing = facing;
+                    currentSheet.isAnimatable = isAnimatable;
+                    currentSheet.origin = origin;
+                    currentSheet.rotation = rotation;
+                    currentSheet.scale = scale;
+                }
             }
         }
         

@@ -47,7 +47,7 @@ namespace GameSlamProject
         /// </summary>
         public int BOSS_SIZE = 3000;
 
-        public int MAX_ENEMIES = 10;
+        public int MAX_ENEMIES = 5;
         #endregion
 
         public Vector2 p_bloodParticleSpawn = new Vector2(118, 664);
@@ -177,6 +177,7 @@ namespace GameSlamProject
                 sprite.pos += movementVector;
             }
 
+            boss.X += (int)movementVector.X;
             p_bloodParticleSpawn += movementVector;
             p_treeFireSpawn1.X += (int)movementVector.X;
             p_treeFireSpawn1.Y += (int)movementVector.Y;

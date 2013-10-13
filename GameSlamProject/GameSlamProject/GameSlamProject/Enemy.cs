@@ -32,6 +32,8 @@ namespace GameSlamProject
 
         public bool outOfBounds = true;
 
+        public bool hasHurtPlayer = false;
+
         public enum Animations
         {
             Running,
@@ -128,7 +130,7 @@ namespace GameSlamProject
                 {
                     pos.X = 0;
                     vel *= -1;
-                    facing = Facing.Right;
+                    facing = Facing.Left;
                     animationState = Animations.Running;
                 }
 
@@ -136,7 +138,7 @@ namespace GameSlamProject
                 {
                     pos.X = world.graphics.GraphicsDevice.Viewport.Width;
                     vel *= -1;
-                    facing = Facing.Left;
+                    facing = Facing.Right;
                     animationState = Animations.Running;
                 }
             }
@@ -168,10 +170,14 @@ namespace GameSlamProject
         {
             if (player.rect.Intersects(this.rect))
             {
-                // Effects a colision has on a player.
-                player.health -= 1;
-                //player.isColliding = true;
-                //player.vel.X -= 1;
+                if (hasHurtPlayer == false)
+                {
+                    // Effects a colision has on a player.
+                    player.health -= 1;
+                    //player.isColliding = true;
+                    //player.vel.X -= 1;
+                }
+                hasHurtPlayer = true;
             }
             player.isColliding = false;
         }
@@ -245,7 +251,14 @@ namespace GameSlamProject
         {
             if (alive == true)
             {
-                spriteBatch.Draw(tex, pos, null, color, rotation, origin, scale, SpriteEffects.None, 0);
+                if (facing == Facing.Left)
+                {
+                    spriteBatch.Draw(tex, pos, null, color, rotation, origin, scale, SpriteEffects.FlipHorizontally, 0);
+                }
+                else if (facing == Facing.Right)
+                {
+                    spriteBatch.Draw(tex, pos, null, color, rotation, origin, scale, SpriteEffects.None, 0);
+                }
             }
         }
 

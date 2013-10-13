@@ -49,10 +49,12 @@ namespace GameSlamProject
             if (player.pos.X < this.pos.X)
             {
                 this.pos.X = this.pos.X - 2;
+                facing = Facing.Left;
             }
             else if (player.pos.X > this.pos.X)
             {
                 this.pos.X = this.pos.X + 2;
+                facing = Facing.Right;
             }
         }
 
