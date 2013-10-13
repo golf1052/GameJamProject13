@@ -44,20 +44,14 @@ namespace GameSlamProject
         // Determines which direction to call the eagle.
         public void moveEagle(Player p)
         {
-            if (this.pos.Y <= -1)
+            if (p.canUseStrike)
             {
-                this.pos.X = graphics.GraphicsDevice.Viewport.Width / 2;
-                this.pos.Y = 0;
-                p.canUseStrike = true;
-                p.myEagle.visible = false;
-                p.eagleIsDoingShit = false;
-            }
-
                 if (p.facing == Facing.Right)
                 {
                     this.moveEagleLeft();
                 }
                 else this.moveEagleRight();
+            }
         }
 
         // Moves the Eagle when it's called to the right.
@@ -114,6 +108,18 @@ namespace GameSlamProject
             foreach (Enemy e in LoE)
             {
                 this.damageEnemy(e);
+            }
+        }
+
+        // checks to see if the eagle is out of bounds now, so it can reset.
+        public void eagleOut(Player p)
+        {
+            if (this.pos.Y <= -1)
+            {
+                p.canUseStrike = true;
+                this.pos.X = graphics.GraphicsDevice.Viewport.Width / 2;
+                this.pos.Y = 0;
+                this.visible = false;
             }
         }
     }

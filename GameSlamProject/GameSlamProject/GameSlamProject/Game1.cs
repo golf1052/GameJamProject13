@@ -108,6 +108,7 @@ namespace GameSlamProject
 
             gunshaver = new Bullet(Content.Load<Texture2D>("Bullet_Right"));
             gunshaver.visible = false;
+            dunkin.myBullet = gunshaver;
 
             testee = new Republican(Content.Load<Texture2D>("Rep1_Stand"));
             testee.pos = new Vector2(testee.tex.Width / 2 + 500, world.GROUND_HEIGHT - testee.tex.Height / 2);
@@ -198,10 +199,23 @@ namespace GameSlamProject
             }
             #endregion
 
+
+            this.dunkin.RevertPlayer();
+            if (dunkin.pupDuration != 0)
+            {
+                dunkin.pupDuration = dunkin.pupDuration - 1;
+            }
+
             if (keyboardState.IsKeyDown(Keys.Escape))
             {
                 this.Exit();
             }
+
+            dunkin.myBullet.offScreen(dunkin, world);
+            dunkin.myBullet.moveBullet(dunkin);
+
+            dunkin.myEagle.eagleOut(dunkin);
+            dunkin.myEagle.moveEagle(dunkin);
 
             if (mouseState.LeftButton == ButtonState.Pressed)
             {
