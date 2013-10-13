@@ -27,6 +27,10 @@ namespace GameSlamProject
         Player dunkin;
         Texture2D republicanTex;
 
+        Sprite healthBar;
+        SpriteFont HUDfont;
+        TextItem healthText;
+
         /// <summary>
         /// the player's faithful eagle companion
         /// </summary>
@@ -134,6 +138,18 @@ namespace GameSlamProject
             
             particleTex = Content.Load<Texture2D>("flixel");
             republicanTex = Content.Load<Texture2D>("Rep1_Stand");
+            
+            HUDfont = Content.Load<SpriteFont>("StatusFont");
+            healthBar = new Sprite(Content.Load<Texture2D>("flixel"));
+            healthBar.origin = Vector2.Zero;
+            healthBar.pos = new Vector2(50, 50);
+            healthBar.drawRect = new Rectangle((int)healthBar.pos.X, (int)healthBar.pos.Y, 200, 20);
+            healthBar.color = Color.Red;
+
+            healthText = new TextItem(HUDfont, dunkin.health.ToString());
+            healthText.origin = Vector2.Zero;
+            healthText.pos = new Vector2(healthBar.pos.X + healthBar.drawRect.Width + 20, healthBar.pos.Y - healthText.MeasureString().Y / 3);
+            healthText.color = Color.Red;
 
             background = new Sprite(Content.Load<Texture2D>("Level1_Chunk1"));
             background.origin = Vector2.Zero;
@@ -443,6 +459,10 @@ namespace GameSlamProject
          
             //Draw(corporateFatCat.tex, corporateFatCat.pos, null, corporateFatCat.color, corporateFatCat.rotation, corporateFatCat.origin, corporateFatCat.scale, SpriteEffects.FlipHorizontally, 0);
             
+
+            healthBar.DrawWithRect(spriteBatch);
+            healthText.DrawString(spriteBatch);
+
             spriteBatch.End();
 
             base.Draw(gameTime);
