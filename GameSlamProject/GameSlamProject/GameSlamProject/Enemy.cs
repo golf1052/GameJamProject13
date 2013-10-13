@@ -29,19 +29,33 @@ namespace GameSlamProject
         /// int representing how much damage the player can do.
         /// </summary>
         public int damage;
+
+        public bool outOfBounds = true;
+
+        /// <summary>
+        /// Base constructor for an enemy
+        /// </summary>
+        /// <param name="loadedTex">The texture to be loaded</param>
+        public Enemy(Texture2D loadedTex)
+            : base(loadedTex)
+        {
+        }
+
         /// <summary>
         /// Constructor for an Enemy.
         /// </summary>
         /// <param name="loadedTx"> Texture represents the image file used for that enemy. </param>
-        public Enemy(Texture2D loadedTx) : base(loadedTx)
+        public Enemy(Texture2D loadedTex, int spawnRange, float minVelocity, float maxVelocity, World world) : base(loadedTex)
         {
-            // Empty constructor, since all subclasses have particular fields.
+            // MapSector sector should be around here somewhere soon in teh future
+            tex = loadedTex;
+            SpawnEnemy(spawnRange, minVelocity, maxVelocity, world);
         }
 
         /// <summary>
         /// Moves the Enemy instance towards the player (at all times).
         /// </summary>
-        public void move(Player p)
+        public void Move(Player p, World world)
         {
             // if they enemies are afraid, they move away from the player.
             if (p.fearOn)
@@ -55,15 +69,34 @@ namespace GameSlamProject
                     this.pos.X = this.pos.X - MOVE_DISTANCE;
                 }
             }
-                // otherwise, they move towards the player.
-            else 
-            if (p.pos.X + 5 < this.pos.X)
+
+            if (outOfBounds == false)
             {
-                this.pos.X = this.pos.X - MOVE_DISTANCE;
+                if (pos.X < 0)
+                {
+                    pos.X = 0;
+                    vel *= -1;
+                }
+
+                if (pos.X > world.graphics.GraphicsDevice.Viewport.Width)
+                {
+                    pos.X = world.graphics.GraphicsDevice.Viewport.Width;
+                    vel *= -1;
+                }
             }
-            else if (p.pos.X > this.pos.X)
+            else
             {
-                this.pos.X = this.pos.X + MOVE_DISTANCE;
+                if (pos.X < 0)
+                {
+                    pos.X = 0;
+                    vel *= -1;
+                }
+
+                if (pos.X > world.graphics.GraphicsDevice.Viewport.Width)
+                {
+                    pos.X = world.graphics.GraphicsDevice.Viewport.Width;
+                    vel *= -1;
+                }
             }
         }
 
@@ -87,33 +120,22 @@ namespace GameSlamProject
         /// Depending on where the player is on the map && how many enemies are on screen, spawn
         /// either a Democrat || a Republican
         /// </summary>
-        public void spawnEnemy(Player p, World w, MapSector ms)
+        public void SpawnEnemy(int spawnRange, float minVelocity, float maxVelocity, World world)
         {
-            if (w.enemyList.Count < 10)
-                if (p.rect.Intersects(ms.start))
-                {
-                    w.enemyList.Add(new Enemy(****Democrat or Republican****)); // set location to (w.graphics.GraphicsDevice.Viewport.Width, w.GROUND_HEIGHT)
-                }
-                if (p.rect.Intersects(ms.republican))
-                {
-                    w.enemyList.Add(new Enemy(****Republican****)); // set location to (w.graphics.GraphicsDevice.Viewport.Width, w.GROUND_HEIGHT)
-                }
-                if (p.rect.Intersects(ms.democrat))
-                {
-                    w.enemyList.Add(new Enemy(****Democrat****)); // set location to (w.graphics.GraphicsDevice.Viewport.Width, w.GROUND_HEIGHT)
-                }
-                if (p.rect.Intersects(ms.boss))
-                {
-                    // Add one boss to the enemy list after clearing all enemies off list.
-                }
+            if (world.enemyList.Count < world.MAX_ENEMIES)
+            {
+                pos = new Vector2(random.Next(-spawnRange, 0), world.GROUND_HEIGHT - tex.Height / 2);
+                vel = new Vector2(world.RandomBetween(minVelocity, maxVelocity), 0.0f);
+                alive = true;
+            }
         }
 
         public void killEnemy(World w)
         {
-            if(this.health <= 0 || ****Enemy is not on the window****)
-            {
-                w.enemyList.Remove(this);
-            }
+            //if(this.health <= 0 || ****Enemy is not on the window****)
+            //{
+            //    w.enemyList.Remove(this);
+            //}
         }
     }
 }

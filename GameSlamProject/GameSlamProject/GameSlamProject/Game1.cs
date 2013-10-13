@@ -25,8 +25,8 @@ namespace GameSlamProject
         MouseState previousMouseState = Mouse.GetState();
 
         Player dunkin;
+        Texture2D republicanTex;
 
-        Sprite ani;
         /// <summary>
         /// the player's faithful eagle companion
         /// </summary>
@@ -112,8 +112,12 @@ namespace GameSlamProject
 
             testee = new Republican(Content.Load<Texture2D>("Rep1_Stand"));
             testee.pos = new Vector2(testee.tex.Width / 2 + 500, world.GROUND_HEIGHT - testee.tex.Height / 2);
+            testee.vel = new Vector2(5.0f, 0.0f);
+            testee.windowCollision = false;
+            world.enemyList.Add(testee);
 
             particleTex = Content.Load<Texture2D>("flixel");
+            republicanTex = Content.Load<Texture2D>("Rep1_Stand");
 
             background = new Sprite(Content.Load<Texture2D>("Level1_Chunk1"));
             background.origin = Vector2.Zero;
@@ -121,10 +125,6 @@ namespace GameSlamProject
 
             List<SpriteSheet> aniSpriteSheets = new List<SpriteSheet>();
             aniSpriteSheets.Add(new SpriteSheet(Content.Load<Texture2D>("PD_Test1_NoWep_cleansheet"), 241, 238, 3, 1, true));
-            ani = new Sprite(aniSpriteSheets);
-            ani.pos = new Vector2(100.0f, 100.0f);
-            ani.scale = 10.0f;
-            ani.spriteSheets[0].scale = 10.0f;
         }
 
         /// <summary>
@@ -143,10 +143,17 @@ namespace GameSlamProject
         /// <param name="gameTime">Provides a snapshot of timing values.</param>
         protected override void Update(GameTime gameTime)
         {
+            #region Input Initalizations
             // Get new states of inputs
             KeyboardState keyboardState = Keyboard.GetState();
             GamePadState gamePadState = GamePad.GetState(PlayerIndex.One);
             MouseState mouseState = Mouse.GetState();
+
+            if (keyboardState.IsKeyDown(Keys.Escape))
+            {
+                this.Exit();
+            }
+            #endregion
 
             #region Map Specific Particles
             if (world.gameWindow.Contains((int)world.p_flagParticleSpawn.X, (int)world.p_flagParticleSpawn.Y))
@@ -204,13 +211,10 @@ namespace GameSlamProject
                 dunkin.pupDuration = dunkin.pupDuration - 1;
             }
 
-            if (keyboardState.IsKeyDown(Keys.Escape))
-            {
-                this.Exit();
-            }
-
             dunkin.myBullet.offScreen(dunkin, world);
             dunkin.myBullet.moveBullet(dunkin);
+
+            world.enemyList.Add(new Enemy(republicanTex, 300, 3.0f, 7.0f, world));
 
             if (mouseState.LeftButton == ButtonState.Pressed)
             {
@@ -221,21 +225,22 @@ namespace GameSlamProject
 
             dunkin.Jump(keyboardState, previousKeyboardState, world);
 
-            List<Enemy> peniswalls = new List<Enemy> ();
-            peniswalls.Add(testee);
-            dunkin.Attack(keyboardState, previousKeyboardState, peniswalls);
+            dunkin.Attack(keyboardState, previousKeyboardState, world.enemyList);
+
+            /*
+             * This comment must remain here till the end of time
+             * Here used to lie peniswalls
+             * The best List<Enemy> known to man
+             * RIP in penis
+             */
 
             dunkin.Update(gameTime, graphics);
 
             dunkin.myEagle.Update(gameTime, graphics);
 
-            testee.move(dunkin);
+            testee.Move(dunkin, world);
 
-            testee.Update(gameTime, graphics);
-
-            ani.DefaultControlSprite(keyboardState, gamePadState, 5.0f);
-            ani.UpdateAnimation(gameTime, graphics, 0);
-
+            #region Background Code
             if (background.pos.X > 0)
             {
                 background.pos.X = 0;
@@ -280,6 +285,13 @@ namespace GameSlamProject
             //{
             //    background.Update(gameTime, graphics);
             //}
+#endregion
+
+            foreach (Enemy e in world.enemyList)
+            {
+                e.Move(dunkin, world);
+                e.Update(gameTime, graphics);
+            }
 
             #region Update Particle Code
             foreach (Particle particle in particles)
@@ -375,6 +387,12 @@ namespace GameSlamProject
             }
             #endregion
 
+            if (gunshaver.visible)
+            {
+                gunshaver.Draw(spriteBatch);
+            }
+
+            #region Player Draw Code
             if (dunkin.facing == Player.Facing.Left)
             {
                 spriteBatch.Draw(dunkin.tex, dunkin.pos, null, dunkin.color, dunkin.rotation, dunkin.origin, dunkin.scale, SpriteEffects.FlipHorizontally, 0);
@@ -383,20 +401,21 @@ namespace GameSlamProject
             {
                 spriteBatch.Draw(dunkin.tex, dunkin.pos, null, dunkin.color, dunkin.rotation, dunkin.origin, dunkin.scale, SpriteEffects.None, 0);
             }
+            #endregion
+
+            #region Enemy Draw Code
+            foreach (Enemy e in world.enemyList)
+            {
+                e.Draw(spriteBatch);
+            }
+            #endregion
 
             if (attilla.visible)
             {
                 attilla.Draw(spriteBatch);
             }
 
-            if (gunshaver.visible)
-            {
-                gunshaver.Draw(spriteBatch);
-            }
-
             testee.Draw(spriteBatch);
-
-            ani.DrawAnimation(spriteBatch, 0);
 
             spriteBatch.End();
 

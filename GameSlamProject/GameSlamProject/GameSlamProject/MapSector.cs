@@ -7,7 +7,7 @@ using Microsoft.Xna.Framework.Graphics;
 
 namespace GameSlamProject
 {
-    class MapSector
+    public class MapSector
     {
         public Rectangle start;
         public Rectangle republican;

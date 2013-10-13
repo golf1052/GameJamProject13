@@ -194,38 +194,6 @@ namespace GameSlamProject
         }
 
         /// <summary>
-        /// Update method for animated sprites. Needs to be changed so that it can override the Sprite.cs Update function.
-        /// </summary>
-        /// <param name="gameTime">gameTime from class</param>
-        //public void UpdateAnimation(GameTime gameTime)
-        //{
-        //    if (active == false)
-        //    {
-        //        return;
-        //    }
-
-        //    elapsedTime += (int)gameTime.ElapsedGameTime.TotalMilliseconds;
-
-        //    if (elapsedTime > frameTime)
-        //    {
-        //        currentFrame++;
-
-        //        if (currentFrame == frameCount)
-        //        {
-        //            currentFrame = 0;
-        //            if (looping == false)
-        //            {
-        //                active = false;
-        //            }
-        //        }
-
-        //        elapsedTime = 0;
-        //    }
-
-        //    sourceRect = new Rectangle(currentFrame * frameWidth, 0, frameWidth, frameHeight);
-        //}
-
-        /// <summary>
         /// Updates the sprite. Adds vel to pos, changes the drawRect, updates rect and the pixel perfect code.
         /// </summary>
         /// <param name="gameTime">GameTime from class</param>

@@ -46,6 +46,8 @@ namespace GameSlamProject
         /// Size of the boss region of the map
         /// </summary>
         public int BOSS_SIZE;
+
+        public int MAX_ENEMIES = 10;
         #endregion
 
         public Vector2 p_flagParticleSpawn = new Vector2(506, 338);
@@ -102,6 +104,17 @@ namespace GameSlamProject
             sparkColors.Add(Color.Yellow);
             sparkColors.Add(Color.LightGoldenrodYellow);
             sparkColors.Add(Color.LightYellow);
+        }
+
+        /// <summary>
+        /// Gets a random value between two floats. The minimum number can also be negative!
+        /// </summary>
+        /// <param name="min">The smallest number you could get</param>
+        /// <param name="max">The largest number you could get, not inclusive</param>
+        /// <returns>Returns a random number of type float.</returns>
+        public float RandomBetween(float min, float max)
+        {
+            return min + (float)random.NextDouble() * (max - min);
         }
 
         public void GenerateBackgroundList(List<Background> backgrounds)
