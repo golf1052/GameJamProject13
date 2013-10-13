@@ -39,6 +39,8 @@ namespace GameSlamProject
 
         Enemy testee;
 
+        Boss corporateFatCat;
+
         #region Map Particles
         List<Particle> particles = new List<Particle>();
         List<Particle> p_bloodParticles = new List<Particle>();
@@ -90,11 +92,10 @@ namespace GameSlamProject
             spriteBatch = new SpriteBatch(GraphicsDevice);
 
             #region Load Backgrounds
-            backgrounds.Add(new Background(Content.Load<Texture2D>("testbackground1")));
-            backgrounds.Add(new Background(Content.Load<Texture2D>("testbackground2")));
-            backgrounds.Add(new Background(Content.Load<Texture2D>("testbackground3")));
-            backgrounds.Add(new Background(Content.Load<Texture2D>("testbackground4")));
-            backgrounds.Add(new Background(Content.Load<Texture2D>("testbackground5")));
+            backgrounds.Add(new Background(Content.Load<Texture2D>("Level1_Chunk1")));
+            backgrounds.Add(new Background(Content.Load<Texture2D>("Level1_Chunk1")));
+            backgrounds.Add(new Background(Content.Load<Texture2D>("Level1_Chunk1")));
+            backgrounds.Add(new Background(Content.Load<Texture2D>("Level1_Chunk1")));
 
             world.GenerateBackgroundList(backgrounds);
             #endregion
@@ -121,12 +122,24 @@ namespace GameSlamProject
             testee.vel = new Vector2(5.0f, 0.0f);
             world.enemyList.Add(testee);
 
+            corporateFatCat = new Boss(Content.Load<Texture2D>("Fat_Cat"));
+            corporateFatCat.pos = new Vector2(corporateFatCat.tex.Width / 2 + 5000, world.GROUND_HEIGHT - corporateFatCat.tex.Height / 2);
+            corporateFatCat.vel = new Vector2(2.0f, 0.0f);
+            world.enemyList.Add(corporateFatCat);
+            //if (world.gameWindow.Intersects(world.boss))
+            //{
+            //   world.enemyList.Add(corporateFatCat);
+            //}
+            
+            
             particleTex = Content.Load<Texture2D>("flixel");
             republicanTex = Content.Load<Texture2D>("Rep1_Stand");
 
             background = new Sprite(Content.Load<Texture2D>("Level1_Chunk1"));
             background.origin = Vector2.Zero;
+
             world.worldObjects.Add(background);
+           
         }
 
         /// <summary>
@@ -179,7 +192,7 @@ namespace GameSlamProject
             //if (world.gameWindow.Intersects(world.p_treeFireSpawn3))
             //{
             //    p_treeFireParticles.Add(new Particle(particleTex, new Vector2(world.random.Next(world.p_treeFireSpawn3.Left, world.p_treeFireSpawn3.Right), world.random.Next(world.p_treeFireSpawn3.Top, world.p_treeFireSpawn3.Bottom)), world.fireColors, 500, 1000, new Rectangle(0, 0, 5, 5), 270, 10, 1.0f, 1.5f, Color.Gray, false));
-            //    world.worldObjects.Add(p_treeFireParticles[p_treeFireParticles.Count - 1]);
+            //   world.worldObjects.Add(p_treeFireParticles[p_treeFireParticles.Count - 1]);
             //}
 
             //if (world.gameWindow.Intersects(world.p_bushFireSpawn))
@@ -194,6 +207,12 @@ namespace GameSlamProject
             //}
             #endregion
 
+            //does not work because the bg is changed
+            //if (world.gameWindow.Intersects(world.start))
+            //{
+            //    world.bossList.Add(corporateFatCat);
+            //}
+
             this.dunkin.RevertPlayer();
             if (dunkin.pupDuration != 0)
             {
@@ -207,6 +226,7 @@ namespace GameSlamProject
             #endregion
 
             world.enemyList.Add(new Enemy(republicanTex, 300, 3.0f, 7.0f, world));
+
 
             /*
              * This comment must remain here till the end of time
@@ -235,50 +255,51 @@ namespace GameSlamProject
             #endregion
 
             #region Background Code
-            if (background.pos.X > 0)
-            {
-                background.pos.X = 0;
-            }
+            //if (background.pos.X > 0)
+            //{
+            //    background.pos.X = 0;
+            //}
 
-            if (background.pos.X + background.tex.Width < graphics.GraphicsDevice.Viewport.Width)
-            {
-                background.pos.X = -background.tex.Width + graphics.GraphicsDevice.Viewport.Width;
-            }
+            //if (background.pos.X + background.tex.Width < graphics.GraphicsDevice.Viewport.Width)
+            //{
+            //    background.pos.X = -background.tex.Width + graphics.GraphicsDevice.Viewport.Width;
+            //}
 
             if (dunkin.pos.X > graphics.GraphicsDevice.Viewport.Width / 2 + 200 - dunkin.tex.Width / 2)
             {
                 dunkin.pos.X = graphics.GraphicsDevice.Viewport.Width / 2 + 200 - dunkin.tex.Width / 2;
 
-                //if (backgrounds[backgrounds.Count - 1].pos.X + backgrounds[backgrounds.Count - 1].tex.Width > graphics.GraphicsDevice.Viewport.Width)
-                //{
-                //    backgrounds[0].pos.X -= 1.0f;
-                //}
-
-                if (background.pos.X + background.tex.Width > graphics.GraphicsDevice.Viewport.Width)
+                if (backgrounds[backgrounds.Count - 1].pos.X + backgrounds[backgrounds.Count - 1].tex.Width > graphics.GraphicsDevice.Viewport.Width)
                 {
-                    world.MoveWorld(new Vector2(-5.0f, 0.0f));
+                    backgrounds[0].pos.X -= 15.0f;
                 }
+
+                //if (background.pos.X + background.tex.Width > graphics.GraphicsDevice.Viewport.Width)
+                //{
+                //    world.MoveWorld(new Vector2(-5.0f, 0.0f));
+                //}
             }
 
             if (dunkin.pos.X < graphics.GraphicsDevice.Viewport.Width / 2 - 200 + dunkin.tex.Width / 2)
             {
                 dunkin.pos.X = graphics.GraphicsDevice.Viewport.Width / 2 - 200 + dunkin.tex.Width / 2;
 
-                //if (backgrounds[0].pos.X < 0)
-                //{
-                //    backgrounds[0].pos.X += 1.0f;
-                //}
-
-                if (background.pos.X < 0)
+                if (backgrounds[0].pos.X < 0)
                 {
-                    world.MoveWorld(new Vector2(5.0f, 0.0f));
+                    backgrounds[0].pos.X += 15.0f;
                 }
+
+                //if (background.pos.X < 0)
+                //{
+                //    world.MoveWorld(new Vector2(5.0f, 0.0f));
+                //}
             }
 
-            //foreach (Background background in backgrounds)
-            //{
-            //    background.Update(gameTime, graphics);
-            //}
+            foreach (Background bg in backgrounds)
+            {
+                bg.Update(gameTime, graphics);
+            }
+
 #endregion
 
             foreach (Enemy e in world.enemyList)
@@ -338,7 +359,11 @@ namespace GameSlamProject
 
             // ALL DRAW CODE GOES IN HERE
 
-            background.Draw(spriteBatch);
+            foreach (Background bg in backgrounds)
+            {
+                bg.Draw(spriteBatch);
+            }
+            
 
             #region Particle Draw Code
             foreach (Particle particle in particles)
@@ -394,6 +419,12 @@ namespace GameSlamProject
             {
                 e.Draw(spriteBatch);
             }
+
+            foreach (Enemy b in world.bossList)
+            {
+                b.Draw(spriteBatch);
+            }
+
             #endregion
 
             if (attilla.visible)
@@ -409,7 +440,9 @@ namespace GameSlamProject
             }
 
             testee.Draw(spriteBatch);
-
+         
+            //Draw(corporateFatCat.tex, corporateFatCat.pos, null, corporateFatCat.color, corporateFatCat.rotation, corporateFatCat.origin, corporateFatCat.scale, SpriteEffects.FlipHorizontally, 0);
+            
             spriteBatch.End();
 
             base.Draw(gameTime);
