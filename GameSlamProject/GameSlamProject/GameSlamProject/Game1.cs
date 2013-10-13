@@ -89,6 +89,7 @@ namespace GameSlamProject
             // Create a new SpriteBatch, which can be used to draw textures.
             spriteBatch = new SpriteBatch(GraphicsDevice);
 
+            #region Load Backgrounds
             backgrounds.Add(new Background(Content.Load<Texture2D>("testbackground1")));
             backgrounds.Add(new Background(Content.Load<Texture2D>("testbackground2")));
             backgrounds.Add(new Background(Content.Load<Texture2D>("testbackground3")));
@@ -96,9 +97,16 @@ namespace GameSlamProject
             backgrounds.Add(new Background(Content.Load<Texture2D>("testbackground5")));
 
             world.GenerateBackgroundList(backgrounds);
+            #endregion
 
-            dunkin = new Player(Content.Load<Texture2D>("PD_Stand_NoWep"), attilla, gunshaver);
-            dunkin.pos = new Vector2(dunkin.tex.Width / 2 + 125, world.GROUND_HEIGHT - dunkin.tex.Height / 2);
+            #region Load Player
+            List<SpriteSheet> dunkinSpriteSheets = new List<SpriteSheet>();
+            dunkinSpriteSheets.Add(new SpriteSheet(Content.Load<Texture2D>("PD_Stand_NoWep"), 187, 286, 1, 0, true));
+            dunkinSpriteSheets.Add(new SpriteSheet(Content.Load<Texture2D>("PD_Test1_NoWep_cleansheet"), 241, 238, 3, 200, true));
+            dunkin = new Player(dunkinSpriteSheets, attilla, gunshaver);
+            dunkin.origin = new Vector2(dunkin.spriteSheets[0].tex.Width / 2, dunkin.spriteSheets[0].tex.Height / 2);
+            dunkin.pos = new Vector2(dunkin.spriteSheets[0].tex.Width + 125, world.GROUND_HEIGHT - dunkin.spriteSheets[0].tex.Height / 2);
+            #endregion
 
             attilla = new Eagle(Content.Load<Texture2D>("therealeagle"), 10, graphics);
             attilla.visible = false;
@@ -119,9 +127,6 @@ namespace GameSlamProject
             background = new Sprite(Content.Load<Texture2D>("Level1_Chunk1"));
             background.origin = Vector2.Zero;
             world.worldObjects.Add(background);
-
-            List<SpriteSheet> aniSpriteSheets = new List<SpriteSheet>();
-            aniSpriteSheets.Add(new SpriteSheet(Content.Load<Texture2D>("PD_Test1_NoWep_cleansheet"), 241, 238, 3, 1, true));
         }
 
         /// <summary>
@@ -153,40 +158,40 @@ namespace GameSlamProject
             #endregion
 
             #region Map Specific Particles
-            if (world.gameWindow.Contains((int)world.p_bloodParticleSpawn.X, (int)world.p_bloodParticleSpawn.Y))
-            {
-                p_bloodParticles.Add(new Particle(particleTex, world.p_bloodParticleSpawn, Color.Red, 300, 500, new Rectangle(0, 0, 3, 3), 90, 7, 1.0f, 2.0f, Color.DarkRed, false));
-                world.worldObjects.Add(p_bloodParticles[p_bloodParticles.Count - 1]);
-            }
+            //if (world.gameWindow.Contains((int)world.p_bloodParticleSpawn.X, (int)world.p_bloodParticleSpawn.Y))
+            //{
+            //    p_bloodParticles.Add(new Particle(particleTex, world.p_bloodParticleSpawn, Color.Red, 300, 500, new Rectangle(0, 0, 3, 3), 90, 7, 1.0f, 2.0f, Color.DarkRed, false));
+            //    world.worldObjects.Add(p_bloodParticles[p_bloodParticles.Count - 1]);
+            //}
 
-            if (world.gameWindow.Intersects(world.p_treeFireSpawn1))
-            {
-                p_treeFireParticles.Add(new Particle(particleTex, new Vector2(world.random.Next(world.p_treeFireSpawn1.Left, world.p_treeFireSpawn1.Right), world.random.Next(world.p_treeFireSpawn1.Top, world.p_treeFireSpawn1.Bottom)), world.fireColors, 500, 1000, new Rectangle(0, 0, 5, 5), 270, 10, 1.0f, 1.5f, Color.Gray, false));
-                world.worldObjects.Add(p_treeFireParticles[p_treeFireParticles.Count - 1]);
-            }
+            //if (world.gameWindow.Intersects(world.p_treeFireSpawn1))
+            //{
+            //    p_treeFireParticles.Add(new Particle(particleTex, new Vector2(world.random.Next(world.p_treeFireSpawn1.Left, world.p_treeFireSpawn1.Right), world.random.Next(world.p_treeFireSpawn1.Top, world.p_treeFireSpawn1.Bottom)), world.fireColors, 500, 1000, new Rectangle(0, 0, 5, 5), 270, 10, 1.0f, 1.5f, Color.Gray, false));
+            //    world.worldObjects.Add(p_treeFireParticles[p_treeFireParticles.Count - 1]);
+            //}
 
-            if (world.gameWindow.Intersects(world.p_treeFireSpawn2))
-            {
-                p_treeFireParticles.Add(new Particle(particleTex, new Vector2(world.random.Next(world.p_treeFireSpawn2.Left, world.p_treeFireSpawn2.Right), world.random.Next(world.p_treeFireSpawn2.Top, world.p_treeFireSpawn2.Bottom)), world.fireColors, 500, 1000, new Rectangle(0, 0, 5, 5), 270, 10, 1.0f, 1.5f, Color.Gray, false));
-                world.worldObjects.Add(p_treeFireParticles[p_treeFireParticles.Count - 1]);
-            }
+            //if (world.gameWindow.Intersects(world.p_treeFireSpawn2))
+            //{
+            //    p_treeFireParticles.Add(new Particle(particleTex, new Vector2(world.random.Next(world.p_treeFireSpawn2.Left, world.p_treeFireSpawn2.Right), world.random.Next(world.p_treeFireSpawn2.Top, world.p_treeFireSpawn2.Bottom)), world.fireColors, 500, 1000, new Rectangle(0, 0, 5, 5), 270, 10, 1.0f, 1.5f, Color.Gray, false));
+            //    world.worldObjects.Add(p_treeFireParticles[p_treeFireParticles.Count - 1]);
+            //}
 
-            if (world.gameWindow.Intersects(world.p_treeFireSpawn3))
-            {
-                p_treeFireParticles.Add(new Particle(particleTex, new Vector2(world.random.Next(world.p_treeFireSpawn3.Left, world.p_treeFireSpawn3.Right), world.random.Next(world.p_treeFireSpawn3.Top, world.p_treeFireSpawn3.Bottom)), world.fireColors, 500, 1000, new Rectangle(0, 0, 5, 5), 270, 10, 1.0f, 1.5f, Color.Gray, false));
-                world.worldObjects.Add(p_treeFireParticles[p_treeFireParticles.Count - 1]);
-            }
+            //if (world.gameWindow.Intersects(world.p_treeFireSpawn3))
+            //{
+            //    p_treeFireParticles.Add(new Particle(particleTex, new Vector2(world.random.Next(world.p_treeFireSpawn3.Left, world.p_treeFireSpawn3.Right), world.random.Next(world.p_treeFireSpawn3.Top, world.p_treeFireSpawn3.Bottom)), world.fireColors, 500, 1000, new Rectangle(0, 0, 5, 5), 270, 10, 1.0f, 1.5f, Color.Gray, false));
+            //    world.worldObjects.Add(p_treeFireParticles[p_treeFireParticles.Count - 1]);
+            //}
 
-            if (world.gameWindow.Intersects(world.p_bushFireSpawn))
-            {
-                p_bushFireParticles.Add(new Particle(particleTex, new Vector2(world.random.Next(world.p_bushFireSpawn.Left, world.p_bushFireSpawn.Right), world.random.Next(world.p_bushFireSpawn.Top, world.p_bushFireSpawn.Bottom)), world.fireColors, 500, 1000, new Rectangle(0, 0, 5, 5), 270, 20, 1.0f, 1.5f, Color.Gray, false));
-                world.worldObjects.Add(p_bushFireParticles[p_bushFireParticles.Count - 1]);
-            }
+            //if (world.gameWindow.Intersects(world.p_bushFireSpawn))
+            //{
+            //    p_bushFireParticles.Add(new Particle(particleTex, new Vector2(world.random.Next(world.p_bushFireSpawn.Left, world.p_bushFireSpawn.Right), world.random.Next(world.p_bushFireSpawn.Top, world.p_bushFireSpawn.Bottom)), world.fireColors, 500, 1000, new Rectangle(0, 0, 5, 5), 270, 20, 1.0f, 1.5f, Color.Gray, false));
+            //    world.worldObjects.Add(p_bushFireParticles[p_bushFireParticles.Count - 1]);
+            //}
 
-            if (mouseState.LeftButton == ButtonState.Pressed)
-            {
-                particles.Add(new Particle(particleTex, new Vector2(mouseState.X, mouseState.Y), world.sparkColors, 1000, 2000, new Rectangle(0, 0, 5, 5), 270, 22, 5.0f, 10.0f, Color.White, true));
-            }
+            //if (mouseState.LeftButton == ButtonState.Pressed)
+            //{
+            //    particles.Add(new Particle(particleTex, new Vector2(mouseState.X, mouseState.Y), world.sparkColors, 1000, 2000, new Rectangle(0, 0, 5, 5), 270, 22, 5.0f, 10.0f, Color.White, true));
+            //}
             #endregion
 
             this.dunkin.RevertPlayer();
@@ -215,7 +220,18 @@ namespace GameSlamProject
             dunkin.Jump(keyboardState, previousKeyboardState, world);
             dunkin.Attack(keyboardState, previousKeyboardState, world.enemyList);
             dunkin.myEagle.Update(gameTime, graphics);
-            dunkin.Update(gameTime, graphics);
+            if (dunkin.animationState == Player.Animations.Idle)
+            {
+                dunkin.Update(gameTime, graphics, 0);
+            }
+            if (dunkin.animationState == Player.Animations.Running)
+            {
+                dunkin.Update(gameTime, graphics, 1);
+            }
+            foreach (SpriteSheet sheet in dunkin.spriteSheets)
+            {
+                sheet.pos = dunkin.pos;
+            }
             #endregion
 
             #region Background Code
@@ -359,13 +375,17 @@ namespace GameSlamProject
             }
 
             #region Player Draw Code
-            if (dunkin.facing == Player.Facing.Left)
+            if (dunkin.animationState == Player.Animations.Idle)
             {
-                spriteBatch.Draw(dunkin.tex, dunkin.pos, null, dunkin.color, dunkin.rotation, dunkin.origin, dunkin.scale, SpriteEffects.FlipHorizontally, 0);
+                dunkin.Draw(spriteBatch, 0);
+            }
+            else if (dunkin.animationState == Player.Animations.Running)
+            {
+                dunkin.Draw(spriteBatch, 1);
             }
             else
             {
-                spriteBatch.Draw(dunkin.tex, dunkin.pos, null, dunkin.color, dunkin.rotation, dunkin.origin, dunkin.scale, SpriteEffects.None, 0);
+                dunkin.Draw(spriteBatch);
             }
             #endregion
 

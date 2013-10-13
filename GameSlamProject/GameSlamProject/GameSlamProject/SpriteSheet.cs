@@ -67,7 +67,18 @@ namespace GameSlamProject
         {
             if (active == true)
             {
-                spriteBatch.Draw(tex, pos, sourceRect, color, rotation, origin, scale, SpriteEffects.None, 0);
+                if (facing == Facing.Left)
+                {
+                    spriteBatch.Draw(tex, pos, sourceRect, color, rotation, origin, scale, SpriteEffects.FlipHorizontally, 0);
+                }
+                else if (facing == Facing.Right)
+                {
+                    spriteBatch.Draw(tex, pos, sourceRect, color, rotation, origin, scale, SpriteEffects.None, 0);
+                }
+                else
+                {
+                    spriteBatch.Draw(tex, pos, sourceRect, color, rotation, origin, scale, SpriteEffects.None, 0);
+                }
             }
         }
     }

@@ -272,7 +272,18 @@ namespace GameSlamProject
         /// <param name="spriteBatch">SpriteBatch from class</param>
         public void Draw(SpriteBatch spriteBatch)
         {
-            spriteBatch.Draw(tex, pos, null, color, rotation, origin, scale, SpriteEffects.None, 0);
+            if (facing == Facing.Left)
+            {
+                spriteBatch.Draw(tex, pos, null, color, rotation, origin, scale, SpriteEffects.FlipHorizontally, 0);
+            }
+            else if (facing == Facing.Right)
+            {
+                spriteBatch.Draw(tex, pos, null, color, rotation, origin, scale, SpriteEffects.None, 0);
+            }
+            else
+            {
+                spriteBatch.Draw(tex, pos, null, color, rotation, origin, scale, SpriteEffects.None, 0);
+            }
         }
 
         public void DrawAnimation(SpriteBatch spriteBatch, int index)

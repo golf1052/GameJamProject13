@@ -138,7 +138,7 @@ namespace GameSlamProject
             animationState = Animations.None;
         }
 
-        public Player(List<SpriteSheet> loadedSheets)
+        public Player(List<SpriteSheet> loadedSheets, Eagle myEagle, Bullet myBullet)
             : base(loadedSheets)
         {
             health = 100;
@@ -155,7 +155,28 @@ namespace GameSlamProject
             isFalling = false;
             isColliding = false;
             isAnimatable = true;
-            animationState = Animations.None;
+            animationState = Animations.Idle;
+        }
+
+        public void Draw(SpriteBatch spriteBatch)
+        {
+            if (facing == Facing.Left)
+            {
+                spriteBatch.Draw(tex, pos, null, color, rotation, origin, scale, SpriteEffects.FlipHorizontally, 0);
+            }
+            else if (facing == Facing.Right)
+            {
+                spriteBatch.Draw(tex, pos, null, color, rotation, origin, scale, SpriteEffects.None, 0);
+            }
+            else
+            {
+                spriteBatch.Draw(tex, pos, null, color, rotation, origin, scale, SpriteEffects.None, 0);
+            }
+        }
+
+        public void Draw(SpriteBatch spriteBatch, int sheet)
+        {
+            spriteSheets[sheet].DrawAnimation(spriteBatch);
         }
 
         /// <summary>
@@ -170,38 +191,37 @@ namespace GameSlamProject
             rect = new Rectangle((int)pos.X, (int)pos.Y, tex.Width, tex.Height);
             spriteTransform = Matrix.CreateTranslation(new Vector3(-origin, 0.0f)) * Matrix.CreateScale(scale) * Matrix.CreateRotationZ(rotation) * Matrix.CreateTranslation(new Vector3(pos, 0.0f));
             rect = CalculateBoundingRectangle(new Rectangle(0, 0, tex.Width, tex.Height), spriteTransform);
-            if (isAnimatable == true)
-            {
-                UpdateAnimation(gameTime, (int)animationState);
-            }
         }
 
-        public void UpdateAnimation(GameTime gameTime, int i)
+        /// <summary>
+        /// Updates the sprite. Adds vel to pos, changes the drawRect, updates rect and the pixel perfect code.
+        /// </summary>
+        /// <param name="gameTime">GameTime from class</param>
+        public void Update(GameTime gameTime, GraphicsDeviceManager graphics, int sheet)
         {
-            if (spriteSheets[i].active == false)
+            pos += vel;
+            drawRect.X = (int)pos.X;
+            drawRect.Y = (int)pos.Y;
+            rect = new Rectangle((int)pos.X, (int)pos.Y, tex.Width, tex.Height);
+            spriteTransform = Matrix.CreateTranslation(new Vector3(-origin, 0.0f)) * Matrix.CreateScale(scale) * Matrix.CreateRotationZ(rotation) * Matrix.CreateTranslation(new Vector3(pos, 0.0f));
+            rect = CalculateBoundingRectangle(new Rectangle(0, 0, tex.Width, tex.Height), spriteTransform);
+            if (isAnimatable == true)
             {
-                return;
+                spriteSheets[sheet].UpdateAnimation(gameTime);
             }
 
-            spriteSheets[i].elapsedTime += (int)gameTime.ElapsedGameTime.TotalMilliseconds;
-
-            if (spriteSheets[i].elapsedTime > spriteSheets[i].frameTime)
+            foreach (SpriteSheet currentSheet in spriteSheets)
             {
-                spriteSheets[i].currentFrame++;
-
-                if (spriteSheets[i].currentFrame >= spriteSheets[i].frameCount)
-                {
-                    spriteSheets[i].currentFrame = 0;
-                    if (spriteSheets[i].looping == false)
-                    {
-                        spriteSheets[i].active = false;
-                    }
-                }
-
-                spriteSheets[i].elapsedTime = 0;
+                currentSheet.pos = pos;
+                currentSheet.vel = vel;
+                currentSheet.visible = visible;
+                currentSheet.alive = alive;
+                currentSheet.facing = facing;
+                currentSheet.isAnimatable = isAnimatable;
+                currentSheet.origin = origin;
+                currentSheet.rotation = rotation;
+                currentSheet.scale = scale;
             }
-
-            spriteSheets[i].sourceRect = new Rectangle(spriteSheets[i].currentFrame * spriteSheets[i].frameWidth, 0, spriteSheets[i].frameWidth, spriteSheets[i].frameHeight);
         }
 
         /// <summary>
@@ -214,11 +234,17 @@ namespace GameSlamProject
             {
                 this.pos.X -= MOVE_DISTANCE;
                 facing = Facing.Left;
+                animationState = Animations.Running;
             }
             else if (ks.IsKeyDown(Keys.Right))
             {
                 this.pos.X += MOVE_DISTANCE;
                 facing = Facing.Right;
+                animationState = Animations.Running;
+            }
+            else
+            {
+                animationState = Animations.Idle;
             }
         }
 
