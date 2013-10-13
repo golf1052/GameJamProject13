@@ -118,13 +118,10 @@ namespace GameSlamProject
             background.origin = Vector2.Zero;
             world.worldObjects.Add(background);
 
-            Texture2D aniX = Content.Load<Texture2D>("testspritesheet");
-            List<Texture2D> aniList = new List<Texture2D>();
-            aniList.Add(Content.Load<Texture2D>("testspritesheet"));
-            ani = new Sprite(aniList, 10, 10, 5, 100, true, particleTex);
-            ani.active = true;
-            ani.alive = true;
-            ani.visible = true;
+            List<SpriteSheet> aniSpriteSheets = new List<SpriteSheet>();
+            aniSpriteSheets.Add(new SpriteSheet(Content.Load<Texture2D>("testSpriteSheet"), 10, 10, 5, 100, true));
+            ani = new Sprite(aniSpriteSheets);
+            ani.spriteSheets[0].scale = 5.0f;
         }
 
         /// <summary>
@@ -225,7 +222,7 @@ namespace GameSlamProject
             testee.Update(gameTime, graphics);
 
             ani.DefaultControlSprite(keyboardState, gamePadState, 5.0f);
-            ani.Update(gameTime, graphics);
+            ani.UpdateAnimation(gameTime, graphics, 0);
 
             if (background.pos.X > 0)
             {
@@ -387,7 +384,7 @@ namespace GameSlamProject
 
             testee.Draw(spriteBatch);
 
-            ani.DrawAnimation(spriteBatch);
+            ani.DrawAnimation(spriteBatch, 0);
 
             spriteBatch.End();
 
