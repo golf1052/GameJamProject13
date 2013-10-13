@@ -215,6 +215,13 @@ namespace GameSlamProject
             {
                 dunkin.pupDuration = dunkin.pupDuration - 1;
             }
+            
+            for (int i = 0; i < world.enemyList.Count(); i++)
+            {
+                world.enemyList[i].collide(dunkin);
+                healthText.UpdateString();
+            }
+            
 
             #region Bullet Stuff
             dunkin.myBullet.offScreen(dunkin, world);
@@ -232,6 +239,7 @@ namespace GameSlamProject
              */
 
             #region Duncan's Fun House 2013 (Dunkin update stuff)
+
             dunkin.Move(keyboardState);
             dunkin.Jump(keyboardState, previousKeyboardState, world);
             dunkin.Attack(keyboardState, previousKeyboardState, world.enemyList);

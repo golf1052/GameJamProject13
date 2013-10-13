@@ -15,7 +15,7 @@ namespace GameSlamProject
     public class Enemy : Sprite
     {
         #region CONSTANTS
-        const int MOVE_DISTANCE = 5; // How far we want the unit to move on a tick.
+        const int MOVE_DISTANCE = 10; // How far we want the unit to move on a tick.
         #endregion
 
         // FIELDS -----------------------------------------------------------------------------------------------------
@@ -122,8 +122,8 @@ namespace GameSlamProject
             {
                 // Effects a colision has on a player.
                 player.health -= 1;
-                player.isColliding = true;
-                player.vel.X -= 1;
+                //player.isColliding = true;
+                //player.vel.X -= 1;
             }
             player.isColliding = false;
         }
