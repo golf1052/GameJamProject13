@@ -198,7 +198,6 @@ namespace GameSlamProject
             }
             #endregion
 
-
             this.dunkin.RevertPlayer();
             if (dunkin.pupDuration != 0)
             {
@@ -212,7 +211,6 @@ namespace GameSlamProject
 
             dunkin.myBullet.offScreen(dunkin, world);
             dunkin.myBullet.moveBullet(dunkin);
-
 
             if (mouseState.LeftButton == ButtonState.Pressed)
             {

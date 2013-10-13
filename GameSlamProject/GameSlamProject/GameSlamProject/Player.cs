@@ -257,7 +257,6 @@ namespace GameSlamProject
             spriteSheets[i].sourceRect = new Rectangle(spriteSheets[i].currentFrame * spriteSheets[i].frameWidth, 0, spriteSheets[i].frameWidth, spriteSheets[i].frameHeight);
         }
 
-
         /// <summary>
         /// move the player based on the ks parameter
         /// </summary>
@@ -314,12 +313,6 @@ namespace GameSlamProject
                     fearOn = true;
                     hasPup = true;
                 }
-            }
-            else if ((ks.IsKeyDown(Keys.C)) && (ls.IsKeyUp(Keys.C)))
-            {
-                myEagle.visible = true;
-                this.canUseStrike = false;
-
             }
             else
                 if (!eagleIsDoingShit)
