@@ -203,6 +203,11 @@ namespace GameSlamProject
                 p_bushFireParticles.Add(new Particle(particleTex, new Vector2(world.random.Next(world.p_bushFireSpawn.Left, world.p_bushFireSpawn.Right), world.random.Next(world.p_bushFireSpawn.Top, world.p_bushFireSpawn.Bottom)), world.fireColors, 500, 1000, new Rectangle(0, 0, 5, 5), 270, 20, 1.0f, 1.5f, Color.Gray, false));
                 world.worldObjects.Add(p_bushFireParticles[p_bushFireParticles.Count - 1]);
             }
+
+            if (mouseState.LeftButton == ButtonState.Pressed)
+            {
+                particles.Add(new Particle(particleTex, new Vector2(mouseState.X, mouseState.Y), world.sparkColors, 1000, 2000, new Rectangle(0, 0, 5, 5), 270, 22, 5.0f, 10.0f, Color.White, true));
+            }
             #endregion
 
             this.dunkin.RevertPlayer();
@@ -211,21 +216,12 @@ namespace GameSlamProject
                 dunkin.pupDuration = dunkin.pupDuration - 1;
             }
 
+            #region Bullet Stuff
             dunkin.myBullet.offScreen(dunkin, world);
             dunkin.myBullet.moveBullet(dunkin);
+            #endregion
 
             world.enemyList.Add(new Enemy(republicanTex, 300, 3.0f, 7.0f, world));
-
-            if (mouseState.LeftButton == ButtonState.Pressed)
-            {
-                particles.Add(new Particle(particleTex, new Vector2(mouseState.X, mouseState.Y), world.sparkColors, 1000, 2000, new Rectangle(0, 0, 5, 5), 270, 22, 5.0f, 10.0f, Color.White, true));
-            }
-			
-            dunkin.Move(keyboardState);
-
-            dunkin.Jump(keyboardState, previousKeyboardState, world);
-
-            dunkin.Attack(keyboardState, previousKeyboardState, world.enemyList);
 
             /*
              * This comment must remain here till the end of time
@@ -234,11 +230,13 @@ namespace GameSlamProject
              * RIP in penis
              */
 
-            dunkin.Update(gameTime, graphics);
-
+            #region Duncan's Fun House 2013 (Dunkin update stuff)
+            dunkin.Move(keyboardState);
+            dunkin.Jump(keyboardState, previousKeyboardState, world);
+            dunkin.Attack(keyboardState, previousKeyboardState, world.enemyList);
             dunkin.myEagle.Update(gameTime, graphics);
-
-            testee.Move(dunkin, world);
+            dunkin.Update(gameTime, graphics);
+            #endregion
 
             #region Background Code
             if (background.pos.X > 0)
@@ -289,48 +287,89 @@ namespace GameSlamProject
 
             foreach (Enemy e in world.enemyList)
             {
-                e.Move(dunkin, world);
-                e.Update(gameTime, graphics);
+                e.Update(gameTime, dunkin, world);
+
+                //if (e.alive == false)
+                //{
+                //    world.enemyList.Remove(e/*.rect*/);
+                //}
             }
 
             #region Update Particle Code
             foreach (Particle particle in particles)
             {
                 particle.UpdateParticle(gameTime, graphics, 1.0f, 0.2f, 0.1f, world);
+
+                if (particle.alive == false)
+                {
+                }
             }
 
+            List<Particle> p_flagParticlesToRemove = new List<Particle>();
             foreach (Particle particle in p_flagParticles)
             {
                 particle.UpdateParticle(gameTime, graphics, 1.0f, 0.05f, 0.1f, world);
+
+                if (particle.alive == false)
+                {
+                    p_flagParticlesToRemove.Add(particle);
+                }
+            }
+
+            foreach (Particle particle in p_flagParticlesToRemove)
+            {
+                p_flagParticles.Remove(particle);
             }
 
             foreach (Particle particle in p_bloodParticles)
             {
                 particle.UpdateParticle(gameTime, graphics, 0.999f, 0.0005f, 0.5f, world);
+
+                //if (particle.alive == false)
+                //{
+                //    particles.Remove(particle);
+                //}
             }
 
             foreach (Particle particle in p_fireGroundParticles)
             {
                 particle.UpdateParticle(gameTime, graphics, 1.0f, 0.0005f, 0.5f, world);
+
+                //if (particle.alive == false)
+                //{
+                //    particles.Remove(particle);
+                //}
             }
 
             foreach (Particle particle in p_treeFireParticles)
             {
                 particle.UpdateParticle(gameTime, graphics, 1.0f, 0.0005f, 0.5f, world);
+
+                //if (particle.alive == false)
+                //{
+                //    particles.Remove(particle);
+                //}
             }
 
             foreach (Particle particle in p_bushFireParticles)
             {
                 particle.UpdateParticle(gameTime, graphics, 1.0f, 0.005f, 0.3f, world);
+
+                //if (particle.alive == false)
+                //{
+                //    particles.Remove(particle);
+                //}
             }
             #endregion
 
+            #region End of Update Code
             // Set previous states to current states
             previousKeyboardState = keyboardState;
             previousGamePadState = gamePadState;
             previousMouseState = mouseState;
 
             base.Update(gameTime);
+            #endregion
         }
 
         /// <summary>

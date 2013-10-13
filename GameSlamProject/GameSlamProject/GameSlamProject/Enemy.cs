@@ -55,8 +55,13 @@ namespace GameSlamProject
         /// <summary>
         /// Moves the Enemy instance towards the player (at all times).
         /// </summary>
-        public void Move(Player p, World world)
+        public void Update(GameTime gameTime, Player p, World world)
         {
+            if (health <= 0)
+            {
+                alive = false;
+            }
+
             // if they enemies are afraid, they move away from the player.
             if (p.fearOn)
             {
