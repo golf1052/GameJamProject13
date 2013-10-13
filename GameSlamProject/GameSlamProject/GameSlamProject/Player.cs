@@ -166,8 +166,8 @@ namespace GameSlamProject
             {
                 if (this.canFire)
                 {
-                    myBullet.visible = false;
-                    this.canFire = false;
+                    //myBullet.visible = false;
+                    //this.canFire = false;
                 }
                 else
                 {
@@ -187,19 +187,21 @@ namespace GameSlamProject
                     hasPup = true;
                 }
             }
-            else if (!eagleIsDoingShit)
-            {
-                if ((ks.IsKeyDown(Keys.C))&&(ls.IsKeyUp(Keys.C)))
-                {
-                    eagleIsDoingShit = true;
-                }
-            }
             else
-            {
-                myEagle.visible = true;
-                myEagle.moveEagle(this);
-                myEagle.damageEnemies(enemyList);
-            }
+                if (!eagleIsDoingShit)
+                {
+                    if ((ks.IsKeyDown(Keys.C)) && (ls.IsKeyUp(Keys.C)))
+                    {
+                        eagleIsDoingShit = true;
+                    }
+                }
+                else
+                {
+                    myEagle.visible = true;
+                    myEagle.moveEagle(this);
+                    myEagle.damageEnemies(enemyList);
+                    
+                }
             
         }
 
