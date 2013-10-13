@@ -41,9 +41,7 @@ namespace GameSlamProject
 
         #region Map Particles
         List<Particle> particles = new List<Particle>();
-        List<Particle> p_flagParticles = new List<Particle>();
         List<Particle> p_bloodParticles = new List<Particle>();
-        List<Particle> p_fireGroundParticles = new List<Particle>();
         List<Particle> p_treeFireParticles = new List<Particle>();
         List<Particle> p_bushFireParticles = new List<Particle>();
 
@@ -156,28 +154,10 @@ namespace GameSlamProject
             #endregion
 
             #region Map Specific Particles
-            if (world.gameWindow.Contains((int)world.p_flagParticleSpawn.X, (int)world.p_flagParticleSpawn.Y))
-            {
-                p_flagParticles.Add(new Particle(particleTex, world.p_flagParticleSpawn, Color.Orange, 500, 1000, new Rectangle(0, 0, 5, 5), 270, 90, 1.0f, 1.0f, Color.Gray, false));
-                world.worldObjects.Add(p_flagParticles[p_flagParticles.Count - 1]);
-            }
-
             if (world.gameWindow.Contains((int)world.p_bloodParticleSpawn.X, (int)world.p_bloodParticleSpawn.Y))
             {
                 p_bloodParticles.Add(new Particle(particleTex, world.p_bloodParticleSpawn, Color.Red, 300, 500, new Rectangle(0, 0, 3, 3), 90, 7, 1.0f, 2.0f, Color.DarkRed, false));
                 world.worldObjects.Add(p_bloodParticles[p_bloodParticles.Count - 1]);
-            }
-
-            if (world.gameWindow.Contains((int)world.p_fireGroundSpawn1.X, (int)world.p_fireGroundSpawn1.Y))
-            {
-                p_fireGroundParticles.Add(new Particle(particleTex, world.p_fireGroundSpawn1, Color.Orange, 1000, 2000, new Rectangle(0, 0, 5, 5), 270, 22, 1.0f, 1.5f, Color.Gray, false));
-                world.worldObjects.Add(p_fireGroundParticles[p_fireGroundParticles.Count - 1]);
-            }
-
-            if (world.gameWindow.Contains((int)world.p_fireGroundSpawn2.X, (int)world.p_fireGroundSpawn2.Y))
-            {
-                p_fireGroundParticles.Add(new Particle(particleTex, world.p_fireGroundSpawn2, Color.Orange, 1000, 2000, new Rectangle(0, 0, 5, 5), 270, 22, 1.0f, 1.5f, Color.Gray, false));
-                world.worldObjects.Add(p_fireGroundParticles[p_fireGroundParticles.Count - 1]);
             }
 
             if (world.gameWindow.Intersects(world.p_treeFireSpawn1))
@@ -288,77 +268,27 @@ namespace GameSlamProject
             foreach (Enemy e in world.enemyList)
             {
                 e.Update(gameTime, dunkin, world);
-
-                //if (e.alive == false)
-                //{
-                //    world.enemyList.Remove(e/*.rect*/);
-                //}
             }
 
             #region Update Particle Code
             foreach (Particle particle in particles)
             {
                 particle.UpdateParticle(gameTime, graphics, 1.0f, 0.2f, 0.1f, world);
-
-                if (particle.alive == false)
-                {
-                }
-            }
-
-            List<Particle> p_flagParticlesToRemove = new List<Particle>();
-            foreach (Particle particle in p_flagParticles)
-            {
-                particle.UpdateParticle(gameTime, graphics, 1.0f, 0.05f, 0.1f, world);
-
-                if (particle.alive == false)
-                {
-                    p_flagParticlesToRemove.Add(particle);
-                }
-            }
-
-            foreach (Particle particle in p_flagParticlesToRemove)
-            {
-                p_flagParticles.Remove(particle);
             }
 
             foreach (Particle particle in p_bloodParticles)
             {
                 particle.UpdateParticle(gameTime, graphics, 0.999f, 0.0005f, 0.5f, world);
-
-                //if (particle.alive == false)
-                //{
-                //    particles.Remove(particle);
-                //}
-            }
-
-            foreach (Particle particle in p_fireGroundParticles)
-            {
-                particle.UpdateParticle(gameTime, graphics, 1.0f, 0.0005f, 0.5f, world);
-
-                //if (particle.alive == false)
-                //{
-                //    particles.Remove(particle);
-                //}
             }
 
             foreach (Particle particle in p_treeFireParticles)
             {
                 particle.UpdateParticle(gameTime, graphics, 1.0f, 0.0005f, 0.5f, world);
-
-                //if (particle.alive == false)
-                //{
-                //    particles.Remove(particle);
-                //}
             }
 
             foreach (Particle particle in p_bushFireParticles)
             {
                 particle.UpdateParticle(gameTime, graphics, 1.0f, 0.005f, 0.3f, world);
-
-                //if (particle.alive == false)
-                //{
-                //    particles.Remove(particle);
-                //}
             }
             #endregion
 
@@ -400,17 +330,7 @@ namespace GameSlamProject
                 particle.DrawWithRect(spriteBatch);
             }
 
-            foreach (Particle particle in p_flagParticles)
-            {
-                particle.DrawWithRect(spriteBatch);
-            }
-
             foreach (Particle particle in p_bloodParticles)
-            {
-                particle.DrawWithRect(spriteBatch);
-            }
-
-            foreach (Particle particle in p_fireGroundParticles)
             {
                 particle.DrawWithRect(spriteBatch);
             }

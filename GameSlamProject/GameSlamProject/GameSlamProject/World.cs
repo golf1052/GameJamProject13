@@ -47,13 +47,10 @@ namespace GameSlamProject
         /// </summary>
         public int BOSS_SIZE;
 
-        public int MAX_ENEMIES = 10;
+        public int MAX_ENEMIES = 100;
         #endregion
 
-        public Vector2 p_flagParticleSpawn = new Vector2(506, 338);
         public Vector2 p_bloodParticleSpawn = new Vector2(118, 664);
-        public Vector2 p_fireGroundSpawn1 = new Vector2(627, 596);
-        public Vector2 p_fireGroundSpawn2 = new Vector2(1151, 613);
         public Rectangle p_treeFireSpawn1 = new Rectangle(1674, 467, 96, 101);
         public Rectangle p_treeFireSpawn2 = new Rectangle(2160, 441, 103, 97);
         public Rectangle p_treeFireSpawn3 = new Rectangle(2413, 408, 104, 94);
@@ -85,7 +82,7 @@ namespace GameSlamProject
         /// <summary>
         /// List of enemies that are to be drawn.
         /// </summary>
-        public List<Enemy> enemyList = new List<Enemy>(10);
+        public List<Enemy> enemyList = new List<Enemy>();
 
         /// <summary>
         /// Main constructor. Needs to be passed the GraphicsDeviceManager so that it can get the game window.
@@ -170,10 +167,7 @@ namespace GameSlamProject
                 sprite.pos += movementVector;
             }
 
-            p_flagParticleSpawn += movementVector;
             p_bloodParticleSpawn += movementVector;
-            p_fireGroundSpawn1 += movementVector;
-            p_fireGroundSpawn2 += movementVector;
             p_treeFireSpawn1.X += (int)movementVector.X;
             p_treeFireSpawn1.Y += (int)movementVector.Y;
             p_treeFireSpawn2.X += (int)movementVector.X;

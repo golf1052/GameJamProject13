@@ -39,6 +39,7 @@ namespace GameSlamProject
         public Enemy(Texture2D loadedTex)
             : base(loadedTex)
         {
+            alive = false;
         }
 
         /// <summary>
@@ -57,6 +58,13 @@ namespace GameSlamProject
         /// </summary>
         public void Update(GameTime gameTime, Player p, World world)
         {
+            pos += vel;
+            drawRect.X = (int)pos.X;
+            drawRect.Y = (int)pos.Y;
+            rect = new Rectangle((int)pos.X, (int)pos.Y, tex.Width, tex.Height);
+            spriteTransform = Matrix.CreateTranslation(new Vector3(-origin, 0.0f)) * Matrix.CreateScale(scale) * Matrix.CreateRotationZ(rotation) * Matrix.CreateTranslation(new Vector3(pos, 0.0f));
+            rect = CalculateBoundingRectangle(new Rectangle(0, 0, tex.Width, tex.Height), spriteTransform);
+
             if (health <= 0)
             {
                 alive = false;
@@ -129,8 +137,22 @@ namespace GameSlamProject
         {
             if (world.enemyList.Count < world.MAX_ENEMIES)
             {
-                pos = new Vector2(random.Next(-spawnRange, 0), world.GROUND_HEIGHT - tex.Height / 2);
-                vel = new Vector2(world.RandomBetween(minVelocity, maxVelocity), 0.0f);
+                if (random.NextDouble() < 0.5)
+                {
+                    pos = new Vector2(random.Next(-spawnRange, 0), world.GROUND_HEIGHT - tex.Height / 2);
+                }
+                else
+                {
+                    pos = new Vector2(random.Next(world.graphics.GraphicsDevice.Viewport.Width + 1, world.graphics.GraphicsDevice.Viewport.Width + spawnRange), world.GROUND_HEIGHT - tex.Height / 2);
+                }
+                if (pos.X < 0)
+                {
+                    vel = new Vector2(world.RandomBetween(minVelocity, maxVelocity), 0.0f);
+                }
+                else
+                {
+                    vel = new Vector2(-world.RandomBetween(minVelocity, maxVelocity), 0.0f);
+                }
                 alive = true;
             }
         }
