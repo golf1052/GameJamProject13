@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using Microsoft.Xna.Framework;
@@ -46,15 +46,6 @@ namespace GameSlamProject
         // Determines which direction to call the eagle.
         public void moveEagle(Player p)
         {
-            if (p.canUseStrike)
-            {
-                if (p.facing == Facing.Right)
-                {
-                    this.moveEagleLeft();
-                }
-                else this.moveEagleRight();
-            }
-			
             if (((this.pos.Y < 10)&&(this.pos.X > 600))||((this.pos.Y < 10)&&(this.pos.X < 50)))
             {
                 p.eagleIsDoingShit = false;
@@ -126,18 +117,6 @@ namespace GameSlamProject
             foreach (Enemy e in LoE)
             {
                 this.damageEnemy(e);
-            }
-        }
-
-        // checks to see if the eagle is out of bounds now, so it can reset.
-        public void eagleOut(Player p)
-        {
-            if (this.pos.Y <= -1)
-            {
-                p.canUseStrike = true;
-                this.pos.X = graphics.GraphicsDevice.Viewport.Width / 2;
-                this.pos.Y = 0;
-                this.visible = false;
             }
         }
     }
