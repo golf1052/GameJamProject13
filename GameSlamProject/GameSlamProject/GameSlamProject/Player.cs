@@ -300,18 +300,12 @@ namespace GameSlamProject
             {
                 if (this.canFire)
                 {
-                    myBullet.visible = false;
-                    this.canFire = false;
-                }
-                else
-                {
                     myBullet.visible = true;
-                    myBullet.pos.X = this.origin.X;
-                    myBullet.pos.Y = this.origin.Y;
+                    this.canFire = false;
+                    myBullet.pos.X = this.pos.X;
+                    myBullet.pos.Y = this.pos.Y;
                     myBullet.moveBullet(this);
                 }
-
-
             }
             else if (ks.IsKeyDown(Keys.V))
             {
@@ -321,20 +315,27 @@ namespace GameSlamProject
                     hasPup = true;
                 }
             }
-            else if (!eagleIsDoingShit)
-            {
-                if ((ks.IsKeyDown(Keys.C))&&(ls.IsKeyUp(Keys.C)))
-                {
-                    eagleIsDoingShit = true;
-                }
-            }
-            else
+            else if ((ks.IsKeyDown(Keys.C)) && (ls.IsKeyUp(Keys.C)))
             {
                 myEagle.visible = true;
-                myEagle.moveEagle(this);
-                myEagle.damageEnemies(enemyList);
+                this.canUseStrike = false;
+
             }
-            
+            else
+                if (!eagleIsDoingShit)
+                {
+                    if ((ks.IsKeyDown(Keys.C)) && (ls.IsKeyUp(Keys.C)))
+                    {
+                        eagleIsDoingShit = true;
+                    }
+                }
+                else
+                {
+                    myEagle.visible = true;
+                    myEagle.moveEagle(this);
+                    myEagle.damageEnemies(enemyList);
+                    
+                }
         }
 
         /// <summary>
@@ -409,7 +410,7 @@ namespace GameSlamProject
 
             if (!isColliding)
             {
-                this.vel = PLAYER_VELOCITY;
+                this.vel = new Vector2(0,0);
             }
 
         }
