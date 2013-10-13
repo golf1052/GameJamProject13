@@ -104,6 +104,7 @@ namespace GameSlamProject
 
             attilla = new Eagle(Content.Load<Texture2D>("Eagle"), 10, graphics);
             attilla.visible = false;
+            dunkin.myEagle = attilla;
 
             gunshaver = new Bullet(Content.Load<Texture2D>("Bullet_Right"));
             gunshaver.visible = false;
@@ -208,7 +209,13 @@ namespace GameSlamProject
 
             dunkin.Jump(keyboardState, previousKeyboardState, world);
 
+            List<Enemy> peniswalls = new List<Enemy> ();
+            peniswalls.Add(testee);
+            dunkin.Attack(keyboardState, previousKeyboardState, peniswalls);
+
             dunkin.Update(gameTime, graphics);
+
+            dunkin.myEagle.Update(gameTime, graphics);
 
             testee.move(dunkin);
 

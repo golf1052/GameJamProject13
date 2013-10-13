@@ -85,6 +85,11 @@ namespace GameSlamProject
         public bool isColliding;
 
         /// <summary>
+        /// check if the eagle object is in motion for literally no reason
+        /// </summary>
+        public bool eagleIsDoingShit;
+
+        /// <summary>
         /// the bullet that exists as part of the player
         /// </summary>
         public Bullet myBullet;
@@ -189,6 +194,8 @@ namespace GameSlamProject
                     {
                         pos.Y = 0;
                     }
+					
+					eagleIsDoingShit = false;
 
                     if (pos.Y > graphics.GraphicsDevice.Viewport.Height - tex.Height)
                     {
@@ -281,7 +288,7 @@ namespace GameSlamProject
         /// player uses one of four attacks based on ks parameter
         /// </summary>
         /// <param name="ks"></param>
-        public void Attack(KeyboardState ks, List<Enemy> enemyList)
+        public void Attack(KeyboardState ks, KeyboardState ls, List<Enemy> enemyList)
         {
             if(ks.IsKeyDown(Keys.Z)) 
             {
@@ -313,22 +320,6 @@ namespace GameSlamProject
 
 
             }
-            else if (ks.IsKeyDown(Keys.C))
-            {
-                if (this.canUseStrike)
-                {
-                    myEagle.visible = false;
-                    this.canFire = false;
-                }
-                else
-                {
-                    myEagle.visible = true;
-                    myEagle.pos.X = this.pos.X;
-                    myEagle.pos.Y = 0;
-                    myEagle.moveEagleLeft();
-                    myEagle.damageEnemies(enemyList);
-                }
-            }
             else if (ks.IsKeyDown(Keys.V))
             {
                 if (this.canUseFear)
@@ -337,6 +328,20 @@ namespace GameSlamProject
                     hasPup = true;
                 }
             }
+            else if (!eagleIsDoingShit)
+            {
+                if ((ks.IsKeyDown(Keys.C))&&(ls.IsKeyUp(Keys.C)))
+                {
+                    eagleIsDoingShit = true;
+                }
+            }
+            else
+            {
+                myEagle.visible = true;
+                myEagle.moveEagle(this);
+                myEagle.damageEnemies(enemyList);
+            }
+            
         }
 
         /// <summary>

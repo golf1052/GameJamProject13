@@ -18,6 +18,7 @@ namespace GameSlamProject
     {
         public int damage;
         public GraphicsDeviceManager graphics;
+        public bool hitBottom;
 
         #region CONSTANTS
         public Vector2 descendingRightSpeed = new Vector2(7, 25);
@@ -37,25 +38,63 @@ namespace GameSlamProject
             this.pos.X = graphics.GraphicsDevice.Viewport.Width / 2;
             this.pos.Y = 0;
             this.graphics = graphics;
+            this.hitBottom = false;
+        }
+
+        // Determines which direction to call the eagle.
+        public void moveEagle(Player p)
+        {
+            if (this.pos.Y <= -1)
+            {
+                this.pos.X = graphics.GraphicsDevice.Viewport.Width / 2;
+                this.pos.Y = 0;
+                p.canUseStrike = true;
+                p.myEagle.visible = false;
+                p.eagleIsDoingShit = false;
+            }
+
+                if (p.facing == Facing.Right)
+                {
+                    this.moveEagleLeft();
+                }
+                else this.moveEagleRight();
         }
 
         // Moves the Eagle when it's called to the right.
-        public void moveEagleRight()
-        {
-            if (this.pos.Y >= graphics.GraphicsDevice.Viewport.Height - 25)
-            {
-                this.pos = this.pos + descendingRightSpeed;
-            }
-            this.pos = this.pos + ascendingRightSpeed;
-        }
-        // Moves the Eagle when it's called to the left.
         public void moveEagleLeft()
         {
-            if (this.pos.Y >= graphics.GraphicsDevice.Viewport.Height - 25)
+            
+            if (!this.hitBottom)
             {
-                this.pos = this.pos + descendingLeftSpeed;
+                if (this.pos.Y >= graphics.GraphicsDevice.Viewport.Height - 25)
+                {
+                    this.hitBottom = true;
+                }
+                else
+                {
+                    this.pos += descendingRightSpeed;
+                }
             }
-            this.pos = this.pos + ascendingLeftSpeed;
+            else 
+            this.pos += ascendingRightSpeed;
+        }
+        // Moves the Eagle when it's called to the left.
+        public void moveEagleRight()
+        {
+            
+            if (!this.hitBottom)
+            {
+                if (this.pos.Y >= graphics.GraphicsDevice.Viewport.Height - 25)
+                {
+                    this.hitBottom = true;
+                }
+                else
+                {
+                    this.pos += descendingLeftSpeed;
+                }
+            }
+            else
+                this.pos += ascendingLeftSpeed;
         }
 
         // Checks to see if the Eagle is nearby the enemy. If it is, the enemy
