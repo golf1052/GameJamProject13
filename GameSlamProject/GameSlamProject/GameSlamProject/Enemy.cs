@@ -66,6 +66,7 @@ namespace GameSlamProject
                 this.pos.X = this.pos.X + MOVE_DISTANCE;
             }
         }
+
         /// <summary>
         /// We check to see if this enemy has collided w/ given player, and if so, we hurt player
         /// </summary>
@@ -80,6 +81,39 @@ namespace GameSlamProject
                 player.vel.X -= 1;
             }
             player.isColliding = false;
+        }
+
+        /// <summary>
+        /// Depending on where the player is on the map && how many enemies are on screen, spawn
+        /// either a Democrat || a Republican
+        /// </summary>
+        public void spawnEnemy(Player p, World w, MapSector ms)
+        {
+            if (w.enemyList.Count < 10)
+                if (p.rect.Intersects(ms.start))
+                {
+                    w.enemyList.Add(new Enemy(****Democrat or Republican****)); // set location to (w.graphics.GraphicsDevice.Viewport.Width, w.GROUND_HEIGHT)
+                }
+                if (p.rect.Intersects(ms.republican))
+                {
+                    w.enemyList.Add(new Enemy(****Republican****)); // set location to (w.graphics.GraphicsDevice.Viewport.Width, w.GROUND_HEIGHT)
+                }
+                if (p.rect.Intersects(ms.democrat))
+                {
+                    w.enemyList.Add(new Enemy(****Democrat****)); // set location to (w.graphics.GraphicsDevice.Viewport.Width, w.GROUND_HEIGHT)
+                }
+                if (p.rect.Intersects(ms.boss))
+                {
+                    // Add one boss to the enemy list after clearing all enemies off list.
+                }
+        }
+
+        public void killEnemy(World w)
+        {
+            if(this.health <= 0 || ****Enemy is not on the window****)
+            {
+                w.enemyList.Remove(this);
+            }
         }
     }
 }

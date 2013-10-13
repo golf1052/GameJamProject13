@@ -81,6 +81,11 @@ namespace GameSlamProject
         public List<Color> sparkColors = new List<Color>();
 
         /// <summary>
+        /// List of enemies that are to be drawn.
+        /// </summary>
+        public List<Enemy> enemyList = new List<Enemy>(10);
+
+        /// <summary>
         /// Main constructor. Needs to be passed the GraphicsDeviceManager so that it can get the game window.
         /// </summary>
         /// <param name="graphics">GraphicsDeviceManager from class</param>
