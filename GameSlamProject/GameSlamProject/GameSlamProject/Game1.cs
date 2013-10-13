@@ -213,8 +213,6 @@ namespace GameSlamProject
             dunkin.myBullet.offScreen(dunkin, world);
             dunkin.myBullet.moveBullet(dunkin);
 
-            dunkin.myEagle.eagleOut(dunkin);
-            dunkin.myEagle.moveEagle(dunkin);
 
             if (mouseState.LeftButton == ButtonState.Pressed)
             {
