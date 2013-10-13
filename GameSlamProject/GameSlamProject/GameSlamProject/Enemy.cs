@@ -34,6 +34,8 @@ namespace GameSlamProject
 
         public bool hasHurtPlayer = false;
 
+        public bool spawnSideLeft = false;
+
         public enum Animations
         {
             Running,
@@ -112,7 +114,7 @@ namespace GameSlamProject
                 {
                     pos.X = 0;
                     vel *= -1;
-                    facing = Facing.Right;
+                    facing = Facing.Left;
                     animationState = Animations.Running;
                 }
 
@@ -120,7 +122,7 @@ namespace GameSlamProject
                 {
                     pos.X = world.graphics.GraphicsDevice.Viewport.Width;
                     vel *= -1;
-                    facing = Facing.Left;
+                    facing = Facing.Right;
                     animationState = Animations.Running;
                 }
             }
@@ -128,16 +130,12 @@ namespace GameSlamProject
             {
                 if (pos.X < 0)
                 {
-                    pos.X = 0;
-                    vel *= -1;
                     facing = Facing.Left;
                     animationState = Animations.Running;
                 }
 
                 if (pos.X > world.graphics.GraphicsDevice.Viewport.Width)
                 {
-                    pos.X = world.graphics.GraphicsDevice.Viewport.Width;
-                    vel *= -1;
                     facing = Facing.Right;
                     animationState = Animations.Running;
                 }
@@ -228,9 +226,11 @@ namespace GameSlamProject
                     if (random.NextDouble() < 0.5)
                     {
                         pos = new Vector2(random.Next(-spawnRange, 0), world.GROUND_HEIGHT - spriteSheets[0].tex.Height / 2);
+                        spawnSideLeft = false;
                     }
                     else
                     {
+                        spawnSideLeft = true;
                         pos = new Vector2(random.Next(world.graphics.GraphicsDevice.Viewport.Width + 1, world.graphics.GraphicsDevice.Viewport.Width + spawnRange), world.GROUND_HEIGHT - spriteSheets[0].tex.Height / 2);
                     }
                     if (pos.X < 0)

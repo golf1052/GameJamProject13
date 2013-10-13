@@ -118,7 +118,7 @@ namespace GameSlamProject
             dunkin.pos = new Vector2(dunkin.spriteSheets[0].tex.Width + 125, world.GROUND_HEIGHT - dunkin.spriteSheets[0].tex.Height / 2);
             #endregion
 
-            repEnemySpriteSheets.Add(new SpriteSheet(Content.Load<Texture2D>("Fat_Cat"), 60, 146, 1, 0, true));
+            repEnemySpriteSheets.Add(new SpriteSheet(Content.Load<Texture2D>("flixel"), 450, 450, 1, 0, true));
             //repEnemySpriteSheets.Add(new SpriteSheet(Content.Load<Texture2D>("Rep_Run_cleansheet"), 70, 148, 8, 75, true));
             repEnemySpriteSheets.Add(new SpriteSheet(Content.Load<Texture2D>("FatCat_Run"), 450, 450, 6, 200, true));
             //testee2 = new Enemy(repEnemySpriteSheets, 300, 3.0f, 7.0f, world);
@@ -145,9 +145,10 @@ namespace GameSlamProject
             corporateFatCat.alive = true;
             corporateFatCat.visible = true;
             corporateFatCat.isAnimatable = true;
-            corporateFatCat.pos = new Vector2(corporateFatCat.tex.Width / 2 + 5000, world.GROUND_HEIGHT - corporateFatCat.tex.Height / 2);
-            //corporateFatCat.pos.X = 500;
+            corporateFatCat.pos = new Vector2(0, world.GROUND_HEIGHT - 450);
+            corporateFatCat.pos.X = 3000;
             corporateFatCat.vel = new Vector2(-2.0f, 0.0f);
+            corporateFatCat.facing = Sprite.Facing.Right;
             world.enemyList.Add(corporateFatCat);
             
             particleTex = Content.Load<Texture2D>("flixel");
@@ -351,14 +352,11 @@ namespace GameSlamProject
 
             foreach (Enemy e in world.enemyList)
             {
-                //if (e.animationState == Enemy.Animations.Running)
-                //{
-                //    e.Update(gameTime, dunkin, world, 1);
-                //}
-                //else
-                //{
-                //    e.Update(gameTime, dunkin, world, 0);
-                //}
+                if (world.gameWindow.Contains((int)e.pos.X, (int)e.pos.Y))
+                {
+                    e.outOfBounds = false;
+                }
+
                 if (e != corporateFatCat)
                 {
                     e.Update(gameTime, dunkin, world, 0);
@@ -507,11 +505,6 @@ namespace GameSlamProject
                         }
                     }
                 }
-            }
-
-            foreach (Enemy b in world.bossList)
-            {
-                b.Draw(spriteBatch);
             }
 
             #endregion
