@@ -27,6 +27,8 @@ namespace GameSlamProject
         Player dunkin;
         Texture2D republicanTex;
 
+        List<SpriteSheet> repEnemySpriteSheets = new List<SpriteSheet>();
+
         Sprite healthBar;
         SpriteFont HUDfont;
         TextItem healthText;
@@ -41,7 +43,10 @@ namespace GameSlamProject
         /// </summary>
         Bullet gunshaver;
 
-        Enemy testee;
+        /*
+         * HERE LIES TESTEE
+         * RESTEE TESTEE
+         */
 
         #region Map Particles
         List<Particle> particles = new List<Particle>();
@@ -112,6 +117,9 @@ namespace GameSlamProject
             dunkin.pos = new Vector2(dunkin.spriteSheets[0].tex.Width + 125, world.GROUND_HEIGHT - dunkin.spriteSheets[0].tex.Height / 2);
             #endregion
 
+            repEnemySpriteSheets.Add(new SpriteSheet(Content.Load<Texture2D>("Rep1_Stand"), 60, 146, 1, 0, true));
+            repEnemySpriteSheets.Add(new SpriteSheet(Content.Load<Texture2D>("Rep_Run_cleansheet"), 70, 148, 8, 200, true));
+
             attilla = new Eagle(Content.Load<Texture2D>("therealeagle"), 10, graphics);
             attilla.visible = false;
             dunkin.myEagle = attilla;
@@ -120,10 +128,10 @@ namespace GameSlamProject
             gunshaver.visible = false;
             dunkin.myBullet = gunshaver;
 
-            testee = new Republican(Content.Load<Texture2D>("Rep1_Stand"));
-            testee.pos = new Vector2(testee.tex.Width / 2 + 500, world.GROUND_HEIGHT - testee.tex.Height / 2);
-            testee.vel = new Vector2(5.0f, 0.0f);
-            world.enemyList.Add(testee);
+            //testee = new Republican(Content.Load<Texture2D>("Rep1_Stand"));
+            //testee.pos = new Vector2(testee.tex.Width / 2 + 500, world.GROUND_HEIGHT - testee.tex.Height / 2);
+            //testee.vel = new Vector2(5.0f, 0.0f);
+            //world.enemyList.Add(testee);
 
             particleTex = Content.Load<Texture2D>("flixel");
             republicanTex = Content.Load<Texture2D>("Rep1_Stand");
@@ -223,6 +231,15 @@ namespace GameSlamProject
             #endregion
 
             world.enemyList.Add(new Enemy(republicanTex, 300, 3.0f, 7.0f, world));
+            foreach (Enemy e in world.enemyList)
+            {
+                e.isAnimatable = false;
+                //foreach (SpriteSheet sheet in e.spriteSheets)
+                //{
+                //    sheet.pos = e.pos;
+                //}
+            }
+            //world.enemyList[world.enemyList.Count - 1].pos = new Vector2(world.enemyList[world.enemyList.Count - 1].tex.Width / 2 + 500, world.GROUND_HEIGHT - world.enemyList[world.enemyList.Count - 1].tex.Height / 2);
 
             /*
              * This comment must remain here till the end of time
@@ -299,7 +316,15 @@ namespace GameSlamProject
 
             foreach (Enemy e in world.enemyList)
             {
-                e.Update(gameTime, dunkin, world);
+                //if (e.animationState == Enemy.Animations.Running)
+                //{
+                //    e.Update(gameTime, dunkin, world, 1);
+                //}
+                //else
+                //{
+                //    e.Update(gameTime, dunkin, world, 0);
+                //}
+                e.Update(gameTime, dunkin, world, 0);
             }
 
             #region Update Particle Code
@@ -378,6 +403,7 @@ namespace GameSlamProject
             }
             #endregion
 
+            #region Gun Draw Code
             if (gunshaver.visible)
             {
                 if (dunkin.facing == Player.Facing.Left)
@@ -389,6 +415,7 @@ namespace GameSlamProject
                     spriteBatch.Draw(gunshaver.tex, gunshaver.pos, null, gunshaver.color, gunshaver.rotation, gunshaver.origin, gunshaver.scale, SpriteEffects.None, 0);
                 }
             }
+            #endregion
 
             #region Player Draw Code
             if (dunkin.animationState == Player.Animations.Idle)
@@ -408,7 +435,19 @@ namespace GameSlamProject
             #region Enemy Draw Code
             foreach (Enemy e in world.enemyList)
             {
-                e.Draw(spriteBatch);
+                if (e.alive == true)
+                {
+                    //if (e.animationState == Enemy.Animations.Running)
+                    //{
+                    //    e.Draw(spriteBatch, 1);
+                    //}
+                    //else
+                    //{
+                    //    e.Draw(spriteBatch, 0);
+                    //}
+
+                    e.Draw(spriteBatch);
+                }
             }
             #endregion
 
@@ -423,8 +462,6 @@ namespace GameSlamProject
                     spriteBatch.Draw(attilla.tex, attilla.pos, null, attilla.color, attilla.rotation, attilla.origin, attilla.scale, SpriteEffects.None, 0);
                 }
             }
-
-            testee.Draw(spriteBatch);
 
             healthBar.DrawWithRect(spriteBatch);
             healthText.DrawString(spriteBatch);

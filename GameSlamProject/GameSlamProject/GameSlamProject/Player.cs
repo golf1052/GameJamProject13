@@ -194,37 +194,6 @@ namespace GameSlamProject
         }
 
         /// <summary>
-        /// Updates the sprite. Adds vel to pos, changes the drawRect, updates rect and the pixel perfect code.
-        /// </summary>
-        /// <param name="gameTime">GameTime from class</param>
-        public void Update(GameTime gameTime, GraphicsDeviceManager graphics, int sheet)
-        {
-            pos += vel;
-            drawRect.X = (int)pos.X;
-            drawRect.Y = (int)pos.Y;
-            rect = new Rectangle((int)pos.X, (int)pos.Y, tex.Width, tex.Height);
-            spriteTransform = Matrix.CreateTranslation(new Vector3(-origin, 0.0f)) * Matrix.CreateScale(scale) * Matrix.CreateRotationZ(rotation) * Matrix.CreateTranslation(new Vector3(pos, 0.0f));
-            rect = CalculateBoundingRectangle(new Rectangle(0, 0, tex.Width, tex.Height), spriteTransform);
-            if (isAnimatable == true)
-            {
-                spriteSheets[sheet].UpdateAnimation(gameTime);
-            }
-
-            foreach (SpriteSheet currentSheet in spriteSheets)
-            {
-                currentSheet.pos = pos;
-                currentSheet.vel = vel;
-                currentSheet.visible = visible;
-                currentSheet.alive = alive;
-                currentSheet.facing = facing;
-                currentSheet.isAnimatable = isAnimatable;
-                currentSheet.origin = origin;
-                currentSheet.rotation = rotation;
-                currentSheet.scale = scale;
-            }
-        }
-
-        /// <summary>
         /// move the player based on the ks parameter
         /// </summary>
         /// <param name="ks"></param>

@@ -32,6 +32,15 @@ namespace GameSlamProject
 
         public bool outOfBounds = true;
 
+        public enum Animations
+        {
+            Running,
+            Idle,
+            None
+        }
+
+        public Animations animationState;
+
         /// <summary>
         /// Base constructor for an enemy
         /// </summary>
@@ -49,13 +58,22 @@ namespace GameSlamProject
         {
             // MapSector sector should be around here somewhere soon in teh future
             tex = loadedTex;
+            isAnimatable = false;
             SpawnEnemy(spawnRange, minVelocity, maxVelocity, world);
+        }
+
+        public Enemy(List<SpriteSheet> loadedSheets, int spawnRange, float minVelocity, float maxVelocity, World world)
+            : base(loadedSheets)
+        {
+            SpawnEnemy(spawnRange, minVelocity, maxVelocity, world);
+            isAnimatable = true;
+            animationState = Animations.Running;
         }
 
         /// <summary>
         /// Moves the Enemy instance towards the player (at all times).
         /// </summary>
-        public void Update(GameTime gameTime, Player p, World world)
+        public void Update(GameTime gameTime, Player p, World world, int sheet)
         {
             pos += vel;
             drawRect.X = (int)pos.X;
@@ -75,10 +93,14 @@ namespace GameSlamProject
                 if (p.pos.X < this.pos.X)
                 {
                     this.pos.X = this.pos.X + MOVE_DISTANCE;
+                    facing = Facing.Right;
+                    animationState = Animations.Running;
                 }
                 else if (p.pos.X > this.pos.X)
                 {
                     this.pos.X = this.pos.X - MOVE_DISTANCE;
+                    facing = Facing.Left;
+                    animationState = Animations.Running;
                 }
             }
 
@@ -88,12 +110,16 @@ namespace GameSlamProject
                 {
                     pos.X = 0;
                     vel *= -1;
+                    facing = Facing.Right;
+                    animationState = Animations.Running;
                 }
 
                 if (pos.X > world.graphics.GraphicsDevice.Viewport.Width)
                 {
                     pos.X = world.graphics.GraphicsDevice.Viewport.Width;
                     vel *= -1;
+                    facing = Facing.Left;
+                    animationState = Animations.Running;
                 }
             }
             else
@@ -102,12 +128,34 @@ namespace GameSlamProject
                 {
                     pos.X = 0;
                     vel *= -1;
+                    facing = Facing.Right;
+                    animationState = Animations.Running;
                 }
 
                 if (pos.X > world.graphics.GraphicsDevice.Viewport.Width)
                 {
                     pos.X = world.graphics.GraphicsDevice.Viewport.Width;
                     vel *= -1;
+                    facing = Facing.Left;
+                    animationState = Animations.Running;
+                }
+            }
+
+            if (isAnimatable == true)
+            {
+                spriteSheets[sheet].UpdateAnimation(gameTime);
+
+                foreach (SpriteSheet currentSheet in spriteSheets)
+                {
+                    currentSheet.pos = pos;
+                    currentSheet.vel = vel;
+                    currentSheet.visible = visible;
+                    currentSheet.alive = alive;
+                    currentSheet.facing = facing;
+                    currentSheet.isAnimatable = isAnimatable;
+                    currentSheet.origin = origin;
+                    currentSheet.rotation = rotation;
+                    currentSheet.scale = scale;
                 }
             }
         }
@@ -165,6 +213,23 @@ namespace GameSlamProject
                 {
                     vel = new Vector2(-world.RandomBetween(minVelocity, maxVelocity), 0.0f);
                 }
+
+                //if (random.NextDouble() < 0.5)
+                //{
+                //    pos = new Vector2(random.Next(-spawnRange, 0), world.GROUND_HEIGHT - spriteSheets[0].tex.Height / 2);
+                //}
+                //else
+                //{
+                //    pos = new Vector2(random.Next(world.graphics.GraphicsDevice.Viewport.Width + 1, world.graphics.GraphicsDevice.Viewport.Width + spawnRange), world.GROUND_HEIGHT - spriteSheets[0].tex.Height / 2);
+                //}
+                //if (pos.X < 0)
+                //{
+                //    vel = new Vector2(world.RandomBetween(minVelocity, maxVelocity), 0.0f);
+                //}
+                //else
+                //{
+                //    vel = new Vector2(-world.RandomBetween(minVelocity, maxVelocity), 0.0f);
+                //}
             }
         }
 
@@ -181,6 +246,14 @@ namespace GameSlamProject
             if (alive == true)
             {
                 spriteBatch.Draw(tex, pos, null, color, rotation, origin, scale, SpriteEffects.None, 0);
+            }
+        }
+
+        public void Draw(SpriteBatch spriteBatch, int sheet)
+        {
+            if (alive == true)
+            {
+                spriteSheets[sheet].DrawAnimation(spriteBatch);
             }
         }
     }
