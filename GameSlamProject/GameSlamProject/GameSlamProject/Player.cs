@@ -98,6 +98,20 @@ namespace GameSlamProject
         /// Is the player currently using fear
         /// </summary>
         public bool fearOn;
+
+        public enum Animations
+        {
+            Running,
+            Jumping,
+            GavelAttack,
+            GunAttack,
+            PhoneAttack,
+            Death,
+            Idle,
+            None
+        }
+
+        public Animations animationState;
        
         public Player(Texture2D loadedTex, Eagle myEagle, Bullet myBullet)
             : base(loadedTex)
@@ -115,7 +129,133 @@ namespace GameSlamProject
             isJumping = false;
             isFalling = false;
             isColliding = false;
+            isAnimatable = false;
+            animationState = Animations.None;
+        }
 
+        public Player(List<SpriteSheet> loadedSheets)
+            : base(loadedSheets)
+        {
+            health = 100;
+            isInvulnerable = false;
+            rateOfFire = 1;
+            pupDuration = 30;
+            killCount = 0;
+            hasPup = false;
+            score = 0;
+            canFire = true;
+            canUseStrike = true;
+            canUseFear = true;
+            isJumping = false;
+            isFalling = false;
+            isColliding = false;
+            isAnimatable = true;
+            animationState = Animations.None;
+        }
+
+        /// <summary>
+        /// Updates the sprite. Adds vel to pos, changes the drawRect, updates rect and the pixel perfect code.
+        /// </summary>
+        /// <param name="gameTime">GameTime from class</param>
+        public void Update(GameTime gameTime, GraphicsDeviceManager graphics)
+        {
+            pos += vel;
+            drawRect.X = (int)pos.X;
+            drawRect.Y = (int)pos.Y;
+            rect = new Rectangle((int)pos.X, (int)pos.Y, tex.Width, tex.Height);
+            spriteTransform = Matrix.CreateTranslation(new Vector3(-origin, 0.0f)) * Matrix.CreateScale(scale) * Matrix.CreateRotationZ(rotation) * Matrix.CreateTranslation(new Vector3(pos, 0.0f));
+            rect = CalculateBoundingRectangle(new Rectangle(0, 0, tex.Width, tex.Height), spriteTransform);
+            if (isAnimatable == true)
+            {
+                UpdateAnimation(gameTime, (int)animationState);
+            }
+
+            #region Window Collision
+            if (windowCollision == true)
+            {
+                if (origin == Vector2.Zero)
+                {
+                    if (pos.X < 0)
+                    {
+                        pos.X = 0;
+                    }
+
+                    if (pos.X > graphics.GraphicsDevice.Viewport.Width - tex.Width)
+                    {
+                        pos.X = graphics.GraphicsDevice.Viewport.Width - tex.Width;
+                    }
+
+                    if (pos.Y < 0)
+                    {
+                        pos.Y = 0;
+                    }
+
+                    if (pos.Y > graphics.GraphicsDevice.Viewport.Height - tex.Height)
+                    {
+                        pos.Y = graphics.GraphicsDevice.Viewport.Height - tex.Height;
+                    }
+                }
+
+                if (origin == new Vector2(tex.Width / 2, tex.Height / 2))
+                {
+                    if (pos.X < 0 + tex.Width / 2)
+                    {
+                        pos.X = tex.Width / 2;
+                    }
+
+                    if (pos.X > graphics.GraphicsDevice.Viewport.Width - tex.Width / 2)
+                    {
+                        pos.X = graphics.GraphicsDevice.Viewport.Width - tex.Width / 2;
+                    }
+
+                    if (pos.Y < 0 + tex.Height / 2)
+                    {
+                        pos.Y = tex.Height / 2;
+                    }
+
+                    if (pos.Y > graphics.GraphicsDevice.Viewport.Height - tex.Height / 2)
+                    {
+                        pos.Y = graphics.GraphicsDevice.Viewport.Height - tex.Height / 2;
+                    }
+                }
+            }
+            #endregion
+        }
+
+        public void UpdateAnimation(GameTime gameTime, int i)
+        {
+            if (spriteSheets[i].active == false)
+            {
+                return;
+            }
+
+            spriteSheets[i].elapsedTime += (int)gameTime.ElapsedGameTime.TotalMilliseconds;
+
+            if (spriteSheets[i].elapsedTime > spriteSheets[i].frameTime)
+            {
+                spriteSheets[i].currentFrame++;
+
+                if (spriteSheets[i].currentFrame >= spriteSheets[i].frameCount)
+                {
+                    spriteSheets[i].currentFrame = 0;
+                    if (spriteSheets[i].looping == false)
+                    {
+                        spriteSheets[i].active = false;
+                    }
+                }
+
+                spriteSheets[i].elapsedTime = 0;
+            }
+
+            spriteSheets[i].sourceRect = new Rectangle(spriteSheets[i].currentFrame * spriteSheets[i].frameWidth, 0, spriteSheets[i].frameWidth, spriteSheets[i].frameHeight);
+        }
+
+        public void DrawAnimation(SpriteBatch spriteBatch, int i)
+        {
+            //if (active == true)
+            //{
+            //    spriteBatch.Draw(spriteSheets[i].tex, pos, spriteSheets[i].sourceRect, color, rotation, origin, scale, SpriteEffects.None, 0);
+            //}
         }
 
         /// <summary>
