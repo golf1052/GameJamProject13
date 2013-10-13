@@ -19,6 +19,7 @@ namespace GameSlamProject
         public int damage;
         public GraphicsDeviceManager graphics;
         public bool hitBottom;
+        public bool isRising;
 
         #region CONSTANTS
         public Vector2 descendingRightSpeed = new Vector2(7, 25);
@@ -36,9 +37,10 @@ namespace GameSlamProject
         {
             this.damage = 10;
             this.pos.X = graphics.GraphicsDevice.Viewport.Width / 2;
-            this.pos.Y = 0;
+            this.pos.Y = -50;
             this.graphics = graphics;
             this.hitBottom = false;
+            this.isRising = false;
         }
 
         // Determines which direction to call the eagle.
@@ -52,12 +54,24 @@ namespace GameSlamProject
                 }
                 else this.moveEagleRight();
             }
+			
+            if (((this.pos.Y < 10)&&(this.pos.X > 600))||((this.pos.Y < 10)&&(this.pos.X < 50)))
+            {
+                p.eagleIsDoingShit = false;
+                this.pos.Y = -170;
+                this.pos.X = 384;
+                hitBottom = false;
+            }
+            else if (p.facing == Facing.Right)
+            {
+                this.moveEagleLeft();
+            }
+            else this.moveEagleRight();
         }
 
         // Moves the Eagle when it's called to the right.
         public void moveEagleLeft()
         {
-            
             if (!this.hitBottom)
             {
                 if (this.pos.Y >= graphics.GraphicsDevice.Viewport.Height - 25)
@@ -66,16 +80,18 @@ namespace GameSlamProject
                 }
                 else
                 {
+            
                     this.pos += descendingRightSpeed;
                 }
             }
-            else 
-            this.pos += ascendingRightSpeed;
+            else
+                    this.pos += ascendingRightSpeed;
+            
         }
         // Moves the Eagle when it's called to the left.
         public void moveEagleRight()
         {
-            
+
             if (!this.hitBottom)
             {
                 if (this.pos.Y >= graphics.GraphicsDevice.Viewport.Height - 25)
@@ -84,10 +100,12 @@ namespace GameSlamProject
                 }
                 else
                 {
+                   
                     this.pos += descendingLeftSpeed;
                 }
             }
             else
+                
                 this.pos += ascendingLeftSpeed;
         }
 

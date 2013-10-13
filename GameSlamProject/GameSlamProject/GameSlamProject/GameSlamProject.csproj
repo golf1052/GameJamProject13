@@ -91,6 +91,7 @@
     <Compile Include="RapidFire.cs" />
     <Compile Include="Republican.cs" />
     <Compile Include="Sprite.cs" />
+    <Compile Include="SpriteSheet.cs" />
     <Compile Include="TextItem.cs" />
     <Compile Include="World.cs" />
   </ItemGroup>
