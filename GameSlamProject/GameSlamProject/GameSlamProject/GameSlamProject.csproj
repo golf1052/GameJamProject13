@@ -76,6 +76,8 @@
     <Compile Include="Background.cs" />
     <Compile Include="Bullet.cs" />
     <Compile Include="Boss.cs" />
+    <Compile Include="Earth.cs" />
+    <Compile Include="Flixel.cs" />
     <Compile Include="MapSector.cs" />
     <Compile Include="Phobia.cs" />
     <Compile Include="Democrat.cs" />
@@ -92,6 +94,7 @@
     <Compile Include="Republican.cs" />
     <Compile Include="Sprite.cs" />
     <Compile Include="SpriteSheet.cs" />
+    <Compile Include="Star.cs" />
     <Compile Include="TextItem.cs" />
     <Compile Include="World.cs" />
   </ItemGroup>

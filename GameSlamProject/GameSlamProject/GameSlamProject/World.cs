@@ -61,6 +61,9 @@ namespace GameSlamProject
         public Rectangle democrat = new Rectangle(9000, 0, 3000, 768);
         public Rectangle boss = new Rectangle(2000, 0, 3000, 768);
 
+        public int numOfPlayers = 1;
+        public int playersAlive = 1;
+
         /// <summary>
         /// Random to use.
         /// </summary>
