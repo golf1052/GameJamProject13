@@ -92,6 +92,7 @@
     <Compile Include="Pup.cs" />
     <Compile Include="RapidFire.cs" />
     <Compile Include="Republican.cs" />
+    <Compile Include="Sky.cs" />
     <Compile Include="Sprite.cs" />
     <Compile Include="SpriteSheet.cs" />
     <Compile Include="Star.cs" />

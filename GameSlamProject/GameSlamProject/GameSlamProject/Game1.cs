@@ -87,7 +87,7 @@ namespace GameSlamProject
         TextItem fp2F;
         TextItem fp2P;
         TextItem fp22;
-        TimeSpan countDownToLaunch = TimeSpan.FromSeconds(5);
+        TimeSpan countDownToLaunch = TimeSpan.FromSeconds(3);
 
         SpriteFont fp2MenuFont;
         TextItem t_flixel;
@@ -114,6 +114,26 @@ namespace GameSlamProject
         SpriteFont fp2CountDownFont;
         TextItem t_countDown;
         bool started = false;
+
+        SpriteFont fp2ColorFont;
+        TextItem t_color;
+        bool readyToSelect = true;
+        Flixel selecting;
+        TimeSpan displayTime = TimeSpan.FromSeconds(0.5);
+        bool fade = false;
+
+        SpriteFont fp2Exploded;
+        TextItem t_f1Exploded;
+        TextItem t_f2Exploded;
+        TextItem t_f3Exploded;
+        TextItem t_f4Exploded;
+        List<TextItem> explodedTexts = new List<TextItem>();
+
+        TextItem t_playerWins;
+        TextItem t_playerWinsScore;
+
+        bool tie = false;
+        bool winner = false;
         #endregion
 
         /// <summary>
@@ -129,6 +149,7 @@ namespace GameSlamProject
             // Window size
             graphics.PreferredBackBufferWidth = 1024;
             graphics.PreferredBackBufferHeight = 768;
+            graphics.IsFullScreen = true;
         }
 
         /// <summary>
@@ -308,6 +329,38 @@ namespace GameSlamProject
             t_countDown = new TextItem(fp2CountDownFont, "3");
             t_countDown.alive = false;
             t_countDown.pos = new Vector2(graphics.GraphicsDevice.Viewport.Width / 2 - t_countDown.MeasureString().X / 2, graphics.GraphicsDevice.Viewport.Height / 2 - t_countDown.MeasureString().Y / 2);
+
+            fp2ColorFont = Content.Load<SpriteFont>("fp2colorfont");
+            t_color = new TextItem(fp2ColorFont, "fire");
+            t_color.alive = false;
+            t_color.pos = new Vector2(graphics.GraphicsDevice.Viewport.Width / 2 - t_color.MeasureString().X / 2, graphics.GraphicsDevice.Viewport.Height / 2 - t_color.MeasureString().Y / 2);
+            selecting = null;
+
+            fp2Exploded = Content.Load<SpriteFont>("fp2exploded");
+            t_f1Exploded = new TextItem(fp2Exploded, "player 1 exploded");
+            t_f1Exploded.alive = false;
+            t_f1Exploded.pos = new Vector2(graphics.GraphicsDevice.Viewport.Width / 2 - t_f1Exploded.MeasureString().X / 2, graphics.GraphicsDevice.Viewport.Height / 5 - t_f1Exploded.MeasureString().Y / 2);
+            t_f2Exploded = new TextItem(fp2Exploded, "player 2 exploded");
+            t_f2Exploded.alive = false;
+            t_f2Exploded.pos = new Vector2(graphics.GraphicsDevice.Viewport.Width / 2 - t_f2Exploded.MeasureString().X / 2, (graphics.GraphicsDevice.Viewport.Height / 5) * 2 - t_f2Exploded.MeasureString().Y / 2);
+            t_f3Exploded = new TextItem(fp2Exploded, "player 3 exploded");
+            t_f3Exploded.alive = false;
+            t_f3Exploded.pos = new Vector2(graphics.GraphicsDevice.Viewport.Width / 2 - t_f3Exploded.MeasureString().X / 2, (graphics.GraphicsDevice.Viewport.Height / 5) * 3 - t_f3Exploded.MeasureString().Y / 2);
+            t_f4Exploded = new TextItem(fp2Exploded, "player 4 exploded");
+            t_f4Exploded.alive = false;
+            t_f4Exploded.pos = new Vector2(graphics.GraphicsDevice.Viewport.Width / 2 - t_f4Exploded.MeasureString().X / 2, (graphics.GraphicsDevice.Viewport.Height / 5) * 4 - t_f4Exploded.MeasureString().Y / 2);
+
+            explodedTexts.Add(t_f1Exploded);
+            explodedTexts.Add(t_f2Exploded);
+            explodedTexts.Add(t_f3Exploded);
+            explodedTexts.Add(t_f4Exploded);
+
+            t_playerWins = new TextItem(fp2Exploded, "player 1 wins");
+            t_playerWins.alive = false;
+            t_playerWins.pos = new Vector2(graphics.GraphicsDevice.Viewport.Width / 2 - t_playerWins.MeasureString().X / 2, graphics.GraphicsDevice.Viewport.Height / 3 - t_playerWins.MeasureString().Y / 2);
+            t_playerWinsScore = new TextItem(fp2Exploded, "score: 0");
+            t_playerWinsScore.alive = false;
+            t_playerWinsScore.pos = new Vector2(graphics.GraphicsDevice.Viewport.Width / 2 - t_playerWinsScore.MeasureString().X / 2, (graphics.GraphicsDevice.Viewport.Height / 3) * 2 - t_playerWinsScore.MeasureString().Y / 2);
             #endregion
         }
 
@@ -569,7 +622,7 @@ namespace GameSlamProject
                     fp2F.alive = false;
                     fp2P.alive = false;
                     fp22.alive = false;
-                    countDownToLaunch = TimeSpan.FromSeconds(5);
+                    countDownToLaunch = TimeSpan.FromSeconds(3);
                 }
             }
 
@@ -600,6 +653,188 @@ namespace GameSlamProject
                     }
 
                     #region Menu Selection Code
+                    #region Select Color
+                    if (keyboardState.IsKeyDown(Keys.Tab) && previousKeyboardState.IsKeyUp(Keys.Tab))
+                    {
+                        if (readyToSelect == true)
+                        {
+                            readyToSelect = false;
+                            t_color.alive = true;
+                            fade = false;
+                            selecting = flixel1;
+                            t_color.alpha = 1.0f;
+                            displayTime = TimeSpan.FromSeconds(0.5);
+                            t_color.color = selecting.colorLists[selecting.selectedColor][0];
+
+                            t_color.text = selecting.nameOfColors[selecting.selectedColor];
+                            t_color.pos = new Vector2(graphics.GraphicsDevice.Viewport.Width / 2 - t_color.MeasureString().X / 2, graphics.GraphicsDevice.Viewport.Height / 2 - t_color.MeasureString().Y / 2);
+                        }
+                        else
+                        {
+                            if (selecting == flixel1)
+                            {
+                                displayTime = TimeSpan.FromSeconds(0.5);
+                                t_color.alpha = 1.0f;
+                                fade = false;
+                                if (selecting.selectedColor < selecting.colorLists.Count - 1)
+                                {
+                                    selecting.selectedColor++;
+                                }
+                                else
+                                {
+                                    selecting.selectedColor = 0;
+                                }
+                                t_color.color = selecting.colorLists[selecting.selectedColor][0];
+                                t_color.text = selecting.nameOfColors[selecting.selectedColor];
+                                t_color.pos = new Vector2(graphics.GraphicsDevice.Viewport.Width / 2 - t_color.MeasureString().X / 2, graphics.GraphicsDevice.Viewport.Height / 2 - t_color.MeasureString().Y / 2);
+                            }
+                        }
+                    }
+
+                    if (keyboardState.IsKeyDown(Keys.R) && previousKeyboardState.IsKeyUp(Keys.R))
+                    {
+                        if (readyToSelect == true)
+                        {
+                            readyToSelect = false;
+                            t_color.alive = true;
+                            fade = false;
+                            selecting = flixel2;
+                            t_color.alpha = 1.0f;
+                            displayTime = TimeSpan.FromSeconds(0.5);
+                            t_color.color = selecting.colorLists[selecting.selectedColor][0];
+
+                            t_color.text = selecting.nameOfColors[selecting.selectedColor];
+                            t_color.pos = new Vector2(graphics.GraphicsDevice.Viewport.Width / 2 - t_color.MeasureString().X / 2, graphics.GraphicsDevice.Viewport.Height / 2 - t_color.MeasureString().Y / 2);
+                        }
+                        else
+                        {
+                            if (selecting == flixel2)
+                            {
+                                displayTime = TimeSpan.FromSeconds(0.5);
+                                t_color.alpha = 1.0f;
+                                fade = false;
+                                if (selecting.selectedColor < selecting.colorLists.Count - 1)
+                                {
+                                    selecting.selectedColor++;
+                                }
+                                else
+                                {
+                                    selecting.selectedColor = 0;
+                                }
+                                t_color.color = selecting.colorLists[selecting.selectedColor][0];
+                                t_color.text = selecting.nameOfColors[selecting.selectedColor];
+                                t_color.pos = new Vector2(graphics.GraphicsDevice.Viewport.Width / 2 - t_color.MeasureString().X / 2, graphics.GraphicsDevice.Viewport.Height / 2 - t_color.MeasureString().Y / 2);
+                            }
+                        }
+                    }
+
+                    if (keyboardState.IsKeyDown(Keys.U) && previousKeyboardState.IsKeyUp(Keys.U))
+                    {
+                        if (readyToSelect == true)
+                        {
+                            readyToSelect = false;
+                            t_color.alive = true;
+                            fade = false;
+                            selecting = flixel3;
+                            t_color.alpha = 1.0f;
+                            displayTime = TimeSpan.FromSeconds(0.5);
+                            t_color.color = selecting.colorLists[selecting.selectedColor][0];
+
+                            t_color.text = selecting.nameOfColors[selecting.selectedColor];
+                            t_color.pos = new Vector2(graphics.GraphicsDevice.Viewport.Width / 2 - t_color.MeasureString().X / 2, graphics.GraphicsDevice.Viewport.Height / 2 - t_color.MeasureString().Y / 2);
+                        }
+                        else
+                        {
+                            if (selecting == flixel3)
+                            {
+                                displayTime = TimeSpan.FromSeconds(0.5);
+                                t_color.alpha = 1.0f;
+                                fade = false;
+                                if (selecting.selectedColor < selecting.colorLists.Count - 1)
+                                {
+                                    selecting.selectedColor++;
+                                }
+                                else
+                                {
+                                    selecting.selectedColor = 0;
+                                }
+                                t_color.color = selecting.colorLists[selecting.selectedColor][0];
+                                t_color.text = selecting.nameOfColors[selecting.selectedColor];
+                                t_color.pos = new Vector2(graphics.GraphicsDevice.Viewport.Width / 2 - t_color.MeasureString().X / 2, graphics.GraphicsDevice.Viewport.Height / 2 - t_color.MeasureString().Y / 2);
+                            }
+                        }
+                    }
+
+                    if (keyboardState.IsKeyDown(Keys.P) && previousKeyboardState.IsKeyUp(Keys.P))
+                    {
+                        if (readyToSelect == true)
+                        {
+                            readyToSelect = false;
+                            t_color.alive = true;
+                            fade = false;
+                            selecting = flixel4;
+                            t_color.alpha = 1.0f;
+                            displayTime = TimeSpan.FromSeconds(0.5);
+                            t_color.color = selecting.colorLists[selecting.selectedColor][0];
+
+                            t_color.text = selecting.nameOfColors[selecting.selectedColor];
+                            t_color.pos = new Vector2(graphics.GraphicsDevice.Viewport.Width / 2 - t_color.MeasureString().X / 2, graphics.GraphicsDevice.Viewport.Height / 2 - t_color.MeasureString().Y / 2);
+                        }
+                        else
+                        {
+                            if (selecting == flixel4)
+                            {
+                                displayTime = TimeSpan.FromSeconds(0.5);
+                                t_color.alpha = 1.0f;
+                                fade = false;
+                                if (selecting.selectedColor < selecting.colorLists.Count - 1)
+                                {
+                                    selecting.selectedColor++;
+                                }
+                                else
+                                {
+                                    selecting.selectedColor = 0;
+                                }
+                                t_color.color = selecting.colorLists[selecting.selectedColor][0];
+                                t_color.text = selecting.nameOfColors[selecting.selectedColor];
+                                t_color.pos = new Vector2(graphics.GraphicsDevice.Viewport.Width / 2 - t_color.MeasureString().X / 2, graphics.GraphicsDevice.Viewport.Height / 2 - t_color.MeasureString().Y / 2);
+                            }
+                        }
+                    }
+
+                    if (fade == true)
+                    {
+                        t_color.alpha -= 0.1f;
+                        t_color.color *= t_color.alpha;
+                    }
+
+                    if (displayTime > TimeSpan.Zero)
+                    {
+                        displayTime -= gameTime.ElapsedGameTime;
+                    }
+
+                    if (selecting != null)
+                    {
+                        t_color.color = selecting.colorLists[selecting.selectedColor][world.random.Next(0, selecting.colorLists[selecting.selectedColor].Count)];
+                        t_color.color *= t_color.alpha;
+                    }
+
+                    if (fade == true)
+                    {
+                        if (t_color.alpha <= 0.0f)
+                        {
+                            t_color.alive = false;
+                            readyToSelect = true;
+                            fade = false;
+                        }
+                    }
+
+                    if (displayTime <= TimeSpan.Zero)
+                    {
+                        fade = true;
+                    }
+                    #endregion
+
                     #region Select Player
                     if (keyboardState.IsKeyDown(Keys.Left) && previousKeyboardState.IsKeyUp(Keys.Left))
                     {
@@ -630,6 +865,7 @@ namespace GameSlamProject
                         menuState = MenuState.Game;
                         world.numOfPlayers = menuSelection + 1;
                         world.playersAlive = world.numOfPlayers;
+                        SetUpGame();
 
                         if (menuSelection == 0)
                         {
@@ -720,8 +956,11 @@ namespace GameSlamProject
 
                     if (flixel1.playing == true)
                     {
-                        
-                        flixel1.Push(keyboardState, previousKeyboardState, Keys.Tab, gameTime, graphics, 20.0f);
+                        if (started == true)
+                        {
+                            flixel1.Push(keyboardState, previousKeyboardState, Keys.Tab, gameTime, graphics, 20.0f);
+                        }
+
                         flixel1.Update(gameTime, graphics);
 
                         if (flixel1.alive == true)
@@ -732,8 +971,11 @@ namespace GameSlamProject
 
                     if (flixel2.playing == true)
                     {
-                        
-                        flixel2.Push(keyboardState, previousKeyboardState, Keys.R, gameTime, graphics, 20.0f);
+                        if (started == true)
+                        {
+                            flixel2.Push(keyboardState, previousKeyboardState, Keys.R, gameTime, graphics, 20.0f);
+                        }
+
                         flixel2.Update(gameTime, graphics);
 
                         if (flixel2.alive == true)
@@ -744,8 +986,11 @@ namespace GameSlamProject
 
                     if (flixel3.playing == true)
                     {
-                        
-                        flixel3.Push(keyboardState, previousKeyboardState, Keys.U, gameTime, graphics, 20.0f);
+                        if (started == true)
+                        {
+                            flixel3.Push(keyboardState, previousKeyboardState, Keys.U, gameTime, graphics, 20.0f);
+                        }
+
                         flixel3.Update(gameTime, graphics);
 
                         if (flixel3.alive == true)
@@ -756,8 +1001,11 @@ namespace GameSlamProject
 
                     if (flixel4.playing == true)
                     {
-                        
-                        flixel4.Push(keyboardState, previousKeyboardState, Keys.P, gameTime, graphics, 20.0f);
+                        if (started == true)
+                        {
+                            flixel4.Push(keyboardState, previousKeyboardState, Keys.P, gameTime, graphics, 20.0f);
+                        }
+
                         flixel4.Update(gameTime, graphics);
 
                         if (flixel4.alive == true)
@@ -811,6 +1059,7 @@ namespace GameSlamProject
                         if (countDown.Seconds <= 3)
                         {
                             t_countDown.color = new Color((float)world.random.NextDouble(), (float)world.random.NextDouble(), (float)world.random.NextDouble());
+                            t_countDown.pos = Shake(t_countDown.pos, new Vector2(graphics.GraphicsDevice.Viewport.Width / 2 - t_countDown.MeasureString().X / 2, graphics.GraphicsDevice.Viewport.Height / 2 - t_countDown.MeasureString().Y / 2));
                         }
                         else
                         {
@@ -819,55 +1068,140 @@ namespace GameSlamProject
 
                         if (countDown <= TimeSpan.Zero)
                         {
+                            if (position.Count == 0)
+                            {
+                                menuState = MenuState.Menu;
+                            }
+
                             countDown = TimeSpan.FromSeconds(10);
 
                             if (position.Count > 0)
                             {
-                                while (true)
+                                List<Flixel> playersKilled = new List<Flixel>();
+
+                                if (position.Count == 1)
                                 {
-                                    if (flixel1.alive == true)
+                                    winner = true;
+
+                                    if (flixel1.score == position[0])
                                     {
-                                        if (flixel1.positon == world.playersAlive)
-                                        {
-                                            flixel1.alive = false;
-                                            flixel1.exploding = true;
-                                            world.playersAlive--;
-                                            break;
-                                        }
+                                        t_playerWins.text = "player 1 wins";
+                                        t_playerWinsScore.text = "score: " + flixel1.score.ToString();
+                                    }
+                                    else if (flixel2.score == position[0])
+                                    {
+                                        t_playerWins.text = "player 2 wins";
+                                        t_playerWinsScore.text = "score: " + flixel2.score.ToString();
+                                    }
+                                    else if (flixel3.score == position[0])
+                                    {
+                                        t_playerWins.text = "player 3 wins";
+                                        t_playerWinsScore.text = "score: " + flixel3.score.ToString();
+                                    }
+                                    else if (flixel4.score == position[0])
+                                    {
+                                        t_playerWins.text = "player 4 wins";
+                                        t_playerWinsScore.text = "score: " + flixel4.score.ToString();
                                     }
 
-                                    if (flixel2.alive == true)
+                                    t_playerWins.pos = new Vector2(graphics.GraphicsDevice.Viewport.Width / 2 - t_playerWins.MeasureString().X / 2, graphics.GraphicsDevice.Viewport.Height / 3 - t_playerWins.MeasureString().Y / 2);
+                                    t_playerWinsScore.pos = new Vector2(graphics.GraphicsDevice.Viewport.Width / 2 - t_playerWinsScore.MeasureString().X / 2, (graphics.GraphicsDevice.Viewport.Height / 3) * 2 - t_playerWinsScore.MeasureString().Y / 2);
+                                }
+
+                                if (flixel1.alive == true)
+                                {
+                                    if (flixel1.score == position[position.Count - 1])
                                     {
-                                        if (flixel2.positon == world.playersAlive)
-                                        {
-                                            flixel2.alive = false;
-                                            flixel2.exploding = true;
-                                            world.playersAlive--;
-                                            break;
-                                        }
+                                        flixel1.alive = false;
+                                        flixel1.exploding = true;
+                                        t_f1Exploded.alive = true;
+                                        t_f1Exploded.alpha = 1.0f;
+                                        playersKilled.Add(flixel1);
+                                    }
+                                }
+
+                                if (flixel2.alive == true)
+                                {
+                                    if (flixel2.score == position[position.Count - 1])
+                                    {
+                                        flixel2.alive = false;
+                                        flixel2.exploding = true;
+                                        t_f2Exploded.alive = true;
+                                        t_f2Exploded.alpha = 1.0f;
+                                        playersKilled.Add(flixel2);
+                                    }
+                                }
+
+                                if (flixel3.alive == true)
+                                {
+                                    if (flixel3.score == position[position.Count - 1])
+                                    {
+                                        flixel3.alive = false;
+                                        flixel3.exploding = true;
+                                        t_f3Exploded.alive = true;
+                                        t_f3Exploded.alpha = 1.0f;
+                                        playersKilled.Add(flixel3);
+                                    }
+                                }
+
+                                if (flixel4.alive == true)
+                                {
+                                    if (flixel4.score == position[position.Count - 1])
+                                    {
+                                        flixel4.alive = false;
+                                        flixel4.exploding = true;
+                                        t_f4Exploded.alive = true;
+                                        t_f4Exploded.alpha = 1.0f;
+                                        playersKilled.Add(flixel4);
+                                    }
+                                }
+
+                                if (winner == false)
+                                {
+                                    if (playersKilled.Count == world.playersAlive)
+                                    {
+                                        tie = true;
+                                    }
+                                }
+
+                                foreach (Flixel flixel in playersKilled)
+                                {
+                                    world.playersAlive--;
+                                }
+
+                                if (world.playersAlive == 0)
+                                {
+                                    if (tie == true)
+                                    {
+                                        t_playerWins.alive = true;
+                                        t_playerWins.text = "nobody wins";
+                                        t_playerWins.color = Color.White;
+                                        t_playerWins.pos = new Vector2(graphics.GraphicsDevice.Viewport.Width / 2 - t_playerWins.MeasureString().X / 2, graphics.GraphicsDevice.Viewport.Height / 4 - t_playerWins.MeasureString().Y / 2);
                                     }
 
-                                    if (flixel3.alive == true)
+                                    if (winner == true)
                                     {
-                                        if (flixel3.positon == world.playersAlive)
-                                        {
-                                            flixel3.alive = false;
-                                            flixel3.exploding = true;
-                                            world.playersAlive--;
-                                            break;
-                                        }
+                                        t_playerWins.alive = true;
+                                        t_playerWinsScore.alive = true;
                                     }
 
-                                    if (flixel4.alive == true)
-                                    {
-                                        if (flixel4.positon == world.playersAlive)
-                                        {
-                                            flixel4.alive = false;
-                                            flixel4.exploding = true;
-                                            world.playersAlive--;
-                                            break;
-                                        }
-                                    }
+                                    countDown = TimeSpan.FromSeconds(6);
+                                }
+                            }
+                        }
+
+                        foreach (TextItem item in explodedTexts)
+                        {
+                            if (item.alive == true)
+                            {
+                                item.alpha -= 0.001f;
+                                item.color *= item.alpha;
+
+                                if (item.alpha <= 0.0f)
+                                {
+                                    item.alive = false;
+                                    item.alpha = 1.0f;
+                                    item.color.A = (byte)1.0f;
                                 }
                             }
                         }
@@ -884,6 +1218,88 @@ namespace GameSlamProject
 
             base.Update(gameTime);
             #endregion
+        }
+
+        Vector2 Shake(Vector2 pos, Vector2 originalPosition)
+        {
+            if (pos == originalPosition)
+            {
+                return new Vector2(pos.X + world.random.Next(-15, 16), pos.Y + world.random.Next(-15, 16));
+            }
+            else
+            {
+                return originalPosition;
+            }
+        }
+
+        void SetUpGame()
+        {
+            startDown = TimeSpan.FromSeconds(4);
+            countDown = TimeSpan.FromSeconds(10);
+            t_countDown.color = Color.White;
+            started = false;
+            tie = false;
+            winner = false;
+            t_countDown.alive = false;
+            t_color.alive = false;
+            t_f1Exploded.alive = false;
+            t_f2Exploded.alive = false;
+            t_f3Exploded.alive = false;
+            t_f4Exploded.alive = false;
+            t_playerWins.alive = false;
+            t_playerWinsScore.alive = false;
+
+            flixel1.positon = 0;
+            flixel1.score = 0;
+            flixel1.alive = true;
+            flixel1.exploding = false;
+            flixel1.side = Flixel.Side.Center;
+            flixel1.sky.fadeRate = 0.0f;
+            flixel1.sky.currentColor = 0;
+            flixel1.sky.color = flixel1.sky.fadeToList[0];
+            flixel1.playing = false;
+            t_f1Exploded.alpha = 1.0f;
+            flixel1.t_score.text = "0";
+            t_f1Exploded.color = Color.White;
+
+            flixel2.positon = 0;
+            flixel2.score = 0;
+            flixel2.alive = true;
+            flixel2.exploding = false;
+            flixel2.side = Flixel.Side.Center;
+            flixel2.sky.fadeRate = 0.0f;
+            flixel2.sky.currentColor = 0;
+            flixel2.sky.color = flixel2.sky.fadeToList[0];
+            flixel2.playing = false;
+            t_f2Exploded.alpha = 1.0f;
+            flixel2.t_score.text = "0";
+            t_f2Exploded.color = Color.White;
+
+            flixel3.positon = 0;
+            flixel3.score = 0;
+            flixel3.alive = true;
+            flixel3.exploding = false;
+            flixel3.side = Flixel.Side.Center;
+            flixel3.sky.fadeRate = 0.0f;
+            flixel3.sky.currentColor = 0;
+            flixel3.sky.color = flixel3.sky.fadeToList[0];
+            flixel3.playing = false;
+            t_f3Exploded.alpha = 1.0f;
+            flixel3.t_score.text = "0";
+            t_f3Exploded.color = Color.White;
+
+            flixel4.positon = 0;
+            flixel4.score = 0;
+            flixel4.alive = true;
+            flixel4.exploding = false;
+            flixel4.side = Flixel.Side.Center;
+            flixel4.sky.fadeRate = 0.0f;
+            flixel4.sky.currentColor = 0;
+            flixel4.sky.color = flixel4.sky.fadeToList[0];
+            flixel4.playing = false;
+            t_f4Exploded.alpha = 1.0f;
+            flixel4.t_score.text = "0";
+            t_f4Exploded.color = Color.White;
         }
 
         /// <summary>
@@ -1053,6 +1469,11 @@ namespace GameSlamProject
                     t_2player.DrawString(spriteBatch);
                     t_3player.DrawString(spriteBatch);
                     t_4player.DrawString(spriteBatch);
+
+                    if (t_color.alive == true)
+                    {
+                        t_color.DrawString(spriteBatch);
+                    }
                 }
                 else if (menuState == MenuState.Game)
                 {
@@ -1077,6 +1498,36 @@ namespace GameSlamProject
                     }
 
                     t_countDown.DrawString(spriteBatch);
+
+                    if (t_f1Exploded.alive == true)
+                    {
+                        t_f1Exploded.DrawString(spriteBatch);
+                    }
+
+                    if (t_f2Exploded.alive == true)
+                    {
+                        t_f2Exploded.DrawString(spriteBatch);
+                    }
+
+                    if (t_f3Exploded.alive == true)
+                    {
+                        t_f3Exploded.DrawString(spriteBatch);
+                    }
+
+                    if (t_f4Exploded.alive == true)
+                    {
+                        t_f4Exploded.DrawString(spriteBatch);
+                    }
+
+                    if (t_playerWins.alive == true)
+                    {
+                        t_playerWins.DrawString(spriteBatch);
+                    }
+
+                    if (t_playerWinsScore.alive == true)
+                    {
+                        t_playerWinsScore.DrawString(spriteBatch);
+                    }
                 }
             }
             #endregion
